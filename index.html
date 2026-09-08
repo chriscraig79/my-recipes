@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Recipes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf7f2;
+    --ink: #1c1812;
+    --muted: #6b5f4e;
+    --accent: #b5470a;
+    --border: #d9cfc0;
+    --rule: #c4b8a4;
+  }
+
+  body {
+    background: var(--warm-white);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── Index ── */
+  #index {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .site-header {
+    border-top: 3px solid var(--ink);
+    padding: 2rem 0 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .site-header::after {
+    content: '';
+    display: block;
+    border-bottom: 3px solid var(--ink);
+    margin-top: 1.5rem;
+  }
+
+  .site-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .site-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.05;
+  }
+
+  .site-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  /* ── Filters ── */
+  .filters {
+    margin-bottom: 2rem;
+  }
+
+  .filter-group {
+    margin-bottom: 1rem;
+  }
+
+  .filter-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chip.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--warm-white);
+  }
+
+  .results-count {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rule);
+    margin-bottom: 1rem;
+  }
+
+  /* ── Recipe list ── */
+  .recipe-list { list-style: none; }
+
+  .recipe-list-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .recipe-list-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .recipe-card-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1.25rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--ink);
+    gap: 1rem;
+    transition: color 0.15s;
+  }
+
+  .recipe-card-btn:hover { color: var(--accent); }
+  .recipe-card-btn:hover .recipe-card-arrow { transform: translateX(4px); }
+
+  .recipe-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .recipe-card-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.4rem;
+  }
+
+  .recipe-chip {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.45rem;
+    border-radius: 2px;
+  }
+
+  .recipe-chip.time { color: var(--accent); border-color: var(--accent); opacity: 0.7; }
+
+  .recipe-card-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    margin-top: 0.2rem;
+  }
+
+  .recipe-card-arrow {
+    font-size: 1.2rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+
+  .no-results {
+    padding: 2rem 0;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Recipe view ── */
+  #recipe-view {
+    display: none;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0;
+    margin-bottom: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.15s;
+  }
+
+  .back-btn:hover { color: var(--accent); }
+
+  .recipe-header {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding: 2rem 0 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .recipe-header::after {
+    content: '';
+    display: block;
+    border-bottom: 3px solid var(--ink);
+    margin-top: 1.5rem;
+  }
+
+  .recipe-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .recipe-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .recipe-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .recipe-description {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .recipe-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.25rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+
+  .recipe-meta span strong {
+    color: var(--ink);
+    display: block;
+    font-size: 1.1rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+  }
+
+  section.recipe-section { margin-bottom: 2.5rem; }
+
+  h2.section-heading {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  h2.section-heading--no-gap {
+    margin-bottom: 0;
+  }
+
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ingredient {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .ingredient:nth-child(odd) { padding-right: 1.5rem; }
+  .ingredient:nth-child(even) { padding-left: 1.5rem; border-left: 1px solid var(--border); }
+
+  .ingredient-amount {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0 1.25rem;
+    margin-bottom: 1.5rem;
+    align-items: start;
+  }
+
+  .step-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--border);
+    line-height: 1;
+    text-align: right;
+    padding-top: 0.1rem;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .step-content {
+    font-size: 0.93rem;
+    color: #3d3427;
+    line-height: 1.65;
+  }
+
+  .step-timer {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    opacity: 0.8;
+  }
+
+  .notes-box {
+    background: var(--cream);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .footer-rule {
+    border: none;
+    border-top: 3px solid var(--ink);
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 500px) {
+    .ingredients-grid { grid-template-columns: 1fr; }
+    .ingredient:nth-child(even) { padding-left: 0; border-left: none; }
+    .ingredient:nth-child(odd) { padding-right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="index">
+  <header class="site-header">
+    <p class="site-label">Recipe collection</p>
+    <h1 class="site-title">My <em>Recipes</em></h1>
+  </header>
+
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label">Ingredient</span>
+      <div class="filter-chips" id="ingredient-chips"></div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Time</span>
+      <div class="filter-chips" id="time-chips"></div>
+    </div>
+  </div>
+
+  <p class="results-count" id="results-count"></p>
+  <ul class="recipe-list" id="recipe-list"></ul>
+</div>
+
+<div id="recipe-view">
+  <button class="back-btn" onclick="showIndex()">← All recipes</button>
+  <div id="recipe-content"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  RECIPE DATA
+//
+//  Each recipe needs:
+//    id         — unique slug, no spaces
+//    title      — plain text, for the index list
+//    titleHtml  — can include <em> for italic styling
+//    label      — e.g. "Main course", "Pasta"
+//    servings   — e.g. "4"
+//    time       — display string e.g. "1 hr 15 min"
+//    timeMins   — number, used for time band filter
+//    extra      — third meta item e.g. oven temp
+//    description
+//    tags       — array of ingredient strings e.g. ["pork", "potato"]
+//    ingredients — array of { name, amount }
+//    steps      — array of { title, content, timer? }
+//    notes
+// ─────────────────────────────────────────────
+
+const recipes = [
+  {
+    id: "gratin",
+    title: "Gammon & Potato Gratin",
+    titleHtml: "Gammon <em>&</em> Potato Gratin",
+    label: "Main course",
+    servings: "4",
+    time: "1 hr 15 min",
+    timeMins: 75,
+    extra: "180°C / fan 160°C",
+    oven: true,
+    description: "Rich, creamy layers of potato and gammon baked until golden and bubbling. A great way to use up a leftover joint.",
+    tags: ["pork", "potato"],
+    ingredients: [
+      { name: "Maris Piper potatoes", amount: "800g" },
+      { name: "Cooked gammon, diced or shredded", amount: "300g" },
+      { name: "Single cream", amount: "400ml" },
+      { name: "Cheddar or gruyère, grated", amount: "100g" },
+      { name: "Garlic cloves, minced", amount: "2" },
+      { name: "Dijon mustard", amount: "1 tbsp" },
+      { name: "Nutmeg, grated", amount: "¼ tsp" },
+      { name: "Black pepper", amount: "½ tsp" },
+    ],
+    steps: [
+      { title: "Preheat oven", content: "Heat your oven to 180°C (160°C fan). Lightly butter a medium baking dish — roughly 30×20cm works well." },
+      { title: "Slice the potatoes", content: "Peel and slice as thinly as you can — around 3–4mm. A mandoline is ideal, but a sharp knife is fine. Don't rinse them after slicing; the starch helps the sauce thicken." },
+      { title: "Make the cream sauce", content: "In a jug, mix together the cream, mustard, nutmeg, pepper, and minced garlic. Taste it — it should be well seasoned, but go easy on salt since the gammon will add plenty." },
+      { title: "Layer up", content: "Arrange a layer of potato slices in the dish, slightly overlapping. Scatter over some gammon, then pour over a little of the cream mixture. Repeat the layers until everything is used up, finishing with a top layer of potatoes. Pour any remaining cream over the top." },
+      { title: "Add cheese and cover", content: "Scatter the grated cheese evenly over the top. Cover the dish tightly with foil." },
+      { title: "Bake covered", content: "Bake covered for 45 minutes.", timer: "⏱ 45 minutes" },
+      { title: "Bake uncovered", content: "Remove the foil and bake for a further 20–25 minutes until the top is golden and a knife slides easily through the potatoes.", timer: "⏱ 20–25 minutes" },
+      { title: "Rest and serve", content: "Leave to rest for 10 minutes before serving — it'll hold together much better. Serve with a green salad or steamed greens.", timer: "⏱ Rest 10 minutes" },
+    ],
+    notes: "The gammon is already cooked and salty, so taste the cream sauce before adding any salt. Gruyère gives a nuttier flavour, cheddar is more robust — either works. With single cream, add a little extra cheese on top and don't skip the resting time; it helps the gratin firm up. Leftovers reheat well the next day, and the flavour actually improves.",
+  },
+  {
+    id: "carbonara",
+    title: "Gammon Carbonara",
+    titleHtml: "Gammon <em>Carbonara</em>",
+    label: "Pasta",
+    servings: "2",
+    time: "20 min",
+    timeMins: 20,
+    extra: "No cream needed",
+    description: "A weeknight carbonara using leftover gammon in place of pancetta. Rich, silky, and ready in 20 minutes.",
+    tags: ["pork", "eggs", "pasta"],
+    ingredients: [
+      { name: "Spaghetti or rigatoni", amount: "200g" },
+      { name: "Cooked gammon, diced small", amount: "150g" },
+      { name: "Large eggs", amount: "3" },
+      { name: "Egg yolk", amount: "1" },
+      { name: "Parmesan or pecorino, grated", amount: "50g" },
+      { name: "Garlic clove", amount: "1" },
+      { name: "Black pepper, coarsely ground", amount: "1 tsp" },
+      { name: "Olive oil", amount: "1 tbsp" },
+    ],
+    steps: [
+      { title: "Boil the pasta", content: "Bring a large pan of well-salted water to the boil and cook the pasta until al dente according to packet instructions. Before draining, scoop out a mugful of the starchy pasta water — you'll need it for the sauce.", timer: "⏱ ~10 minutes" },
+      { title: "Mix the sauce", content: "While the pasta cooks, whisk together the 3 eggs, 1 egg yolk, and most of the parmesan in a bowl. Season with the black pepper. The mixture should be thick and pale — this is your sauce. Don't add salt; the gammon and cheese will take care of that." },
+      { title: "Fry the gammon", content: "Heat the olive oil in a wide frying pan over medium heat. Add the whole garlic clove and let it sizzle for a minute, then remove it. Add the gammon and fry for 2–3 minutes until the edges start to colour slightly.", timer: "⏱ 3 minutes" },
+      { title: "Combine off the heat", content: "Turn the heat off completely — this is important, or the eggs will scramble. Add the drained pasta to the pan and toss well. Pour the egg and cheese mixture over, tossing quickly and adding splashes of the reserved pasta water to loosen it into a glossy, silky sauce. You want it creamy, not dry." },
+      { title: "Serve immediately", content: "Divide between warm bowls. Finish with the remaining parmesan and an extra grind of black pepper." },
+    ],
+    notes: "The key is taking the pan off the heat before adding the egg mixture — residual heat is enough to cook it into a sauce without scrambling. Gammon is saltier than pancetta so don't add salt until you've tasted at the end. A splash more pasta water than you think you need is always better than too little.",
+  },
+  {
+    id: "thai-chicken-curry",
+    title: "Green Thai Chicken Curry",
+    titleHtml: "Green Thai <em>Chicken Curry</em>",
+    label: "Main course",
+    servings: "4",
+    time: "40 min",
+    timeMins: 40,
+    extra: "One pan",
+    oven: false,
+    description: "A fragrant, from-scratch green curry paste with coconut milk and chicken breast. Fresh and aromatic without needing a specialist shop.",
+    tags: ["chicken"],
+    ingredients: [
+      { name: "Chicken breasts, cut into bite-sized pieces", amount: "600g" },
+      { name: "Coconut milk, full fat tin", amount: "400ml" },
+      { name: "Vegetable or chicken stock", amount: "150ml" },
+      { name: "Fish sauce", amount: "2 tbsp" },
+      { name: "Lime juice", amount: "1 tbsp" },
+      { name: "Brown sugar", amount: "1 tsp" },
+      { name: "Vegetable oil", amount: "1 tbsp" },
+      { name: "Green chillies, mild or hot to taste", amount: "3" },
+      { name: "Garlic cloves", amount: "4" },
+      { name: "Fresh ginger, roughly chopped", amount: "3 tbsp" },
+      { name: "Spring onions, roughly chopped", amount: "4" },
+      { name: "Ground coriander", amount: "1 tsp" },
+      { name: "Ground cumin", amount: "1 tsp" },
+      { name: "Lime zest", amount: "1 tsp" },
+      { name: "Fresh coriander, stalks and leaves", amount: "30g" },
+      { name: "Jasmine or basmati rice, to serve", amount: "300g" },
+    ],
+    steps: [
+      { title: "Make the paste", content: "Blitz the chillies, garlic, ginger, spring onions, ground coriander, ground cumin, lime zest, and coriander stalks (save leaves for later) in a small food processor or blender with a splash of water until you have a rough paste. A stick blender in a jug works well too." },
+      { title: "Cook the paste", content: "Heat the oil in a wide pan or wok over medium-high heat. Add the paste and fry for 2–3 minutes, stirring constantly, until fragrant and starting to darken slightly.", timer: "⏱ 2–3 minutes" },
+      { title: "Add coconut milk", content: "Pour in the coconut milk and stir to combine with the paste. Let it come to a gentle simmer." },
+      { title: "Cook the chicken", content: "Add the chicken and stock. Simmer gently for 12–15 minutes until the chicken is cooked through. Don't boil hard or the chicken will tighten up.", timer: "⏱ 12–15 minutes" },
+      { title: "Season", content: "Stir in the fish sauce, lime juice, and sugar. Taste and adjust — more fish sauce for saltiness, more lime for brightness, more sugar to balance. This is where you get it right." },
+      { title: "Cook the rice", content: "Cook the rice according to packet instructions while the curry simmers.", timer: "⏱ ~12 minutes" },
+      { title: "Serve", content: "Ladle over rice and scatter with the reserved fresh coriander leaves. A wedge of lime on the side doesn't hurt." },
+    ],
+    notes: "The paste works best with lemongrass if you can get it — bash a stalk and blitz it in with everything else. Kaffir lime leaves added to the simmering curry add a lot of fragrance. If you want more veg, baby spinach, courgette, or sugar snaps all work well added in the last 5 minutes. Fish sauce is salty, so don't add extra salt — taste first.",
+  },
+  {
+    id: "spanish-tortilla",
+    title: "Spanish Tortilla",
+    titleHtml: "Spanish <em>Tortilla</em>",
+    label: "Light meal",
+    servings: "4",
+    time: "45 min",
+    timeMins: 45,
+    extra: "One pan",
+    oven: false,
+    description: "The real thing — potato, onion, eggs, olive oil. Served warm or at room temperature, it's one of the great simple dishes.",
+    tags: ["eggs", "potato"],
+    ingredients: [
+      { name: "Waxy potatoes, peeled and thinly sliced", amount: "600g" },
+      { name: "Onion, halved and thinly sliced", amount: "1" },
+      { name: "Large eggs", amount: "6" },
+      { name: "Olive oil", amount: "200ml" },
+      { name: "Salt", amount: "1 tsp" },
+    ],
+    steps: [
+      { title: "Confit the potatoes and onion", content: "Pour the olive oil into a medium frying pan (about 24cm) over low-medium heat. Add the potatoes and onion with the salt. Cook gently for 20–25 minutes, turning occasionally, until the potatoes are completely tender but not browned. You're confiting them in oil, not frying — keep the heat low.", timer: "⏱ 20–25 minutes" },
+      { title: "Drain and beat the eggs", content: "Lift the potatoes and onion out with a slotted spoon into a bowl, leaving the oil in the pan. Beat the eggs well in a separate large bowl, season with salt, then fold the potato and onion mixture into the eggs. Press down gently so everything is submerged. Leave to rest for 5 minutes.", timer: "⏱ Rest 5 minutes" },
+      { title: "Cook the first side", content: "Pour most of the oil out of the pan, leaving just a thin coating. Heat over medium heat. Pour in the egg and potato mixture and spread it level. Cook for 4–5 minutes until the edges are set but the centre still has a wobble.", timer: "⏱ 4–5 minutes" },
+      { title: "Flip", content: "This is the moment. Place a large flat plate or lid over the pan, then flip the tortilla onto it in one confident move. Slide it back into the pan, uncooked side down. Tuck the edges under with a spatula to get a neat shape." },
+      { title: "Finish the second side", content: "Cook for 2–3 minutes more. The centre should still have a slight give when you press it — that's what you want. It'll continue to set as it rests.", timer: "⏱ 2–3 minutes" },
+      { title: "Rest and serve", content: "Slide onto a board or plate and leave to rest for at least 5 minutes before cutting. Serve warm or at room temperature — both are correct.", timer: "⏱ Rest 5 minutes" },
+    ],
+    notes: "The flip is the only tricky bit — use a plate bigger than the pan and do it decisively. Hesitating is what causes disasters. Waxy potatoes (Charlotte, Désirée, or similar) hold their shape better than floury ones. The tortilla keeps well at room temperature for a few hours and is arguably better the next day cold from the fridge, sliced and eaten as a snack.",
+  },
+  {
+    id: "beef-guinness-stew",
+    title: "Beef & Guinness Stew",
+    titleHtml: "Beef <em>& Guinness Stew</em>",
+    label: "Main course",
+    servings: "4",
+    time: "3 hrs",
+    timeMins: 180,
+    extra: "160°C / fan 140°C",
+    oven: true,
+    description: "A deep, rich stew with fall-apart beef and a dark, slightly bitter gravy. Better the next day, and the day after that.",
+    tags: ["beef"],
+    ingredients: [
+      { name: "Braising steak or chuck, cut into chunks", amount: "800g" },
+      { name: "Guinness or stout", amount: "500ml" },
+      { name: "Beef stock", amount: "300ml" },
+      { name: "Onions, roughly chopped", amount: "2" },
+      { name: "Carrots, cut into chunks", amount: "3" },
+      { name: "Celery stalks, sliced", amount: "2" },
+      { name: "Garlic cloves, minced", amount: "3" },
+      { name: "Tomato purée", amount: "2 tbsp" },
+      { name: "Worcestershire sauce", amount: "1 tbsp" },
+      { name: "Plain flour", amount: "2 tbsp" },
+      { name: "Vegetable oil", amount: "2 tbsp" },
+      { name: "Bay leaves", amount: "2" },
+      { name: "Fresh or dried thyme", amount: "1 tsp" },
+      { name: "Salt and black pepper", amount: "1 tsp" },
+    ],
+    steps: [
+      { title: "Preheat oven", content: "Heat your oven to 160°C (140°C fan)." },
+      { title: "Brown the beef", content: "Pat the beef dry with kitchen paper and season well. Heat the oil in a large ovenproof casserole over high heat. Brown the beef in batches — don't crowd the pan or it'll steam rather than sear. Take your time here, it builds the flavour base. Set aside once browned.", timer: "⏱ ~10 minutes" },
+      { title: "Soften the vegetables", content: "Reduce the heat to medium. Add the onions, carrots, and celery to the same pan and cook for 6–8 minutes until softened. Add the garlic and tomato purée and cook for 2 minutes more, stirring.", timer: "⏱ 8 minutes" },
+      { title: "Flour and deglaze", content: "Sprinkle the flour over the vegetables and stir to coat. Pour in the Guinness and scrape up any browned bits from the bottom — that's all flavour. Let it bubble for 2 minutes, then add the stock, Worcestershire sauce, bay leaves, and thyme.", timer: "⏱ 2 minutes" },
+      { title: "Braise", content: "Return the beef to the pot. The liquid should come about two thirds up the meat — top up with a little water if needed. Bring to a simmer, then cover and transfer to the oven. Cook for 2½ hours until the beef is completely tender and the gravy has thickened.", timer: "⏱ 2½ hours" },
+      { title: "Finish and serve", content: "Taste and adjust seasoning. Remove the bay leaves. Serve with mashed potato, crusty bread, or just as it is." },
+    ],
+    notes: "Chuck, braising steak, ox cheek, or short rib all work — anything tough and well-marbled that needs a long cook. Don't rush the browning step and don't lift the lid during braising. The stew improves significantly overnight — make it the day before if you can. Leftovers freeze well for up to 3 months.",
+  },
+  {
+    id: "crepes",
+    title: "Crêpes",
+    titleHtml: "<em>Crêpes</em>",
+    label: "Breakfast / dessert",
+    servings: "4",
+    time: "45 min",
+    timeMins: 45,
+    extra: "Incl. rest time",
+    oven: false,
+    description: "Light, thin pancakes that work with anything — lemon and sugar, Nutella, jam, or just butter. The batter rests while you get everything else ready.",
+    tags: ["eggs"],
+    ingredients: [
+      { name: "Plain flour", amount: "125g" },
+      { name: "Large eggs", amount: "2" },
+      { name: "Whole milk", amount: "300ml" },
+      { name: "Melted butter or vegetable oil", amount: "1 tbsp" },
+      { name: "Pinch of salt", amount: "1" },
+      { name: "Butter or oil for frying", amount: "1 tbsp" },
+    ],
+    steps: [
+      { title: "Make the batter", content: "Sift the flour into a bowl with a pinch of salt. Make a well in the centre and crack in the eggs. Whisk from the middle outward, gradually drawing in the flour. Add the milk a little at a time, whisking until you have a smooth, thin batter with no lumps. Stir in the melted butter. The batter should be about the consistency of single cream." },
+      { title: "Rest the batter", content: "Cover and leave to rest for at least 30 minutes at room temperature, or up to a few hours in the fridge. You can skip this if you're in a hurry — 10–15 minutes is better than nothing, and the first crêpe is always a test one anyway.", timer: "⏱ 30 minutes" },
+      { title: "Heat the pan", content: "Heat a non-stick frying pan (about 20–24cm) over medium-high heat. Add a small knob of butter and swirl to coat. When it starts to foam, pour in a small ladleful of batter — roughly 3–4 tbsp — and immediately swirl the pan so it spreads into a thin, even circle." },
+      { title: "Cook each crêpe", content: "Cook for about 1 minute until the edges lift and the underside is lightly golden. Flip with a spatula or — if you're feeling brave — a toss. Cook for 30 seconds on the other side.", timer: "⏱ 90 seconds per crêpe" },
+      { title: "Serve", content: "Serve immediately with lemon juice and sugar, Nutella, or jam. Stack on a warm plate if making a batch and serve together." },
+    ],
+    notes: "The resting time is worth it — it relaxes the gluten and gives you a more tender, even crêpe. If the first one comes out thick or tears, don't worry — it's always a test pancake. The pan temperature and butter amount settle in after the first one. Stack finished crêpes on a warm plate; they won't stick together.",
+  },
+  {
+    id: "drop-scones",
+    title: "Drop Scones (Scotch Pancakes)",
+    titleHtml: "Drop Scones <em>(Scotch Pancakes)</em>",
+    label: "Breakfast / snack",
+    servings: "4",
+    time: "20 min",
+    timeMins: 20,
+    extra: "No rest needed",
+    oven: false,
+    description: "Thick, fluffy drop scones — faster than crêpes, no resting needed. Ready in 20 minutes and good with butter and jam, golden syrup, or fresh fruit.",
+    tags: ["eggs"],
+    ingredients: [
+      { name: "Self-raising flour", amount: "200g" },
+      { name: "Baking powder", amount: "1 tsp" },
+      { name: "Caster sugar", amount: "2 tbsp" },
+      { name: "Pinch of salt", amount: "1" },
+      { name: "Large eggs", amount: "2" },
+      { name: "Whole milk", amount: "150ml" },
+      { name: "Melted butter", amount: "2 tbsp" },
+      { name: "Butter for frying", amount: "1 tbsp" },
+    ],
+    steps: [
+      { title: "Make the batter", content: "Mix the flour, baking powder, sugar, and salt together in a bowl. Make a well in the centre. Beat the eggs and milk together, then pour into the well. Add the melted butter and stir until just combined — don't overwork it, a few lumps are fine. The batter should be thick and drop slowly from a spoon." },
+      { title: "Heat the pan and cook", content: "Heat a heavy-based frying pan or griddle over medium heat. Add a small knob of butter and let it melt. Drop heaped tablespoons of batter into the pan, leaving space between each. They'll spread to about 8cm." },
+      { title: "Watch for bubbles then flip", content: "Cook for 2–3 minutes until bubbles appear across the surface and the edges look set. Flip and cook for another minute or two until golden on the other side.", timer: "⏱ 2–3 minutes per side" },
+      { title: "Serve", content: "Serve warm with butter and jam, golden syrup, or fresh berries and cream." },
+    ],
+    notes: "Don't overmix — a few lumps in the batter are fine and keep the pancakes light. The bubbles on the surface are the signal to flip; don't rush it. Unlike crêpes, these need no resting time. Keep finished ones warm in a low oven (about 100°C) on a plate covered with a clean tea towel while you cook the rest.",
+  },
+  {
+    id: "club-sandwich",
+    title: "Club Sandwich",
+    titleHtml: "Club <em>Sandwich</em>",
+    label: "Lunch",
+    servings: "2",
+    time: "20 min",
+    timeMins: 20,
+    extra: "No cooking required",
+    oven: false,
+    description: "The classic triple-decker, done properly. Sourdough, crispy bacon, chicken, egg, and all the trimmings.",
+    tags: ["chicken", "bacon", "eggs"],
+    ingredients: [
+      { name: "Thick slices sourdough bread", amount: "6" },
+      { name: "Chicken breast, cooked and sliced", amount: "200g" },
+      { name: "Streaky bacon rashers", amount: "6" },
+      { name: "Hard boiled eggs, sliced", amount: "2" },
+      { name: "Ripe tomato, sliced", amount: "1" },
+      { name: "Little gem or iceberg lettuce leaves", amount: "4" },
+      { name: "Mayonnaise", amount: "3 tbsp" },
+      { name: "Dijon mustard", amount: "1 tsp" },
+      { name: "Salt and black pepper", amount: "1 tsp" },
+    ],
+    steps: [
+      { title: "Boil the eggs", content: "Lower the eggs into boiling water and cook for 9 minutes. Transfer to cold water, peel, and slice.", timer: "⏱ 9 minutes" },
+      { title: "Cook the bacon", content: "Fry or grill the bacon until properly crispy. Set aside on kitchen paper. Don't skimp on the crispiness — soggy bacon collapses the whole thing.", timer: "⏱ 5 minutes" },
+      { title: "Toast the bread", content: "Toast all 6 slices until golden. A club sandwich needs toasted bread on every layer — it's what gives it structure." },
+      { title: "Mix the mayo", content: "Stir the mustard into the mayonnaise. Season with a little salt and pepper. Spread generously on one side of all 6 slices." },
+      { title: "Build the first layer", content: "On the first slice, lay down the lettuce, then the chicken and sliced egg. Season with salt and pepper. Top with a second slice of toast, mayo side up." },
+      { title: "Build the second layer", content: "On the second slice, add the tomato (season it), then the bacon. Top with the third slice, mayo side down." },
+      { title: "Cut and secure", content: "Press down gently and cut diagonally into four triangles. Secure each with a cocktail stick if you have them — it's not just for show, it holds everything together. Serve immediately." },
+    ],
+    notes: "Leftover roast chicken works brilliantly here. If cooking chicken from scratch, poach it in seasoned water rather than frying — it stays juicier. The order of layers matters: lettuce and chicken on the bottom, tomato and bacon on top, so the bacon stays crispy and the lettuce doesn't go soggy from the tomato.",
+  },
+  {
+    id: "chicken-massaman",
+    title: "Chicken Massaman Curry",
+    titleHtml: "Chicken <em>Massaman Curry</em>",
+    label: "Main course",
+    servings: "4",
+    time: "55 min",
+    timeMins: 55,
+    extra: "One pan",
+    oven: false,
+    description: "A rich, mildly spiced curry with warmth from dried spices, sweetness from coconut milk, and depth from tamarind. One of the great curries.",
+    tags: ["chicken", "potato"],
+    ingredients: [
+      { name: "Chicken thighs, bone-in or boneless", amount: "800g" },
+      { name: "Coconut milk, full fat tin", amount: "400ml" },
+      { name: "Chicken stock", amount: "200ml" },
+      { name: "Waxy potatoes, cut into chunks", amount: "300g" },
+      { name: "Onion, cut into wedges", amount: "1" },
+      { name: "Roasted peanuts", amount: "50g" },
+      { name: "Fish sauce", amount: "2 tbsp" },
+      { name: "Tamarind paste", amount: "1 tbsp" },
+      { name: "Palm sugar or brown sugar", amount: "2 tsp" },
+      { name: "Vegetable oil", amount: "1 tbsp" },
+      { name: "Dried red chillies, soaked in hot water 10 min", amount: "3" },
+      { name: "Lemongrass stalk, lower third only, chopped", amount: "1" },
+      { name: "Garlic cloves", amount: "3" },
+      { name: "Shallots, roughly chopped", amount: "2" },
+      { name: "Fresh ginger, roughly chopped", amount: "1 tbsp" },
+      { name: "Ground coriander", amount: "1 tsp" },
+      { name: "Ground cumin", amount: "1 tsp" },
+      { name: "Ground cinnamon", amount: "½ tsp" },
+      { name: "Ground cardamom", amount: "½ tsp" },
+      { name: "Ground cloves", amount: "½ tsp" },
+      { name: "Shrimp paste (optional but worth it)", amount: "1 tsp" },
+    ],
+    steps: [
+      { title: "Make the paste", content: "Drain the chillies and blitz with the lemongrass, garlic, shallots, ginger, ground coriander, cumin, cinnamon, cardamom, cloves, and shrimp paste in a small food processor with a splash of water until you have a rough paste. It won't be completely smooth — that's fine." },
+      { title: "Fry the paste", content: "Heat the oil in a large heavy pan over medium heat. Add the paste and fry for 3–4 minutes, stirring constantly, until darkened and very fragrant.", timer: "⏱ 3–4 minutes" },
+      { title: "Add chicken", content: "Add a few tablespoons of coconut milk and stir to loosen the paste. Add the chicken and turn to coat in the paste. Cook for 3–4 minutes until lightly coloured on the outside.", timer: "⏱ 3–4 minutes" },
+      { title: "Simmer", content: "Pour in the remaining coconut milk and stock. Add the onion and potatoes. Bring to a gentle simmer, cover and cook for 30–35 minutes until the chicken is cooked through and the potatoes are tender.", timer: "⏱ 30–35 minutes" },
+      { title: "Season", content: "Stir in the fish sauce, tamarind paste, and sugar. Taste and adjust — it should be rich, mildly spiced, gently sour and sweet. Add more fish sauce for salt, more tamarind for sourness, more sugar to balance." },
+      { title: "Finish and serve", content: "Stir in most of the peanuts, saving a few to scatter on top. Serve over jasmine rice with the remaining peanuts on top." },
+    ],
+    notes: "Bone-in thighs give more flavour but boneless are easier to eat. Don't skip the tamarind — it's what gives massaman its distinctive sour-sweet balance; lime juice is a decent substitute in a pinch. The curry improves overnight. Leftovers freeze well. If you can't find shrimp paste, leave it out rather than substituting.",
+  },
+  {
+    id: "cajun-fries",
+    title: "Louisiana Cajun Fries",
+    titleHtml: "Louisiana <em>Cajun Fries</em>",
+    label: "Side / snack",
+    servings: "2",
+    time: "55 min",
+    timeMins: 55,
+    extra: "Air fryer",
+    oven: false,
+    description: "Crispy air fryer fries with a smoky, punchy Cajun spice blend. Close as you'll get to the real thing at home.",
+    tags: ["potato"],
+    ingredients: [
+      { name: "Floury potatoes (Maris Piper or King Edward)", amount: "600g" },
+      { name: "Vegetable or sunflower oil", amount: "2 tbsp" },
+      { name: "Smoked paprika", amount: "1 tsp" },
+      { name: "Cayenne pepper", amount: "½ tsp" },
+      { name: "Garlic powder", amount: "1 tsp" },
+      { name: "Onion powder", amount: "½ tsp" },
+      { name: "Dried oregano", amount: "½ tsp" },
+      { name: "Dried thyme", amount: "½ tsp" },
+      { name: "Salt", amount: "1 tsp" },
+      { name: "Black pepper", amount: "½ tsp" },
+    ],
+    steps: [
+      { title: "Cut and soak", content: "Peel the potatoes and cut into fries about 1cm thick — thicker than fast food fries, thinner than chip shop chips. Place in a bowl of cold water and soak for at least 30 minutes, or up to a few hours.", timer: "⏱ 30 minutes" },
+      { title: "Mix the spice blend", content: "Mix the smoked paprika, cayenne, garlic powder, onion powder, oregano, thyme, salt, and pepper together in a small bowl. Set aside." },
+      { title: "Dry and oil", content: "Drain the fries and dry thoroughly with a clean tea towel or kitchen paper. The drier they are, the crispier they'll get. Toss with the oil." },
+      { title: "Air fry", content: "Heat your air fryer to 200°C. Cook the fries for 20–25 minutes, shaking the basket every 8 minutes or so, until golden and crispy on the outside.", timer: "⏱ 20–25 minutes" },
+      { title: "Season and serve", content: "Tip the hot fries into a bowl, scatter over the spice blend and toss well to coat. Taste and add more salt or cayenne if needed. Serve immediately." },
+    ],
+    notes: "Soaking draws out the starch and is what gets you a crispy outside. Don't skip it. Don't overcrowd the air fryer basket — cook in batches if needed, or they'll steam rather than crisp. Toss with the spices straight after cooking while the fries are still hot so the seasoning sticks. Adjust cayenne up or down to your heat preference.",
+  },
+  {
+    id: "southern-fried-chicken",
+    title: "Southern Fried Chicken (Air Fryer)",
+    titleHtml: "Southern <em>Fried Chicken</em>",
+    label: "Main course",
+    servings: "4",
+    time: "4 hrs+",
+    timeMins: 270,
+    extra: "Air fryer",
+    oven: false,
+    description: "Crispy Southern-style fried chicken thighs and legs, air fried with a spiced buttermilk marinade and craggy seasoned crust. Family friendly — heat optional.",
+    tags: ["chicken"],
+    ingredients: [
+      { name: "Chicken thighs and legs, bone-in skin-on", amount: "8" },
+      { name: "Buttermilk (or milk with 1 tbsp lemon juice)", amount: "300ml" },
+      { name: "Garlic powder", amount: "1 tsp" },
+      { name: "Onion powder", amount: "1 tsp" },
+      { name: "Smoked paprika", amount: "1 tsp" },
+      { name: "Salt", amount: "1 tsp" },
+      { name: "Black pepper", amount: "½ tsp" },
+      { name: "Plain flour", amount: "200g" },
+      { name: "Cornflour", amount: "50g" },
+      { name: "Baking powder", amount: "1 tsp" },
+      { name: "Garlic powder (for coating)", amount: "1 tsp" },
+      { name: "Smoked paprika (for coating)", amount: "1 tsp" },
+      { name: "Salt (for coating)", amount: "1 tsp" },
+      { name: "Vegetable oil spray or oil", amount: "2 tbsp" },
+    ],
+    steps: [
+      { title: "Marinate the chicken", content: "Mix the buttermilk with the garlic powder, onion powder, smoked paprika, salt, and pepper in a large bowl. Add the chicken and turn to coat. Cover and refrigerate for at least 4 hours, ideally overnight.", timer: "⏱ At least 4 hours" },
+      { title: "Mix the coating", content: "Mix the flour, cornflour, baking powder, garlic powder, smoked paprika, and salt together in a wide shallow bowl." },
+      { title: "Coat the chicken", content: "Take each piece of chicken from the marinade, letting excess drip off, and press firmly into the flour mixture, turning and pressing so you get a good craggy coating all over. Set aside on a rack for 10 minutes — this helps the coating stick.", timer: "⏱ 10 minutes" },
+      { title: "Prep the air fryer", content: "Heat your air fryer to 200°C. Spray or brush the basket with oil. Place the chicken in a single layer — cook in batches if needed. Spray the top of the chicken generously with oil." },
+      { title: "Air fry", content: "Air fry for 25–30 minutes, turning halfway and spraying with oil again, until deeply golden and the internal temperature reads 75°C at the thickest part. The coating should be properly crispy.", timer: "⏱ 25–30 minutes" },
+      { title: "Rest and serve", content: "Rest for 5 minutes before serving. Goes well with the Cajun fries, coleslaw, or hot sauce on the side for the adults.", timer: "⏱ 5 minutes" },
+    ],
+    notes: "Don't skip the overnight marinade if you can help it — it makes a real difference to tenderness and flavour. The cornflour in the coating is what gives you the extra crunch. Make sure the coating is properly pressed on and not just dusted. For a spicy version, add 1 tsp cayenne and 1 tsp hot sauce to the buttermilk marinade. The oil spray is important — without it the coating won't crisp properly in the air fryer.",
+  },
+];
+
+// ─────────────────────────────────────────────
+//  FILTER STATE & LOGIC
+// ─────────────────────────────────────────────
+
+const TIME_BANDS = [
+  { label: "Under 30 min", key: "under30", test: m => m < 30 },
+  { label: "30–60 min",    key: "30to60",  test: m => m >= 30 && m <= 60 },
+  { label: "Over 1 hr",    key: "over60",  test: m => m > 60 },
+];
+
+let activeIngredients = new Set();
+let activeTime = null;
+
+function getAllTags() {
+  const tags = new Set();
+  recipes.forEach(r => r.tags.forEach(t => tags.add(t)));
+  return [...tags].sort();
+}
+
+function getTimeBandsPresent() {
+  return TIME_BANDS.filter(band => recipes.some(r => band.test(r.timeMins)));
+}
+
+function filteredRecipes() {
+  return recipes.filter(r => {
+    const ingredientMatch = activeIngredients.size === 0 || [...activeIngredients].every(t => r.tags.includes(t));
+    const timeMatch = !activeTime || TIME_BANDS.find(b => b.key === activeTime)?.test(r.timeMins);
+    return ingredientMatch && timeMatch;
+  });
+}
+
+function buildFilters() {
+  const ingContainer = document.getElementById('ingredient-chips');
+  const timeContainer = document.getElementById('time-chips');
+
+  const tags = getAllTags();
+  ingContainer.innerHTML = tags.map(tag => `
+    <button class="chip" data-tag="${tag}" onclick="toggleIngredient('${tag}')">${tag}</button>
+  `).join('');
+
+  const bands = getTimeBandsPresent();
+  timeContainer.innerHTML = bands.map(band => `
+    <button class="chip" data-band="${band.key}" onclick="toggleTime('${band.key}')">${band.label}</button>
+  `).join('');
+}
+
+function toggleIngredient(tag) {
+  if (activeIngredients.has(tag)) {
+    activeIngredients.delete(tag);
+  } else {
+    activeIngredients.add(tag);
+  }
+  updateChips();
+  renderList();
+}
+
+function toggleTime(key) {
+  activeTime = activeTime === key ? null : key;
+  updateChips();
+  renderList();
+}
+
+function updateChips() {
+  document.querySelectorAll('#ingredient-chips .chip').forEach(chip => {
+    chip.classList.toggle('active', activeIngredients.has(chip.dataset.tag));
+  });
+  document.querySelectorAll('#time-chips .chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.band === activeTime);
+  });
+}
+
+// ─────────────────────────────────────────────
+//  RENDERING
+// ─────────────────────────────────────────────
+
+function renderList() {
+  const list = document.getElementById('recipe-list');
+  const count = document.getElementById('results-count');
+  const results = filteredRecipes();
+
+  count.textContent = `${results.length} recipe${results.length !== 1 ? 's' : ''}`;
+
+  if (results.length === 0) {
+    list.innerHTML = '<p class="no-results">No recipes match those filters.</p>';
+    return;
+  }
+
+  list.innerHTML = results.map(r => {
+    const tagChips = r.tags.map(t => `<span class="recipe-chip">${t}</span>`).join('');
+    const timeBand = TIME_BANDS.find(b => b.test(r.timeMins));
+    const timeChip = timeBand ? `<span class="recipe-chip time">${r.time}</span>` : '';
+    return `
+      <li class="recipe-list-item">
+        <button class="recipe-card-btn" onclick="showRecipe('${r.id}')">
+          <div class="recipe-card-text">
+            <span class="recipe-card-title">${r.title}</span>
+            <div class="recipe-card-chips">${tagChips}${timeChip}</div>
+            <span class="recipe-card-desc">${r.description}</span>
+          </div>
+          <span class="recipe-card-arrow">→</span>
+        </button>
+      </li>
+    `;
+  }).join('');
+}
+
+function showRecipe(id) {
+  const r = recipes.find(r => r.id === id);
+  if (!r) return;
+
+  const ingredientsHtml = r.ingredients.map(ing => `
+    <div class="ingredient">
+      <span class="ingredient-name">${ing.name}</span>
+      <span class="ingredient-amount">${ing.amount}</span>
+    </div>
+  `).join('');
+
+  const stepsHtml = r.steps.map((step, i) => `
+    <div class="step">
+      <div class="step-number">${i + 1}</div>
+      <div class="step-body">
+        <div class="step-title">${step.title}</div>
+        <div class="step-content">${step.content}</div>
+        ${step.timer ? `<span class="step-timer">${step.timer}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('recipe-content').innerHTML = `
+    <header class="recipe-header">
+      <p class="recipe-label">${r.label} — serves ${r.servings}</p>
+      <h1 class="recipe-title">${r.titleHtml}</h1>
+      <p class="recipe-description">${r.description}</p>
+      <div class="recipe-meta">
+        <span><strong>${r.time}</strong> total time</span>
+        <span><strong>${r.extra}</strong>${r.oven ? ' oven' : ''}</span>
+        <span><strong>${r.servings}</strong> servings</span>
+      </div>
+    </header>
+
+    <section class="recipe-section">
+      <h2 class="section-heading section-heading--no-gap">Ingredients</h2>
+      <div class="ingredients-grid">${ingredientsHtml}</div>
+    </section>
+
+    <section class="recipe-section">
+      <h2 class="section-heading">Method</h2>
+      <div class="steps">${stepsHtml}</div>
+    </section>
+
+    <section class="recipe-section">
+      <h2 class="section-heading">Notes</h2>
+      <div class="notes-box">${r.notes}</div>
+    </section>
+
+    <hr class="footer-rule">
+  `;
+
+  document.getElementById('index').style.display = 'none';
+  document.getElementById('recipe-view').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function showIndex() {
+  document.getElementById('recipe-view').style.display = 'none';
+  document.getElementById('index').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+buildFilters();
+renderList();
+</script>
+</body>
+</html>
