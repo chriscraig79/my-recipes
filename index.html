@@ -544,13 +544,25 @@
   .shopping-items { list-style: none; }
 
   .shopping-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
     padding: 0.55rem 0;
     border-bottom: 1px solid var(--border);
-    gap: 1rem;
     font-size: 0.95rem;
+  }
+
+  .shopping-item-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+  }
+
+  .shopping-item-checkbox {
+    margin-top: 0.3rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
   }
 
   .shopping-item-main {
@@ -566,12 +578,18 @@
     margin-top: 0.1rem;
   }
 
-  .shopping-item-amount {
+  .shopping-item.checked .shopping-item-name,
+  .shopping-item.checked .shopping-item-recipe {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .all-checked-note {
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    font-style: italic;
     font-family: 'Playfair Display', serif;
-    font-weight: 600;
-    color: var(--accent);
-    white-space: nowrap;
-    font-size: 0.9rem;
   }
 
   @media (max-width: 500px) {
@@ -1144,6 +1162,28 @@ function saveBasket() {
 
 let basket = loadBasket();
 
+function loadCheckedItems() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem('shoppingChecked')) || []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveCheckedItems() {
+  try {
+    localStorage.setItem('shoppingChecked', JSON.stringify([...checkedItems]));
+  } catch {}
+}
+
+let checkedItems = loadCheckedItems();
+
+function toggleChecked(name) {
+  checkedItems.has(name) ? checkedItems.delete(name) : checkedItems.add(name);
+  saveCheckedItems();
+  renderShoppingListView();
+}
+
 function toggleBasket(id) {
   basket.has(id) ? basket.delete(id) : basket.add(id);
   saveBasket();
@@ -1160,7 +1200,9 @@ function removeFromBasket(id) {
 
 function clearBasket() {
   basket.clear();
+  checkedItems.clear();
   saveBasket();
+  saveCheckedItems();
   renderBasketBadge();
   renderShoppingListView();
 }
@@ -1171,6 +1213,9 @@ function renderBasketBadge() {
   badge.textContent = `🛒 Shopping list (${basket.size})`;
 }
 
+// Ingredients with the same name (across recipes, or repeated within one)
+// are combined into a single line listing every recipe that needs it —
+// no amount shown, since amounts from different recipes aren't merged.
 function buildShoppingList() {
   const grouped = new Map();
   basket.forEach(id => {
@@ -1178,21 +1223,38 @@ function buildShoppingList() {
     if (!r) return;
     r.ingredients.forEach(ing => {
       const section = ing.section || getSection(ing.name);
-      if (!grouped.has(section)) grouped.set(section, []);
-      grouped.get(section).push({ name: ing.name, amount: ing.amount, recipeTitle: r.title });
+      if (!grouped.has(section)) grouped.set(section, new Map());
+      const bySection = grouped.get(section);
+      if (!bySection.has(ing.name)) {
+        bySection.set(ing.name, { name: ing.name, recipeTitles: [] });
+      }
+      const item = bySection.get(ing.name);
+      if (!item.recipeTitles.includes(r.title)) item.recipeTitles.push(r.title);
     });
   });
 
+  // Drop any checked state for items no longer in the list (e.g. after
+  // removing a recipe) so it doesn't linger in storage indefinitely.
+  const presentNames = new Set();
+  grouped.forEach(bySection => bySection.forEach(item => presentNames.add(item.name)));
+  let checkedChanged = false;
+  checkedItems.forEach(name => {
+    if (!presentNames.has(name)) { checkedItems.delete(name); checkedChanged = true; }
+  });
+  if (checkedChanged) saveCheckedItems();
+
   return SECTION_ORDER
     .filter(section => grouped.has(section))
-    .map(section => ({ section, items: grouped.get(section) }));
+    .map(section => ({ section, items: [...grouped.get(section).values()] }));
 }
 
 function buildShoppingListText(groups) {
   const lines = ['Shopping List', ''];
   groups.forEach(({ section, items }) => {
+    const unchecked = items.filter(item => !checkedItems.has(item.name));
+    if (unchecked.length === 0) return;
     lines.push(section.toUpperCase());
-    items.forEach(item => lines.push(`- ${item.name} — ${item.amount} (${item.recipeTitle})`));
+    unchecked.forEach(item => lines.push(`- ${item.name} (${item.recipeTitles.join(', ')})`));
     lines.push('');
   });
   return lines.join('\n').trim();
@@ -1392,18 +1454,25 @@ function renderShoppingListView() {
     <section class="recipe-section">
       <h2 class="section-heading">${section}</h2>
       <ul class="shopping-items">
-        ${items.map(item => `
-          <li class="shopping-item">
-            <div class="shopping-item-main">
-              <span class="shopping-item-name">${item.name}</span>
-              <span class="shopping-item-recipe">${item.recipeTitle}</span>
-            </div>
-            <span class="shopping-item-amount">${item.amount}</span>
+        ${items.map(item => {
+          const checked = checkedItems.has(item.name);
+          return `
+          <li class="shopping-item${checked ? ' checked' : ''}">
+            <label class="shopping-item-label">
+              <input type="checkbox" class="shopping-item-checkbox" data-name="${item.name}" ${checked ? 'checked' : ''} onchange="toggleChecked(this.dataset.name)">
+              <div class="shopping-item-main">
+                <span class="shopping-item-name">${item.name}</span>
+                <span class="shopping-item-recipe">${item.recipeTitles.join(', ')}</span>
+              </div>
+            </label>
           </li>
-        `).join('')}
+        `;
+        }).join('')}
       </ul>
     </section>
   `).join('');
+
+  const hasUnchecked = groups.some(({ items }) => items.some(item => !checkedItems.has(item.name)));
 
   document.getElementById('shopping-list-content').innerHTML = `
     <header class="recipe-header">
@@ -1414,7 +1483,7 @@ function renderShoppingListView() {
 
     ${basketRecipes.length ? `
       <div class="shopping-actions">
-        <a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>
+        ${hasUnchecked ? `<a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>` : `<span class="all-checked-note">Everything's checked off</span>`}
         <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
       </div>
       ${sectionsHtml}
