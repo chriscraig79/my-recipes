@@ -1466,6 +1466,11 @@ function renderRecipe(r) {
 }
 
 function renderIndexView() {
+  // The index list isn't re-rendered while it's hidden, so its "+"/"✓"
+  // basket toggles can go stale if the basket changed elsewhere (e.g.
+  // clearing the list from the shopping list view). Refresh it here so
+  // it's always accurate by the time it's shown.
+  renderList();
   showView('index');
   document.title = 'My Recipes';
   window.scrollTo(0, 0);
