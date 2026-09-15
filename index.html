@@ -511,6 +511,7 @@
   }
 
   .whatsapp-btn {
+    display: inline-block;
     background: var(--accent);
     color: var(--warm-white);
     border: none;
@@ -520,6 +521,7 @@
     font-size: 0.82rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    text-decoration: none;
     cursor: pointer;
     transition: opacity 0.15s;
   }
@@ -1196,9 +1198,9 @@ function buildShoppingListText(groups) {
   return lines.join('\n').trim();
 }
 
-function shareToWhatsApp() {
-  const text = buildShoppingListText(buildShoppingList());
-  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+function buildWhatsAppUrl(groups) {
+  const text = buildShoppingListText(groups);
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
 
 // ─────────────────────────────────────────────
@@ -1412,7 +1414,7 @@ function renderShoppingListView() {
 
     ${basketRecipes.length ? `
       <div class="shopping-actions">
-        <button class="whatsapp-btn" onclick="shareToWhatsApp()">Send to WhatsApp</button>
+        <a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>
         <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
       </div>
       ${sectionsHtml}
