@@ -989,10 +989,7 @@ function renderList() {
   }).join('');
 }
 
-function showRecipe(id) {
-  const r = recipes.find(r => r.id === id);
-  if (!r) return;
-
+function renderRecipe(r) {
   const ingredientsHtml = r.ingredients.map(ing => `
     <li class="ingredient">
       <span class="ingredient-name">${ing.name}</span>
@@ -1048,7 +1045,7 @@ function showRecipe(id) {
   document.getElementById('recipe-title').focus();
 }
 
-function showIndex() {
+function renderIndexView() {
   document.getElementById('recipe-view').style.display = 'none';
   document.getElementById('index').style.display = 'block';
   document.title = 'My Recipes';
@@ -1056,8 +1053,39 @@ function showIndex() {
   document.getElementById('site-title').focus();
 }
 
+// ─────────────────────────────────────────────
+//  ROUTING — each recipe gets a shareable #slug URL
+// ─────────────────────────────────────────────
+
+function route() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const recipe = recipes.find(r => r.id === id);
+  if (recipe) {
+    renderRecipe(recipe);
+  } else {
+    renderIndexView();
+  }
+}
+
+function showRecipe(id) {
+  location.hash = id;
+}
+
+function showIndex() {
+  if (location.hash) {
+    history.pushState('', document.title, location.pathname + location.search);
+  }
+  renderIndexView();
+}
+
+window.addEventListener('hashchange', route);
+
 buildFilters();
 renderList();
+
+const initialId = decodeURIComponent(location.hash.slice(1));
+const initialRecipe = recipes.find(r => r.id === initialId);
+if (initialRecipe) renderRecipe(initialRecipe);
 </script>
 </body>
 </html>
