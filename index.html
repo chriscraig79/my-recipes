@@ -557,12 +557,42 @@
   }
 
   .shopping-item-checkbox {
-    margin-top: 0.3rem;
-    width: 1.05rem;
-    height: 1.05rem;
+    appearance: none;
+    -webkit-appearance: none;
+    margin-top: 0.2rem;
+    width: 1.15rem;
+    height: 1.15rem;
     flex-shrink: 0;
-    accent-color: var(--accent);
+    border: 1.5px solid var(--muted);
+    border-radius: 3px;
+    background: var(--warm-white);
     cursor: pointer;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .shopping-item-checkbox:hover { border-color: var(--accent); }
+
+  .shopping-item-checkbox:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .shopping-item-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 0.36rem;
+    top: 0.16rem;
+    width: 0.3rem;
+    height: 0.58rem;
+    border: solid var(--warm-white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .shopping-item-checkbox:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .shopping-item-main {
@@ -1181,7 +1211,7 @@ let checkedItems = loadCheckedItems();
 function toggleChecked(name) {
   checkedItems.has(name) ? checkedItems.delete(name) : checkedItems.add(name);
   saveCheckedItems();
-  renderShoppingListView();
+  renderShoppingListContent();
 }
 
 function toggleBasket(id) {
@@ -1195,7 +1225,7 @@ function removeFromBasket(id) {
   basket.delete(id);
   saveBasket();
   renderBasketBadge();
-  renderShoppingListView();
+  renderShoppingListContent();
 }
 
 function clearBasket() {
@@ -1204,7 +1234,7 @@ function clearBasket() {
   saveBasket();
   saveCheckedItems();
   renderBasketBadge();
-  renderShoppingListView();
+  renderShoppingListContent();
 }
 
 function renderBasketBadge() {
@@ -1442,7 +1472,18 @@ function renderIndexView() {
   document.getElementById('site-title').focus();
 }
 
-function renderShoppingListView() {
+// Rebuilds the shopping list content in place — used for interactions
+// that happen while already on the view (checking an item, removing a
+// recipe chip, clearing the list) so they don't reset scroll or steal
+// focus the way a full view transition does.
+function renderShoppingListContent() {
+  // Replacing the DOM below would otherwise jump the page back to the
+  // top, since the browser resets scroll when it loses track of the
+  // interacted element. Preserve the scroll position explicitly so an
+  // in-place update (checking an item, removing a chip, clearing) never
+  // moves the page.
+  const scrollY = window.scrollY;
+
   const basketRecipes = [...basket].map(id => recipes.find(r => r.id === id)).filter(Boolean);
   const groups = buildShoppingList();
 
@@ -1492,6 +1533,14 @@ function renderShoppingListView() {
     <hr class="footer-rule">
   `;
 
+  window.scrollTo(0, scrollY);
+}
+
+// Full transition into the shopping list view — scrolls to top and
+// moves focus to the heading. Only call this when actually navigating
+// to the view; use renderShoppingListContent() for in-place updates.
+function renderShoppingListView() {
+  renderShoppingListContent();
   showView('shopping-list');
   document.title = 'Shopping List – My Recipes';
   window.scrollTo(0, 0);
