@@ -27,6 +27,8 @@ Each recipe object has the following shape:
   tags: ["chicken", "potato"],  // ingredient tags for filtering
   ingredients: [
     { name: "Ingredient name", amount: "200g" },
+    // Optional per-ingredient override — see "Shopping list" below.
+    { name: "Shrimp paste", amount: "1 tsp", section: "Dry Goods & Spices" },
   ],
   steps: [
     { title: "Step title", content: "Step instructions.", timer: "⏱ 20 minutes" },
@@ -42,6 +44,18 @@ Each recipe object has the following shape:
 | Under 30 min | `timeMins < 30` |
 | 30–60 min | `timeMins >= 30 && timeMins <= 60` |
 | Over 1 hr | `timeMins > 60` |
+
+## Shopping list
+
+Any recipe can be added to a shopping basket — via the "+" button on its index card or "Add to shopping list" on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
+
+The shopping list groups every basket recipe's ingredients into supermarket sections, in walking order:
+
+Fruit & Veg → Meat & Fish → Deli & Dairy → Dry Goods & Spices → Tinned & Jarred → Bread & Bakery → Other
+
+Sections are guessed automatically from each ingredient's name (see `getSection()` / `SECTION_KEYWORDS` in `index.html`) — no manual tagging needed for a new recipe. If an ingredient's name doesn't give the guesser enough to go on (or the guess is wrong), give that one ingredient an explicit `section` field to override it, as shown above.
+
+Quantities from different recipes are listed separately rather than merged (no unit math), each line showing its amount and source recipe. A "Send to WhatsApp" button opens `wa.me` with the list pre-filled, ready to pick a chat and send.
 
 ## Editing in Claude Code
 

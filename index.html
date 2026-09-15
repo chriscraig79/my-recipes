@@ -130,6 +130,9 @@
   .recipe-list { list-style: none; }
 
   .recipe-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     border-bottom: 1px solid var(--border);
   }
 
@@ -141,7 +144,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     padding: 1.25rem 0;
     background: none;
     border: none;
@@ -205,8 +209,75 @@
     border-top: 1px solid var(--border);
   }
 
-  /* ── Recipe view ── */
-  #recipe-view {
+  /* ── Basket toggle (index card) ── */
+  .basket-toggle {
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--accent);
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .basket-toggle:hover { border-color: var(--accent); }
+
+  .basket-toggle.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--warm-white);
+  }
+
+  /* ── Basket toggle (recipe header) ── */
+  .basket-toggle-large {
+    margin-top: 1.25rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    background: none;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .basket-toggle-large.active {
+    background: var(--accent);
+    color: var(--warm-white);
+  }
+
+  /* ── Basket badge ── */
+  .basket-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--ink);
+    color: var(--warm-white);
+    border: none;
+    border-radius: 999px;
+    padding: 0.65rem 1.1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(28, 24, 18, 0.25);
+    transition: background 0.15s;
+    z-index: 10;
+  }
+
+  .basket-badge:hover { background: var(--accent); }
+  .basket-badge[hidden] { display: none; }
+
+  /* ── Recipe view / Shopping list view ── */
+  #recipe-view, #shopping-list-view {
     display: none;
     max-width: 680px;
     margin: 0 auto;
@@ -403,10 +474,109 @@
     margin-top: 3rem;
   }
 
+  /* ── Shopping list ── */
+  .basket-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+  }
+
+  .basket-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.25rem 0.4rem 0.25rem 0.6rem;
+  }
+
+  .basket-chip button {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .shopping-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .whatsapp-btn {
+    background: var(--accent);
+    color: var(--warm-white);
+    border: none;
+    border-radius: 2px;
+    padding: 0.7rem 1.4rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .whatsapp-btn:hover { opacity: 0.85; }
+
+  .clear-list-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .shopping-items { list-style: none; }
+
+  .shopping-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .shopping-item-main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shopping-item-recipe {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    margin-top: 0.1rem;
+  }
+
+  .shopping-item-amount {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
   @media (max-width: 500px) {
     .ingredients-grid { grid-template-columns: 1fr; }
     .ingredient:nth-child(even) { padding-left: 0; border-left: none; }
     .ingredient:nth-child(odd) { padding-right: 0; }
+    .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
   }
 </style>
 </head>
@@ -437,6 +607,13 @@
   <button class="back-btn" onclick="showIndex()">← All recipes</button>
   <div id="recipe-content"></div>
 </div>
+
+<div id="shopping-list-view">
+  <button class="back-btn" onclick="showIndex()">← All recipes</button>
+  <div id="shopping-list-content"></div>
+</div>
+
+<button id="basket-badge" class="basket-badge" hidden onclick="showShoppingList()"></button>
 
 <script>
 // ─────────────────────────────────────────────
@@ -893,7 +1070,7 @@ const recipes = [
       { name: "Purple cabbage, thinly sliced", amount: "½ head" },
       { name: "Carrots, thinly sliced", amount: "2" },
       { name: "Red onion, thinly sliced", amount: "½" },
-      { name: "Salt, for drawing out the cabbage", amount: "1 tsp" },
+      { name: "Salt, for drawing out the cabbage", amount: "1 tsp", section: "Dry Goods & Spices" },
       { name: "Mayonnaise", amount: "4 tbsp" },
       { name: "Red wine vinegar", amount: "2 tbsp" },
       { name: "Vegetable oil", amount: "2 tbsp" },
@@ -911,6 +1088,118 @@ const recipes = [
     notes: "Slicing everything on a mandolin keeps the pieces fine and even, which makes for a better slaw than chopping by hand — just use the guard. Salting and draining the cabbage first is the step that keeps it crunchy rather than watery, especially if it's sitting around before serving. It keeps well in the fridge for 2–3 days, and the flavour actually improves after a few hours as it marinates. For more heat, add an extra pinch of cayenne or a dash of hot sauce to the dressing.",
   },
 ];
+
+// ─────────────────────────────────────────────
+//  SHOPPING BASKET
+//
+//  Ingredients are auto-sorted into supermarket sections by keyword
+//  match on their name. An ingredient can override the guess with
+//  an explicit `section` field, e.g. { name: "...", amount: "...",
+//  section: "Dry Goods & Spices" }.
+// ─────────────────────────────────────────────
+
+const SECTION_ORDER = ["Fruit & Veg", "Meat & Fish", "Deli & Dairy", "Dry Goods & Spices", "Tinned & Jarred", "Bread & Bakery", "Other"];
+
+const SECTION_KEYWORDS = [
+  ["Fruit & Veg", ["potato", "onion", "carrot", "cabbage", "celery", "garlic", "ginger", "chilli", "chili", "lemongrass", "shallot", "lettuce", "tomato", "lime", "lemon", "spring onion", "fresh coriander"]],
+  ["Meat & Fish", ["chicken", "beef", "pork", "bacon", "gammon", "steak"]],
+  ["Deli & Dairy", ["cheese", "cheddar", "gruyère", "parmesan", "pecorino", "cream", "milk", "butter", "egg", "buttermilk"]],
+  ["Bread & Bakery", ["bread", "sourdough", "bun"]],
+  ["Tinned & Jarred", ["coconut milk", "tomato purée", "tamarind", "bbq sauce", "mustard", "stock", "peanuts", "mayonnaise", "chicken stock", "beef stock"]],
+  ["Dry Goods & Spices", ["flour", "cornflour", "baking powder", "sugar", "rice", "spaghetti", "rigatoni", "pasta", "paprika", "cayenne", "cumin", "coriander", "cinnamon", "cardamom", "clove", "oregano", "thyme", "nutmeg", "salt", "pepper", "seasoning", "oil", "vinegar", "fish sauce", "worcestershire", "shrimp paste", "garlic powder", "onion powder", "mustard powder", "bay leaves"]],
+];
+
+// Picks the section whose matching keyword is the longest (most specific)
+// substring match, so e.g. "garlic powder" (Dry Goods) beats the shorter
+// "garlic" (Fruit & Veg), and "chicken stock" (Tinned & Jarred) beats
+// "chicken" (Meat & Fish).
+function getSection(ingredientName) {
+  const lower = ingredientName.toLowerCase();
+  let best = null;
+  for (const [section, keywords] of SECTION_KEYWORDS) {
+    for (const keyword of keywords) {
+      if (lower.includes(keyword) && (!best || keyword.length > best.keyword.length)) {
+        best = { section, keyword };
+      }
+    }
+  }
+  return best ? best.section : "Other";
+}
+
+function loadBasket() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem('recipeBasket')) || []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveBasket() {
+  try {
+    localStorage.setItem('recipeBasket', JSON.stringify([...basket]));
+  } catch {}
+}
+
+let basket = loadBasket();
+
+function toggleBasket(id) {
+  basket.has(id) ? basket.delete(id) : basket.add(id);
+  saveBasket();
+  renderBasketBadge();
+  refreshCurrentView();
+}
+
+function removeFromBasket(id) {
+  basket.delete(id);
+  saveBasket();
+  renderBasketBadge();
+  renderShoppingListView();
+}
+
+function clearBasket() {
+  basket.clear();
+  saveBasket();
+  renderBasketBadge();
+  renderShoppingListView();
+}
+
+function renderBasketBadge() {
+  const badge = document.getElementById('basket-badge');
+  badge.hidden = basket.size === 0;
+  badge.textContent = `🛒 Shopping list (${basket.size})`;
+}
+
+function buildShoppingList() {
+  const grouped = new Map();
+  basket.forEach(id => {
+    const r = recipes.find(x => x.id === id);
+    if (!r) return;
+    r.ingredients.forEach(ing => {
+      const section = ing.section || getSection(ing.name);
+      if (!grouped.has(section)) grouped.set(section, []);
+      grouped.get(section).push({ name: ing.name, amount: ing.amount, recipeTitle: r.title });
+    });
+  });
+
+  return SECTION_ORDER
+    .filter(section => grouped.has(section))
+    .map(section => ({ section, items: grouped.get(section) }));
+}
+
+function buildShoppingListText(groups) {
+  const lines = ['Shopping List', ''];
+  groups.forEach(({ section, items }) => {
+    lines.push(section.toUpperCase());
+    items.forEach(item => lines.push(`- ${item.name} — ${item.amount} (${item.recipeTitle})`));
+    lines.push('');
+  });
+  return lines.join('\n').trim();
+}
+
+function shareToWhatsApp() {
+  const text = buildShoppingListText(buildShoppingList());
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
 
 // ─────────────────────────────────────────────
 //  FILTER STATE & LOGIC
@@ -1007,6 +1296,7 @@ function renderList() {
     const tagChips = r.tags.map(t => `<span class="recipe-chip">${t}</span>`).join('');
     const timeBand = TIME_BANDS.find(b => b.test(r.timeMins));
     const timeChip = timeBand ? `<span class="recipe-chip time">${r.time}</span>` : '';
+    const inBasket = basket.has(r.id);
     return `
       <li class="recipe-list-item">
         <button class="recipe-card-btn" onclick="showRecipe('${r.id}')">
@@ -1017,6 +1307,7 @@ function renderList() {
           </div>
           <span class="recipe-card-arrow">→</span>
         </button>
+        <button class="basket-toggle${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" aria-label="${inBasket ? 'Remove from shopping list' : 'Add to shopping list'}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓' : '+'}</button>
       </li>
     `;
   }).join('');
@@ -1041,6 +1332,8 @@ function renderRecipe(r) {
     </li>
   `).join('');
 
+  const inBasket = basket.has(r.id);
+
   document.getElementById('recipe-content').innerHTML = `
     <header class="recipe-header">
       <p class="recipe-label">${r.label} — serves ${r.servings}</p>
@@ -1051,6 +1344,7 @@ function renderRecipe(r) {
         <span><strong>${r.extra}</strong>${r.oven ? ' oven' : ''}</span>
         <span><strong>${r.servings}</strong> servings</span>
       </div>
+      <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
     </header>
 
     <section class="recipe-section">
@@ -1071,19 +1365,72 @@ function renderRecipe(r) {
     <hr class="footer-rule">
   `;
 
-  document.getElementById('index').style.display = 'none';
-  document.getElementById('recipe-view').style.display = 'block';
+  showView('recipe');
   document.title = `${r.title} – My Recipes`;
   window.scrollTo(0, 0);
   document.getElementById('recipe-title').focus();
 }
 
 function renderIndexView() {
-  document.getElementById('recipe-view').style.display = 'none';
-  document.getElementById('index').style.display = 'block';
+  showView('index');
   document.title = 'My Recipes';
   window.scrollTo(0, 0);
   document.getElementById('site-title').focus();
+}
+
+function renderShoppingListView() {
+  const basketRecipes = [...basket].map(id => recipes.find(r => r.id === id)).filter(Boolean);
+  const groups = buildShoppingList();
+
+  const chipsHtml = basketRecipes.map(r => `
+    <span class="basket-chip">${r.title} <button onclick="removeFromBasket('${r.id}')" aria-label="Remove ${r.title} from shopping list">×</button></span>
+  `).join('');
+
+  const sectionsHtml = groups.map(({ section, items }) => `
+    <section class="recipe-section">
+      <h2 class="section-heading">${section}</h2>
+      <ul class="shopping-items">
+        ${items.map(item => `
+          <li class="shopping-item">
+            <div class="shopping-item-main">
+              <span class="shopping-item-name">${item.name}</span>
+              <span class="shopping-item-recipe">${item.recipeTitle}</span>
+            </div>
+            <span class="shopping-item-amount">${item.amount}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </section>
+  `).join('');
+
+  document.getElementById('shopping-list-content').innerHTML = `
+    <header class="recipe-header">
+      <p class="recipe-label">Shopping list — ${basketRecipes.length} recipe${basketRecipes.length !== 1 ? 's' : ''}</p>
+      <h1 class="recipe-title" id="shopping-list-title" tabindex="-1">Shopping <em>List</em></h1>
+      ${basketRecipes.length ? `<div class="basket-chips">${chipsHtml}</div>` : ''}
+    </header>
+
+    ${basketRecipes.length ? `
+      <div class="shopping-actions">
+        <button class="whatsapp-btn" onclick="shareToWhatsApp()">Send to WhatsApp</button>
+        <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
+      </div>
+      ${sectionsHtml}
+    ` : `<p class="no-results">Your shopping list is empty. Add recipes from the index or a recipe page.</p>`}
+
+    <hr class="footer-rule">
+  `;
+
+  showView('shopping-list');
+  document.title = 'Shopping List – My Recipes';
+  window.scrollTo(0, 0);
+  document.getElementById('shopping-list-title').focus();
+}
+
+function showView(name) {
+  document.getElementById('index').style.display = name === 'index' ? 'block' : 'none';
+  document.getElementById('recipe-view').style.display = name === 'recipe' ? 'block' : 'none';
+  document.getElementById('shopping-list-view').style.display = name === 'shopping-list' ? 'block' : 'none';
 }
 
 // ─────────────────────────────────────────────
@@ -1092,6 +1439,10 @@ function renderIndexView() {
 
 function route() {
   const id = decodeURIComponent(location.hash.slice(1));
+  if (id === 'shopping-list') {
+    renderShoppingListView();
+    return;
+  }
   const recipe = recipes.find(r => r.id === id);
   if (recipe) {
     renderRecipe(recipe);
@@ -1100,8 +1451,29 @@ function route() {
   }
 }
 
+// Re-renders whichever view is currently on screen, without the
+// scroll/focus/display side effects `route()` triggers — used after
+// a basket change so the visible toggle buttons stay in sync.
+function refreshCurrentView() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (id === 'shopping-list') {
+    renderShoppingListView();
+    return;
+  }
+  const recipe = recipes.find(r => r.id === id);
+  if (recipe) {
+    renderRecipe(recipe);
+  } else {
+    renderList();
+  }
+}
+
 function showRecipe(id) {
   location.hash = id;
+}
+
+function showShoppingList() {
+  location.hash = 'shopping-list';
 }
 
 function showIndex() {
@@ -1115,10 +1487,15 @@ window.addEventListener('hashchange', route);
 
 buildFilters();
 renderList();
+renderBasketBadge();
 
 const initialId = decodeURIComponent(location.hash.slice(1));
-const initialRecipe = recipes.find(r => r.id === initialId);
-if (initialRecipe) renderRecipe(initialRecipe);
+if (initialId === 'shopping-list') {
+  renderShoppingListView();
+} else {
+  const initialRecipe = recipes.find(r => r.id === initialId);
+  if (initialRecipe) renderRecipe(initialRecipe);
+}
 </script>
 </body>
 </html>
