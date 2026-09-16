@@ -4,7 +4,7 @@ A personal recipe collection built as a single self-contained HTML file. Recipes
 
 ## Live site
 
-Hosted on GitHub Pages at: `https://yourusername.github.io/my-recipes`
+Hosted on GitHub Pages at: `https://chriscraig79.github.io/my-recipes`
 
 ## How it works
 
@@ -57,6 +57,16 @@ Sections are guessed automatically from each ingredient's name (see `getSection(
 
 Quantities from different recipes are listed separately rather than merged (no unit math), each line showing its amount and source recipe. A "Send to WhatsApp" button opens `wa.me` with the list pre-filled, ready to pick a chat and send.
 
+## Local development
+
+No build step, so no install needed. Serve the file locally with:
+
+```bash
+npx serve .
+```
+
+This opens the site at `http://localhost:3000`. There's no auto-reload — save `index.html` and refresh the browser tab to see changes.
+
 ## Editing in Claude Code
 
 Once you've cloned the repo, you can continue building the recipe collection with Claude Code. Here are some useful prompts to get started:
@@ -87,6 +97,5 @@ git push
 my-recipes/
 ├── index.html   # Everything — recipes, styles, and logic in one file
 ├── README.md
-├── .gitignore
 └── LICENSE
 ```
