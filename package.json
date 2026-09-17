@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/watch.mjs"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0"
