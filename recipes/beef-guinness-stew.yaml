@@ -1,0 +1,64 @@
+id: beef-guinness-stew
+title: Beef & Guinness Stew
+titleHtml: Beef <em>& Guinness Stew</em>
+label: Main course
+servings: '4'
+time: 3 hrs
+timeMins: 180
+extra: 160°C / fan 140°C
+oven: true
+description: A deep, rich stew with fall-apart beef and a dark, slightly bitter gravy. Better the next day, and the day after that.
+tags:
+  - beef
+ingredients:
+  - name: Braising steak or chuck
+    amount: 800g
+    prep: cut into chunks
+  - name: Guinness or stout
+    amount: 500ml
+  - name: Beef stock
+    amount: 300ml
+  - name: Onions
+    amount: '2'
+    prep: roughly chopped
+  - name: Carrots
+    amount: '3'
+    prep: cut into chunks
+  - name: Celery stalks
+    amount: '2'
+    prep: sliced
+  - name: Garlic cloves
+    amount: '3'
+    prep: minced
+  - name: Tomato purée
+    amount: 2 tbsp
+  - name: Worcestershire sauce
+    amount: 1 tbsp
+  - name: Plain flour
+    amount: 2 tbsp
+  - name: Vegetable oil
+    amount: 2 tbsp
+  - name: Bay leaves
+    amount: '2'
+  - name: Fresh or dried thyme
+    amount: 1 tsp
+  - name: Salt and black pepper
+    amount: 1 tsp
+steps:
+  - title: Preheat oven
+    content: Heat your oven to 160°C (140°C fan).
+  - title: Brown the beef
+    content: Pat the beef dry with kitchen paper and season well. Heat the oil in a large ovenproof casserole over high heat. Brown the beef in batches — don't crowd the pan or it'll steam rather than sear. Take your time here, it builds the flavour base. Set aside once browned.
+    timer: ⏱ ~10 minutes
+  - title: Soften the vegetables
+    content: Reduce the heat to medium. Add the onions, carrots, and celery to the same pan and cook for 6–8 minutes until softened. Add the garlic and tomato purée and cook for 2 minutes more, stirring.
+    timer: ⏱ 8 minutes
+  - title: Flour and deglaze
+    content: Sprinkle the flour over the vegetables and stir to coat. Pour in the Guinness and scrape up any browned bits from the bottom — that's all flavour. Let it bubble for 2 minutes, then add the stock, Worcestershire sauce, bay leaves, and thyme.
+    timer: ⏱ 2 minutes
+  - title: Braise
+    content: Return the beef to the pot. The liquid should come about two thirds up the meat — top up with a little water if needed. Bring to a simmer, then cover and transfer to the oven. Cook for 2½ hours until the beef is completely tender and the gravy has thickened.
+    timer: ⏱ 2½ hours
+  - title: Finish and serve
+    content: Taste and adjust seasoning. Remove the bay leaves. Serve with mashed potato, crusty bread, or just as it is.
+notes: Chuck, braising steak, ox cheek, or short rib all work — anything tough and well-marbled that needs a long cook. Don't rush the browning step and don't lift the lid during braising. The stew improves significantly overnight — make it the day before if you can. Leftovers freeze well for up to 3 months.

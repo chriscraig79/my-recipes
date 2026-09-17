@@ -1,0 +1,53 @@
+id: lemon-garlic-chicken
+title: Instant Pot Lemon Garlic Chicken
+titleHtml: Instant Pot <em>Lemon Garlic Chicken</em>
+label: Main course
+servings: '3'
+time: 35 min
+timeMins: 35
+extra: Instant Pot
+oven: false
+description: Chicken legs browned then pressure-cooked in a garlicky lemon and herb broth — a fast, hands-off midweek roast dinner alternative.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken legs (quarters)
+    amount: 3 large
+  - name: Onions
+    amount: ½ medium
+    prep: chopped
+  - name: Garlic cloves
+    amount: 4 large
+    prep: chopped
+  - name: Italian seasoning
+    amount: 1 tbsp
+  - name: Lemons
+    amount: '1'
+    prep: juiced
+  - name: Lemons
+    amount: '1'
+    prep: zested
+  - name: Salt and black pepper
+    amount: to taste
+  - name: Butter
+    amount: 1 tbsp
+  - name: Chicken stock
+    amount: 1 cup
+  - name: Olive oil
+    amount: 2 tbsp
+steps:
+  - title: Season the chicken
+    content: Pat the chicken legs dry and season all over with salt and black pepper.
+  - title: Brown the chicken
+    content: Set the Instant Pot to sauté and heat the olive oil until shimmering. Add the chicken legs skin-side down and brown until crisp, about 3 minutes per side. Remove and set aside.
+    timer: ⏱ ~6 minutes
+  - title: Build the sauce
+    content: Reduce the oil left in the pot, still on sauté, and cook the onion until soft. Add the garlic and cook for a few seconds, then stir in the butter until melted.
+  - title: Deglaze
+    content: Add the lemon zest, Italian seasoning, lemon juice and chicken stock, stirring to combine and scraping up any browned bits. Return the chicken legs to the pot, stacking if needed.
+  - title: Pressure cook
+    content: Seal the lid and cook on high pressure for 15 minutes (25 minutes if frozen). Let the pressure release naturally for 5 minutes, then quick release the rest.
+    timer: ⏱ 15 minutes + 5 min release
+  - title: Serve
+    content: Spoon the pan sauce over the chicken. For crispy skin, broil for a further 5 minutes before serving.
+notes: Browning the chicken skin properly before pressure cooking is what gives the sauce its depth — don't skip it. If you want really crisp skin at the end, the 5-minute broil is worth the extra step. Adapted from thedinnerbite.com.

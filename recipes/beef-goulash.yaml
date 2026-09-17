@@ -1,0 +1,62 @@
+id: beef-goulash
+title: Slow-Cooker Beef Goulash
+titleHtml: Slow-Cooker <em>Beef Goulash</em>
+label: Main course
+servings: '6'
+time: 7 hrs+
+timeMins: 420
+extra: Slow cooker
+oven: false
+description: Deeply spiced Hungarian-style beef goulash with peppers and a smoked paprika kick, finished with a swirl of soured cream.
+tags:
+  - beef
+ingredients:
+  - name: Olive oil
+    amount: 3 tbsp
+  - name: Braising or stewing steak
+    amount: 2kg
+    prep: cut into chunks
+  - name: Onions
+    amount: 2 large
+    prep: finely chopped
+  - name: Mixed peppers
+    amount: '4'
+    prep: cut into chunks
+  - name: Garlic cloves
+    amount: '3'
+    prep: crushed
+  - name: Plain flour
+    amount: 2 tbsp
+  - name: Caraway seeds
+    amount: 2 tsp
+  - name: Hot smoked paprika
+    amount: 2 tsp
+  - name: Sweet smoked paprika
+    amount: 1 tbsp
+    prep: plus extra to serve
+  - name: Tomato purée
+    amount: 4 tbsp
+  - name: Large tomatoes
+    amount: '4'
+    prep: chopped
+  - name: Beef stock
+    amount: 400–500ml
+  - name: Soured cream
+    amount: 300ml
+  - name: Parsley
+    amount: 1 small bunch
+    prep: chopped
+steps:
+  - title: Sear the beef
+    content: Heat the slow cooker to low. Heat 2 tbsp of the oil in a deep frying pan over medium heat. Season and sear the beef in batches until browned all over, then transfer to a plate.
+  - title: Soften the veg
+    content: Add the remaining oil to the pan and fry the onions for 10 minutes until lightly golden. Add the peppers and garlic and fry for a further 5–10 minutes.
+    timer: ⏱ 15–20 minutes
+  - title: Build the sauce
+    content: Stir in the flour and all the spices and cook for 2 minutes. Stir in the tomato purée, chopped tomatoes and 400ml of the beef stock. Season well and bring to a simmer.
+  - title: Slow cook
+    content: Tip the sauce into the slow cooker with the seared beef. Add the remaining stock if needed to cover the meat. Cover and cook for 6–7 hours until the beef is tender and the sauce has thickened slightly.
+    timer: ⏱ 6–7 hours
+  - title: Finish and serve
+    content: Season to taste, then swirl the soured cream and most of the parsley through the stew. Scatter over the remaining parsley and a little extra smoked paprika, and serve with small roasted potatoes or brown rice.
+notes: Searing the beef properly in batches (don't crowd the pan) makes a real difference to the depth of flavour. The soured cream is stirred through at the very end, off the direct heat, so it doesn't split. Leftovers freeze well.

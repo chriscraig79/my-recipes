@@ -1,0 +1,60 @@
+id: southern-fried-chicken
+title: Southern Fried Chicken (Air Fryer)
+titleHtml: Southern <em>Fried Chicken</em>
+label: Main course
+servings: '4'
+time: 4 hrs+
+timeMins: 270
+extra: Air fryer
+oven: false
+description: Crispy Southern-style fried chicken thighs and legs, air fried with a spiced buttermilk marinade and craggy seasoned crust. Family friendly — heat optional.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken thighs and legs
+    amount: '8'
+    prep: bone-in skin-on
+  - name: Buttermilk (or milk with 1 tbsp lemon juice)
+    amount: 300ml
+  - name: Garlic powder
+    amount: 1 tsp
+  - name: Onion powder
+    amount: 1 tsp
+  - name: Smoked paprika
+    amount: 1 tsp
+  - name: Salt
+    amount: 1 tsp
+  - name: Black pepper
+    amount: ½ tsp
+  - name: Plain flour
+    amount: 200g
+  - name: Cornflour
+    amount: 50g
+  - name: Baking powder
+    amount: 1 tsp
+  - name: Garlic powder (for coating)
+    amount: 1 tsp
+  - name: Smoked paprika (for coating)
+    amount: 1 tsp
+  - name: Salt (for coating)
+    amount: 1 tsp
+  - name: Vegetable oil spray or oil
+    amount: 2 tbsp
+steps:
+  - title: Marinate the chicken
+    content: Mix the buttermilk with the garlic powder, onion powder, smoked paprika, salt, and pepper in a large bowl. Add the chicken and turn to coat. Cover and refrigerate for at least 4 hours, ideally overnight.
+    timer: ⏱ At least 4 hours
+  - title: Mix the coating
+    content: Mix the flour, cornflour, baking powder, garlic powder, smoked paprika, and salt together in a wide shallow bowl.
+  - title: Coat the chicken
+    content: Take each piece of chicken from the marinade, letting excess drip off, and press firmly into the flour mixture, turning and pressing so you get a good craggy coating all over. Set aside on a rack for 10 minutes — this helps the coating stick.
+    timer: ⏱ 10 minutes
+  - title: Prep the air fryer
+    content: Heat your air fryer to 200°C. Spray or brush the basket with oil. Place the chicken in a single layer — cook in batches if needed. Spray the top of the chicken generously with oil.
+  - title: Air fry
+    content: Air fry for 25–30 minutes, turning halfway and spraying with oil again, until deeply golden and the internal temperature reads 75°C at the thickest part. The coating should be properly crispy.
+    timer: ⏱ 25–30 minutes
+  - title: Rest and serve
+    content: Rest for 5 minutes before serving. Goes well with the Cajun fries, coleslaw, or hot sauce on the side for the adults.
+    timer: ⏱ 5 minutes
+notes: Don't skip the overnight marinade if you can help it — it makes a real difference to tenderness and flavour. The cornflour in the coating is what gives you the extra crunch. Make sure the coating is properly pressed on and not just dusted. For a spicy version, add 1 tsp cayenne and 1 tsp hot sauce to the buttermilk marinade. The oil spray is important — without it the coating won't crisp properly in the air fryer.

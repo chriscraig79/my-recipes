@@ -1,0 +1,54 @@
+id: club-sandwich
+title: Club Sandwich
+titleHtml: Club <em>Sandwich</em>
+label: Lunch
+servings: '2'
+time: 20 min
+timeMins: 20
+extra: No cooking required
+oven: false
+description: The classic triple-decker, done properly. Sourdough, crispy bacon, chicken, egg, and all the trimmings.
+tags:
+  - chicken
+  - bacon
+  - eggs
+ingredients:
+  - name: Thick slices sourdough bread
+    amount: '6'
+  - name: Chicken breasts
+    amount: 200g
+    prep: cooked and sliced
+  - name: Streaky bacon rashers
+    amount: '6'
+  - name: Hard boiled eggs
+    amount: '2'
+    prep: sliced
+  - name: Ripe tomato
+    amount: '1'
+    prep: sliced
+  - name: Little gem or iceberg lettuce leaves
+    amount: '4'
+  - name: Mayonnaise
+    amount: 3 tbsp
+  - name: Dijon mustard
+    amount: 1 tsp
+  - name: Salt and black pepper
+    amount: 1 tsp
+steps:
+  - title: Boil the eggs
+    content: Lower the eggs into boiling water and cook for 9 minutes. Transfer to cold water, peel, and slice.
+    timer: ⏱ 9 minutes
+  - title: Cook the bacon
+    content: Fry or grill the bacon until properly crispy. Set aside on kitchen paper. Don't skimp on the crispiness — soggy bacon collapses the whole thing.
+    timer: ⏱ 5 minutes
+  - title: Toast the bread
+    content: Toast all 6 slices until golden. A club sandwich needs toasted bread on every layer — it's what gives it structure.
+  - title: Mix the mayo
+    content: Stir the mustard into the mayonnaise. Season with a little salt and pepper. Spread generously on one side of all 6 slices.
+  - title: Build the first layer
+    content: On the first slice, lay down the lettuce, then the chicken and sliced egg. Season with salt and pepper. Top with a second slice of toast, mayo side up.
+  - title: Build the second layer
+    content: On the second slice, add the tomato (season it), then the bacon. Top with the third slice, mayo side down.
+  - title: Cut and secure
+    content: Press down gently and cut diagonally into four triangles. Secure each with a cocktail stick if you have them — it's not just for show, it holds everything together. Serve immediately.
+notes: 'Leftover roast chicken works brilliantly here. If cooking chicken from scratch, poach it in seasoned water rather than frying — it stays juicier. The order of layers matters: lettuce and chicken on the bottom, tomato and bacon on top, so the bacon stays crispy and the lettuce doesn''t go soggy from the tomato.'

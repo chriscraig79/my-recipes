@@ -1,0 +1,42 @@
+id: drop-scones
+title: Drop Scones (Scotch Pancakes)
+titleHtml: Drop Scones <em>(Scotch Pancakes)</em>
+label: Breakfast / snack
+servings: '4'
+time: 20 min
+timeMins: 20
+extra: No rest needed
+oven: false
+description: Thick, fluffy drop scones — faster than crêpes, no resting needed. Ready in 20 minutes and good with butter and jam, golden syrup, or fresh fruit.
+tags:
+  - eggs
+ingredients:
+  - name: Self-raising flour
+    amount: 200g
+  - name: Baking powder
+    amount: 1 tsp
+  - name: Caster sugar
+    amount: 2 tbsp
+  - name: Pinch of salt
+    amount: '1'
+  - name: Large eggs
+    amount: '2'
+  - name: Whole milk
+    amount: 150ml
+  - name: Butter
+    amount: 2 tbsp
+    prep: melted
+  - name: Butter
+    amount: 1 tbsp
+    prep: for frying
+steps:
+  - title: Make the batter
+    content: Mix the flour, baking powder, sugar, and salt together in a bowl. Make a well in the centre. Beat the eggs and milk together, then pour into the well. Add the melted butter and stir until just combined — don't overwork it, a few lumps are fine. The batter should be thick and drop slowly from a spoon.
+  - title: Heat the pan and cook
+    content: Heat a heavy-based frying pan or griddle over medium heat. Add a small knob of butter and let it melt. Drop heaped tablespoons of batter into the pan, leaving space between each. They'll spread to about 8cm.
+  - title: Watch for bubbles then flip
+    content: Cook for 2–3 minutes until bubbles appear across the surface and the edges look set. Flip and cook for another minute or two until golden on the other side.
+    timer: ⏱ 2–3 minutes per side
+  - title: Serve
+    content: Serve warm with butter and jam, golden syrup, or fresh berries and cream.
+notes: Don't overmix — a few lumps in the batter are fine and keep the pancakes light. The bubbles on the surface are the signal to flip; don't rush it. Unlike crêpes, these need no resting time. Keep finished ones warm in a low oven (about 100°C) on a plate covered with a clean tea towel while you cook the rest.

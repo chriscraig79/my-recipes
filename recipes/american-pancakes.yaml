@@ -1,0 +1,41 @@
+id: american-pancakes
+title: Fluffy American Pancakes
+titleHtml: Fluffy <em>American Pancakes</em>
+label: Breakfast / dessert
+servings: '2'
+time: 20 min
+timeMins: 20
+extra: No resting needed
+oven: false
+description: Thick, fluffy American-style pancakes with a simple batter — ready in the time it takes to heat the pan.
+tags:
+  - eggs
+ingredients:
+  - name: Plain flour
+    amount: 135g
+  - name: Baking powder
+    amount: 1 tsp
+  - name: Salt
+    amount: ½ tsp
+  - name: Caster sugar
+    amount: 2 tbsp
+  - name: Milk
+    amount: 130ml
+  - name: Large eggs
+    amount: '1'
+    prep: lightly beaten
+  - name: Butter
+    amount: 2 tbsp
+    prep: melted (cooled slightly), or olive oil, plus extra for cooking
+steps:
+  - title: Mix the dry ingredients
+    content: Sift the flour, baking powder, salt and caster sugar into a large bowl.
+  - title: Mix the wet ingredients
+    content: In a separate bowl or jug, lightly whisk together the milk and egg, then whisk in the melted butter.
+  - title: Combine
+    content: Pour the milk mixture into the flour mixture and beat with a fork until smooth — any lumps will disappear with a little mixing. Let the batter stand for a few minutes.
+  - title: Cook the pancakes
+    content: Heat a non-stick frying pan over medium heat and add a knob of butter. Add a ladle of batter (or two, if there's room) — it will look thick, but that's right. Wait until the top begins to bubble, then flip and cook until both sides are golden and the pancake has risen to about 1cm thick.
+  - title: Repeat and serve
+    content: Repeat with the remaining batter, keeping cooked pancakes warm in a low oven if needed. Serve with maple syrup and extra butter.
+notes: The batter should look quite thick before cooking — don't thin it down, that's what gives the pancakes their height. They're best served fresh from the pan rather than kept warm too long.

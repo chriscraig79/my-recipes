@@ -1,0 +1,62 @@
+id: aubergine-chickpea-stew
+title: Aubergine & Chickpea Stew
+titleHtml: Aubergine <em>&</em> Chickpea Stew
+label: Main course
+servings: '6'
+time: 9 hrs+
+timeMins: 540
+extra: Slow cooker
+oven: false
+description: A slow-cooked Middle Eastern stew of tender aubergine and chickpeas in a cinnamon and baharat-spiced tomato sauce, finished with pine nuts and lemon.
+tags:
+  - chickpeas
+  - aubergine
+  - vegetarian
+ingredients:
+  - name: Dried chickpeas
+    amount: 200g
+    prep: soaked for 6–8 hours
+  - name: Extra virgin olive oil
+    amount: 2 tbsp
+  - name: Onions
+    amount: '2'
+    prep: finely sliced
+  - name: Garlic cloves
+    amount: '6'
+    prep: crushed
+  - name: Baharat
+    amount: 1 tbsp
+  - name: Ground cinnamon
+    amount: 1 tsp
+  - name: Flat-leaf parsley
+    amount: 1 small bunch
+  - name: Aubergines
+    amount: 3 medium
+    prep: sliced into 2cm rounds
+  - name: Chopped tomatoes
+    amount: 2 x 400g
+    prep: tinned
+  - name: Lemons
+    amount: '1'
+    prep: juiced
+  - name: Pine nuts
+    amount: 50g
+    prep: toasted, to serve
+  - name: Pitta breads or flatbreads
+    amount: to taste
+    prep: to serve (optional)
+steps:
+  - title: Cook the chickpeas
+    content: Drain the soaked chickpeas and bring to the boil in a pan of salted water. Cook for 10 minutes, then drain.
+    timer: ⏱ 10 minutes
+  - title: Soften the onions
+    content: Heat the oil in a frying pan over medium heat and fry the onions for 10 minutes until beginning to soften. Stir in the garlic, baharat and cinnamon and cook for 1 minute.
+    timer: ⏱ 11 minutes
+  - title: Load the slow cooker
+    content: Tip the onion mixture into a slow cooker. Add the chickpeas, parsley stalks, aubergines, tomatoes and a can of water. Season well.
+  - title: Cook low and slow
+    content: Cover and cook on high for 2 hours, then turn to low and cook for a further 6–8 hours until the chickpeas and aubergines are really tender.
+    timer: ⏱ 8–10 hours total
+  - title: Finish and serve
+    content: Stir in the lemon juice, then scatter over the pine nuts and parsley leaves. Drizzle with a little extra olive oil and serve with pitta or flatbreads.
+notes: Soaking the chickpeas properly (6–8 hours, or overnight) is what gets them tender in the slow cooker time given — don't be tempted to skip it. The stew keeps reducing and intensifying the longer it goes on low, so it's very forgiving if you're out of the house all day. From bbcgoodfood.com/recipes/aubergine-chickpea-stew.

@@ -1,0 +1,61 @@
+id: veggie-chilli
+title: Veggie Chilli
+titleHtml: Veggie <em>Chilli</em>
+label: Main course
+servings: '4'
+time: 50 min
+timeMins: 50
+extra: One pan
+oven: false
+description: A chargrilled sweet potato, pepper and cannellini bean chilli with black rice, a raw veg salsa, and warm tortillas — hearty, bright, and properly vegetarian.
+tags:
+  - vegetarian
+  - rice
+  - potato
+ingredients:
+  - name: Red onions
+    amount: '2'
+  - name: Sweet potatoes
+    amount: 2 (250g each)
+  - name: Mixed-colour peppers
+    amount: '3'
+  - name: Large ripe tomatoes
+    amount: '4'
+  - name: Olive oil
+    amount: as needed
+  - name: Cumin seeds
+    amount: 1 tsp
+  - name: Smoked paprika
+    amount: 1 tsp
+  - name: Garlic cloves
+    amount: '4'
+  - name: Lemons
+    amount: '1'
+  - name: Cannellini beans
+    amount: 1 x 400g
+    prep: tinned
+  - name: Hot chilli sauce
+    amount: to taste
+  - name: Black rice
+    amount: 250g
+  - name: Fresh mint
+    amount: 1 bunch (30g)
+  - name: Small flour tortillas
+    amount: '4'
+  - name: Natural yoghurt
+    amount: 4 tbsp
+steps:
+  - title: Chargrill the veg
+    content: Preheat a griddle pan to high. Peel the onions, scrub the sweet potatoes and deseed the peppers. Set aside a small chunk of each, plus one tomato, for the salsa. Roughly chop the rest into 4cm chunks, halve the remaining tomatoes, and chargrill in batches.
+  - title: Build the stew
+    content: Heat 1 tbsp oil in a large casserole over medium-low heat and stir in the cumin and paprika. Add the chopped garlic and grated lemon zest, then add the grilled veg bit by bit, stirring regularly.
+  - title: Simmer
+    content: Tip in the beans (with their liquid) and 1½ tins' worth of water, then stir in about 1 tbsp chilli sauce, or to taste. Season and simmer for 30 minutes until thickened and reduced.
+    timer: ⏱ 30 minutes
+  - title: Cook the rice
+    content: Meanwhile, cook the black rice in a pan of boiling salted water according to the packet instructions.
+  - title: Make the salsa
+    content: Finely chop the reserved raw veg with a couple of sprigs of mint, then toss with the lemon juice and season to taste.
+  - title: Serve
+    content: Warm the tortillas on the griddle and ripple a few shakes of chilli sauce through the yoghurt. Serve the chilli with the black rice, salsa, spiced yoghurt and tortillas, with the remaining mint leaves scattered over.
+notes: Using some of the veg raw for the salsa as well as cooked in the stew is a great way to stretch the shopping list further. From jamieoliver.com/recipes/vegetable-recipes/amazing-veggie-chilli.

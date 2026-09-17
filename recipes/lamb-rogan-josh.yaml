@@ -1,0 +1,82 @@
+id: lamb-rogan-josh
+title: Lamb Rogan Josh
+titleHtml: Lamb <em>Rogan Josh</em>
+label: Main course
+servings: '4'
+time: 1 hr 10 min
+timeMins: 70
+extra: One pan
+oven: false
+description: A rich, warmly spiced Kashmiri curry — lamb neck fillet simmered slowly in a coriander and paprika paste until tender.
+tags:
+  - lamb
+ingredients:
+  - name: Fresh coriander
+    amount: 1 bunch
+    prep: stalks and leaves separated
+  - name: Red chilli
+    amount: '1'
+    prep: seeded and chopped
+  - name: Coriander seeds
+    amount: 2 tsp
+    prep: toasted and ground
+  - name: Cumin seeds
+    amount: 2 tsp
+    prep: toasted and ground
+  - name: Black peppercorns
+    amount: 1 tsp
+    prep: roughly ground
+  - name: Paprika
+    amount: 2 tsp
+  - name: Turmeric
+    amount: 1 tsp
+  - name: Garam masala
+    amount: 2 tsp
+  - name: Salt
+    amount: 1 pinch
+  - name: Tomato purée
+    amount: 2 tbsp
+  - name: Groundnut oil
+    amount: 1 tbsp
+  - name: Cinnamon stick
+    amount: 5cm
+  - name: Cardamom pods
+    amount: '5'
+    prep: lightly crushed
+  - name: Bay leaves
+    amount: '3'
+  - name: Cloves
+    amount: '4'
+  - name: Onions
+    amount: '1'
+    prep: roughly chopped
+  - name: Lamb neck fillet
+    amount: 600g
+    prep: trimmed, cut into chunks
+  - name: Garlic cloves
+    amount: '2'
+    prep: crushed
+  - name: Fresh ginger
+    amount: 1 thumb-sized piece
+    prep: finely grated
+  - name: Fat-free natural yoghurt
+    amount: 100g
+steps:
+  - title: Make the paste
+    content: Blend the coriander stalks, red chilli, ground spices and salt together in a mixer. Mix in the tomato purée.
+  - title: Fry the whole spices
+    content: Heat the oil in a large heavy-based casserole. Fry the cinnamon stick, cardamom pods, bay leaves and cloves for 2 minutes.
+    timer: ⏱ 2 minutes
+  - title: Brown the lamb
+    content: Add the onion and lamb and fry for 4–5 minutes, stirring. Add the garlic and ginger and fry for a further 2 minutes.
+    timer: ⏱ 6–7 minutes
+  - title: Add the paste
+    content: Add the spice paste and fry for a further 2 minutes, stirring.
+    timer: ⏱ 2 minutes
+  - title: Simmer
+    content: Add 400ml water, cover with a lid, and simmer for 40–50 minutes until the lamb is tender.
+    timer: ⏱ 40–50 minutes
+  - title: Finish
+    content: Stir in the yoghurt and cook for a further 10 minutes. Serve garnished with the reserved coriander leaves.
+    timer: ⏱ 10 minutes
+notes: Toast and grind your own coriander and cumin seeds if you can — it makes a noticeable difference to the depth of the paste. Stir the yoghurt in gently and don't let it boil hard afterwards, or it can split. From bbc.co.uk/food/recipes/lamb_rogan_josh_04376.

@@ -1,0 +1,76 @@
+id: vegetarian-lasagna
+title: Vegetarian Lasagna
+titleHtml: Vegetarian <em>Lasagna</em>
+label: Main course
+servings: '6'
+time: 1 hr 45 min
+timeMins: 105
+extra: 200°C / fan 180°C
+oven: true
+description: Roasted peppers and aubergine layered with a slow-cooked tomato sauce, a silky white sauce and mozzarella — a proper vegetarian centrepiece.
+tags:
+  - aubergine
+  - pasta
+  - vegetarian
+ingredients:
+  - name: Red peppers
+    amount: '3'
+    prep: cut into large chunks
+  - name: Aubergines
+    amount: '2'
+    prep: sliced ½cm thick
+  - name: Olive oil
+    amount: 8 tbsp
+    prep: plus extra for the dish
+  - name: Lasagne sheets
+    amount: 300g
+  - name: Mozzarella
+    amount: 125g
+  - name: Cherry tomatoes
+    amount: 1 handful
+    prep: halved
+  - name: Olive oil
+    amount: 1 tbsp
+  - name: Onions
+    amount: '2'
+    prep: finely chopped
+  - name: Garlic cloves
+    amount: '2'
+    prep: sliced
+  - name: Carrots
+    amount: '1'
+    prep: roughly chopped
+  - name: Tomato purée
+    amount: 2 tbsp
+  - name: White wine
+    amount: 200ml
+  - name: Chopped tomatoes
+    amount: 3 x 400g
+    prep: tinned
+  - name: Basil
+    amount: 1 bunch
+    prep: leaves picked
+  - name: Butter
+    amount: 85g
+  - name: Plain flour
+    amount: 85g
+  - name: Milk
+    amount: 750ml
+steps:
+  - title: Make the tomato sauce
+    content: Heat the olive oil in a saucepan. Add the onions, garlic and carrot and cook for 5–7 minutes until softened. Turn up the heat, stir in the tomato purée and cook for 1 minute, then pour in the white wine and cook for 5 minutes until reduced by two-thirds.
+    timer: ⏱ 11–13 minutes
+  - title: Simmer the sauce
+    content: Pour over the chopped tomatoes, add the basil leaves, bring to the boil, then simmer for 20 minutes. Leave to cool, then blitz in a food processor.
+    timer: ⏱ 20 minutes
+  - title: Make the white sauce
+    content: Melt the butter in a saucepan, stir in the flour and cook for 2 minutes. Slowly whisk in the milk, bring to the boil, then reduce the heat and cook until it coats the back of a spoon.
+  - title: Roast the vegetables
+    content: Heat the oven to 200°C (180°C fan). Lightly oil two large baking trays and toss the peppers and aubergines with the olive oil. Season well and roast for 25 minutes until lightly browned.
+    timer: ⏱ 25 minutes
+  - title: Layer the lasagne
+    content: Reduce the oven to 180°C (160°C fan). Lightly oil a 30 x 20cm ovenproof dish. Layer the roasted vegetables on the bottom, pour over a third of the tomato sauce, then top with lasagne sheets and a quarter of the white sauce. Repeat to make three layers of pasta.
+  - title: Top and bake
+    content: Spoon the remaining white sauce over the top, making sure it's fully covered, then scatter over the mozzarella and cherry tomatoes. Bake for 45 minutes until bubbling and golden.
+    timer: ⏱ 45 minutes
+notes: Both sauces can be made up to three days ahead (or frozen for three months), which makes assembly on the day much quicker. Don't skip reducing the wine properly in the tomato sauce — it's where a lot of the depth comes from.

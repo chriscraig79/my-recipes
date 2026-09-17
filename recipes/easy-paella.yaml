@@ -1,0 +1,56 @@
+id: easy-paella
+title: Easy Paella
+titleHtml: Easy <em>Paella</em>
+label: Main course
+servings: '4'
+time: 30 min
+timeMins: 30
+extra: One pan
+oven: false
+description: A fast, frying-pan paella built on smoked paprika and paella rice, finished with a frozen seafood mix and a squeeze of lemon.
+tags:
+  - seafood
+  - rice
+ingredients:
+  - name: Olive oil
+    amount: 1 tbsp
+  - name: Onions
+    amount: '1'
+    prep: chopped
+  - name: Hot smoked paprika
+    amount: 1 tsp
+  - name: Dried thyme
+    amount: 1 tsp
+  - name: Paella or risotto rice
+    amount: 300g
+  - name: Dry sherry or white wine (optional)
+    amount: 3 tbsp
+  - name: Chopped tomatoes with garlic
+    amount: 400g
+    prep: tinned
+  - name: Chicken stock
+    amount: 900ml
+  - name: Frozen seafood mix
+    amount: 400g
+    prep: defrosted
+  - name: Lemons
+    amount: '1'
+    prep: ½ juiced, ½ cut into wedges
+  - name: Flat-leaf parsley
+    amount: 1 handful
+    prep: chopped
+steps:
+  - title: Soften the onion
+    content: Heat the olive oil in a large frying pan or wok. Add the onion and soften for 5 minutes.
+    timer: ⏱ 5 minutes
+  - title: Toast the rice
+    content: Add the smoked paprika, thyme and rice, and stir for 1 minute. Splash in the sherry if using and let it evaporate, then stir in the chopped tomatoes and chicken stock.
+  - title: Simmer
+    content: Season and cook uncovered for about 15 minutes, stirring occasionally, until the rice is almost tender with a little liquid still surrounding it.
+    timer: ⏱ 15 minutes
+  - title: Add the seafood
+    content: Stir in the seafood mix, cover, and simmer for 5 minutes until cooked through and the rice is tender.
+    timer: ⏱ 5 minutes
+  - title: Serve
+    content: Squeeze over the lemon juice, scatter with parsley, and serve with the lemon wedges.
+notes: 'For a chorizo and chickpea version: fry 150g sliced chorizo for 5 minutes until golden, set aside, then fry everything else in the chorizo oil. Stir in a drained 400g tin of chickpeas with the fried chorizo once the rice is almost tender. From bbcgoodfood.com/recipes/easy-paella.'

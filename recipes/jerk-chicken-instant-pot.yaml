@@ -1,0 +1,44 @@
+id: jerk-chicken-instant-pot
+title: Instant Pot Jerk Chicken
+titleHtml: Instant Pot <em>Jerk Chicken</em>
+label: Main course
+servings: '4'
+time: 30 min
+timeMins: 30
+extra: Instant Pot
+oven: false
+description: Chicken thighs pressure-cooked in a sweet, smoky jerk and ketchup sauce, then finished on the grill for proper char and colour.
+tags:
+  - chicken
+ingredients:
+  - name: Ketchup
+    amount: ½ cup
+  - name: Dark brown sugar
+    amount: ¼ cup
+  - name: Red wine vinegar
+    amount: ¼ cup
+  - name: Soy sauce
+    amount: 3 tbsp
+  - name: Sriracha sauce
+    amount: 2 tbsp
+  - name: Jamaican jerk seasoning
+    amount: 1 tbsp
+  - name: Salt
+    amount: 1 tsp
+  - name: Chicken thighs or drumsticks
+    amount: '6'
+steps:
+  - title: Mix the sauce
+    content: Stir together the ketchup, brown sugar, red wine vinegar, soy sauce, sriracha and jerk seasoning with the salt in the Instant Pot.
+  - title: Add the chicken
+    content: Add the chicken pieces and stir to coat well in the sauce.
+  - title: Pressure cook
+    content: Close the lid and cook for 10 minutes on high pressure. Quick release the pressure and carefully open the lid.
+    timer: ⏱ 10 minutes
+  - title: Reduce the sauce
+    content: Remove the chicken and set aside. Press sauté and reduce the sauce until thickened, 5–7 minutes, using a splatter screen if needed.
+    timer: ⏱ 5–7 minutes
+  - title: Grill to finish
+    content: Grill the chicken for about 2 minutes per side to get sear marks and a proper grilled flavour, basting with the reduced sauce or coating it before grilling.
+    timer: ⏱ ~4 minutes
+notes: The pressure cooking gets the chicken cooked through fast, but the grill finish is what gives it real jerk character — don't skip it if you can help it. Adapted from paintthekitchenred.com.

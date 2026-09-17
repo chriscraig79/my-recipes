@@ -1,0 +1,45 @@
+id: spanish-tortilla
+title: Spanish Tortilla
+titleHtml: Spanish <em>Tortilla</em>
+label: Light meal
+servings: '4'
+time: 45 min
+timeMins: 45
+extra: One pan
+oven: false
+description: The real thing — potato, onion, eggs, olive oil. Served warm or at room temperature, it's one of the great simple dishes.
+tags:
+  - eggs
+  - potato
+ingredients:
+  - name: Waxy potatoes
+    amount: 600g
+    prep: peeled and thinly sliced
+  - name: Onions
+    amount: '1'
+    prep: halved and thinly sliced
+  - name: Large eggs
+    amount: '6'
+  - name: Olive oil
+    amount: 200ml
+  - name: Salt
+    amount: 1 tsp
+steps:
+  - title: Confit the potatoes and onion
+    content: Pour the olive oil into a medium frying pan (about 24cm) over low-medium heat. Add the potatoes and onion with the salt. Cook gently for 20–25 minutes, turning occasionally, until the potatoes are completely tender but not browned. You're confiting them in oil, not frying — keep the heat low.
+    timer: ⏱ 20–25 minutes
+  - title: Drain and beat the eggs
+    content: Lift the potatoes and onion out with a slotted spoon into a bowl, leaving the oil in the pan. Beat the eggs well in a separate large bowl, season with salt, then fold the potato and onion mixture into the eggs. Press down gently so everything is submerged. Leave to rest for 5 minutes.
+    timer: ⏱ Rest 5 minutes
+  - title: Cook the first side
+    content: Pour most of the oil out of the pan, leaving just a thin coating. Heat over medium heat. Pour in the egg and potato mixture and spread it level. Cook for 4–5 minutes until the edges are set but the centre still has a wobble.
+    timer: ⏱ 4–5 minutes
+  - title: Flip
+    content: This is the moment. Place a large flat plate or lid over the pan, then flip the tortilla onto it in one confident move. Slide it back into the pan, uncooked side down. Tuck the edges under with a spatula to get a neat shape.
+  - title: Finish the second side
+    content: Cook for 2–3 minutes more. The centre should still have a slight give when you press it — that's what you want. It'll continue to set as it rests.
+    timer: ⏱ 2–3 minutes
+  - title: Rest and serve
+    content: Slide onto a board or plate and leave to rest for at least 5 minutes before cutting. Serve warm or at room temperature — both are correct.
+    timer: ⏱ Rest 5 minutes
+notes: The flip is the only tricky bit — use a plate bigger than the pan and do it decisively. Hesitating is what causes disasters. Waxy potatoes (Charlotte, Désirée, or similar) hold their shape better than floury ones. The tortilla keeps well at room temperature for a few hours and is arguably better the next day cold from the fridge, sliced and eaten as a snack.

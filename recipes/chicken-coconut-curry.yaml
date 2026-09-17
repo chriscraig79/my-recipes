@@ -1,0 +1,73 @@
+id: chicken-coconut-curry
+title: Sri Lankan Chicken & Coconut Curry
+titleHtml: Sri Lankan Chicken <em>& Coconut Curry</em>
+label: Main course
+servings: '4'
+time: 1 hr
+timeMins: 60
+extra: One pan
+oven: false
+description: A creamy coconut chicken curry built on a from-scratch roasted curry powder, toasted until fragrant for a deep, smoky aroma. By George and Fran Alagiah, from Recipes That Made Me.
+tags:
+  - chicken
+ingredients:
+  - name: Basmati rice
+    amount: 1 handful
+    prep: uncooked, a handful (for the curry powder)
+  - name: Coriander seeds
+    amount: 115g
+  - name: Cinnamon pieces
+    amount: 30–40g
+  - name: Black peppercorns
+    amount: 30g
+  - name: Dried chilli
+    amount: 30–55g
+  - name: Cumin seeds
+    amount: 30g
+  - name: Fennel seeds
+    amount: 85g
+  - name: Coconut or vegetable oil
+    amount: 2 tbsp
+  - name: Fresh curry leaves
+    amount: 1 handful
+  - name: Onions
+    amount: '1'
+    prep: finely sliced
+  - name: Garlic cloves
+    amount: '2'
+    prep: roughly chopped
+  - name: Fresh ginger
+    amount: 1 small piece
+    prep: roughly chopped
+  - name: Chicken thighs
+    amount: '8'
+    prep: boneless and skinless, cut into bite-sized pieces
+  - name: Roasted curry powder (from above)
+    amount: 2 tbsp
+  - name: Coconut milk
+    amount: 200ml
+  - name: Salt
+    amount: to taste
+  - name: Fresh coriander
+    amount: to taste
+    prep: chopped, to serve
+steps:
+  - title: Toast the rice and whole spices
+    content: Heat a wide, heavy-based pan over medium-high heat. Add the basmati rice and cook for a few minutes until starting to brown, then add the coriander seeds, cinnamon and peppercorns and toast for a few minutes, stirring, until the seeds start to pop.
+  - title: Toast the remaining spices
+    content: Add the dried chilli, cumin seeds and fennel seeds and continue roasting for a further 5 minutes until fragrant. Remove from the heat and let cool in a bowl.
+    timer: ⏱ 5 minutes
+  - title: Grind the curry powder
+    content: Once cool, grind the spices in a spice grinder or pestle and mortar to a fine powder.
+  - title: Soften the aromatics
+    content: Heat the oil in a large pan and add the curry leaves, onion, garlic and ginger. Cook for 5–10 minutes until the onions are soft and lightly browned.
+    timer: ⏱ 5–10 minutes
+  - title: Brown the chicken
+    content: Add the chicken pieces and allow to brown, stirring frequently. Stir in 2 tbsp of the roasted curry powder, coating the chicken evenly, and cook for a further 5–10 minutes.
+    timer: ⏱ 5–10 minutes
+  - title: Simmer
+    content: Add the coconut milk and about 250ml water. Add a teaspoon of salt, bring to the boil, then reduce the heat, cover, and simmer gently for around 30 minutes until the chicken is cooked through. Remove the lid and reduce for a further 5–10 minutes to thicken.
+    timer: ⏱ 35–40 minutes
+  - title: Serve
+    content: Transfer to a serving dish and scatter with fresh coriander. Serve with steamed rice.
+notes: The roasted curry powder recipe makes more than you need for one curry — it's best used fresh, so halve the spice quantities if you won't get through it quickly. Toasting the whole spices properly (until the seeds pop) is what gives this curry its distinctive smoky aroma.

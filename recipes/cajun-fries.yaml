@@ -1,0 +1,47 @@
+id: cajun-fries
+title: Louisiana Cajun Fries
+titleHtml: Louisiana <em>Cajun Fries</em>
+label: Side / snack
+servings: '2'
+time: 55 min
+timeMins: 55
+extra: Air fryer
+oven: false
+description: Crispy air fryer fries with a smoky, punchy Cajun spice blend. Close as you'll get to the real thing at home.
+tags:
+  - potato
+ingredients:
+  - name: Floury potatoes (Maris Piper or King Edward)
+    amount: 600g
+  - name: Vegetable or sunflower oil
+    amount: 2 tbsp
+  - name: Smoked paprika
+    amount: 1 tsp
+  - name: Cayenne pepper
+    amount: ½ tsp
+  - name: Garlic powder
+    amount: 1 tsp
+  - name: Onion powder
+    amount: ½ tsp
+  - name: Dried oregano
+    amount: ½ tsp
+  - name: Dried thyme
+    amount: ½ tsp
+  - name: Salt
+    amount: 1 tsp
+  - name: Black pepper
+    amount: ½ tsp
+steps:
+  - title: Cut and soak
+    content: Peel the potatoes and cut into fries about 1cm thick — thicker than fast food fries, thinner than chip shop chips. Place in a bowl of cold water and soak for at least 30 minutes, or up to a few hours.
+    timer: ⏱ 30 minutes
+  - title: Mix the spice blend
+    content: Mix the smoked paprika, cayenne, garlic powder, onion powder, oregano, thyme, salt, and pepper together in a small bowl. Set aside.
+  - title: Dry and oil
+    content: Drain the fries and dry thoroughly with a clean tea towel or kitchen paper. The drier they are, the crispier they'll get. Toss with the oil.
+  - title: Air fry
+    content: Heat your air fryer to 200°C. Cook the fries for 20–25 minutes, shaking the basket every 8 minutes or so, until golden and crispy on the outside.
+    timer: ⏱ 20–25 minutes
+  - title: Season and serve
+    content: Tip the hot fries into a bowl, scatter over the spice blend and toss well to coat. Taste and add more salt or cayenne if needed. Serve immediately.
+notes: Soaking draws out the starch and is what gets you a crispy outside. Don't skip it. Don't overcrowd the air fryer basket — cook in batches if needed, or they'll steam rather than crisp. Toss with the spices straight after cooking while the fries are still hot so the seasoning sticks. Adjust cayenne up or down to your heat preference.

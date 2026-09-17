@@ -1,0 +1,52 @@
+id: chicken-tikka
+title: Chicken Tikka
+titleHtml: Chicken <em>Tikka</em>
+label: Main course
+servings: '4'
+time: 20 min
+timeMins: 20
+extra: Marinate overnight
+oven: false
+description: A punchy, spiced yoghurt marinade turns chicken breast into proper chicken tikka — grill, pan-fry, or air fry, whichever you've got.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken breasts
+    amount: 600g (4 breasts)
+  - name: Lemons
+    amount: ½
+    prep: juiced
+  - name: Natural yoghurt
+    amount: 2 tbsp
+  - name: Cayenne pepper
+    amount: 1 tsp
+  - name: Paprika
+    amount: 1 tsp
+  - name: Ground coriander
+    amount: 1 tsp
+  - name: Ground cumin
+    amount: ½ tsp
+  - name: Turmeric
+    amount: ½ tsp
+  - name: Cinnamon
+    amount: ¼ tsp
+  - name: Garlic cloves
+    amount: '3'
+    prep: crushed
+  - name: Fresh ginger
+    amount: 1 tbsp
+    prep: grated
+  - name: Natural red food colour (optional)
+    amount: 1 tsp
+  - name: Salt
+    amount: 1 pinch
+steps:
+  - title: Marinate
+    content: Mix together all the marinade ingredients in a bowl and add the chicken, turning to coat well.
+  - title: Rest
+    content: Cover and marinate in the fridge overnight, or for at least 4 hours.
+    timer: ⏱ At least 4 hours
+  - title: Cook
+    content: Cook the chicken under a hot grill or in a frying pan until fully cooked through. Alternatively, air fry at 180°C for 20 minutes.
+    timer: ⏱ ~20 minutes
+notes: The longer the marinade, the better — overnight gives the best flavour and the most tender result. The food colouring is purely cosmetic (it's what gives restaurant tikka its red edge) and can be left out entirely without affecting the taste. Adapted from searchingforspice.com.

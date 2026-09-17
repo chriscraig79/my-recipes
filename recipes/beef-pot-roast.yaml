@@ -1,0 +1,63 @@
+id: beef-pot-roast
+title: Slow-Cooker Beef Pot Roast
+titleHtml: Slow-Cooker <em>Beef Pot Roast</em>
+label: Main course
+servings: '6'
+time: 7 hrs 30 min
+timeMins: 450
+extra: Slow cooker + oven finish
+oven: true
+description: Rolled beef brisket slow-cooked over root vegetables in red wine and stock, then roasted to finish and sliced into a rich, gravy-laden Sunday roast.
+tags:
+  - beef
+  - carrot
+ingredients:
+  - name: Sunflower oil
+    amount: 2 tbsp
+  - name: Rolled beef brisket
+    amount: 1½kg
+  - name: Plain flour
+    amount: 2 tbsp
+  - name: Carrots
+    amount: '3'
+    prep: chopped
+  - name: Celery sticks
+    amount: '3'
+    prep: chopped
+  - name: Parsnips
+    amount: '2'
+    prep: chopped
+  - name: Onions
+    amount: '1'
+    prep: chopped
+  - name: Button mushrooms
+    amount: 80g
+  - name: Bay leaves
+    amount: '2'
+  - name: Garlic cloves
+    amount: '2'
+    prep: crushed
+  - name: English mustard
+    amount: 2 tsp
+  - name: Red wine
+    amount: 500ml
+  - name: Beef stock
+    amount: 250ml
+steps:
+  - title: Dust the beef
+    content: Heat the oil in a large pan. Dust the brisket with the flour and season well with salt and pepper.
+  - title: Load the slow cooker
+    content: Put the carrots, celery, parsnips, onion and mushrooms in the bottom of the slow cooker and turn it to low.
+  - title: Sear and add the beef
+    content: Sear the beef all over in the hot pan, then place it on top of the vegetables in the slow cooker.
+  - title: Slow cook
+    content: Add the bay leaves and garlic and stir in the mustard, then pour over the red wine and beef stock. Cover and cook for 7 hours.
+    timer: ⏱ 7 hours
+  - title: Roast to finish
+    content: Heat the oven to 200°C (180°C fan). Carefully lift the beef out of the slow cooker onto a baking tray and roast for 20 minutes.
+    timer: ⏱ 20 minutes
+  - title: Reduce the gravy
+    content: While the beef roasts, ladle the cooking liquid into a shallow pan and boil rapidly to reduce to a rich gravy.
+  - title: Serve
+    content: Serve the beef sliced with roast potatoes, the softened vegetables, gravy, and wilted greens if you like.
+notes: The oven finish at the end isn't optional if you want proper texture on the outside — straight from the slow cooker, the meat is fall-apart but pale. Reducing the cooking liquid hard is what turns it into a proper gravy rather than a thin jus. From bbcgoodfood.com/recipes/slow-cooker-pot-roast.

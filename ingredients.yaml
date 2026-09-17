@@ -1,0 +1,434 @@
+# Canonical ingredient registry — name -> shopping-list section.
+# Recipes must use these exact names for the shopping list to merge
+# correctly. Run `npm run build` after adding or editing an entry.
+
+Apple cider vinegar:
+  section: Dry Goods & Spices
+Apple juice:
+  section: Other
+Aubergines:
+  section: Fruit & Veg
+Bacon lardons:
+  section: Meat & Fish
+Baharat:
+  section: Dry Goods & Spices
+Baking powder:
+  section: Dry Goods & Spices
+Basil:
+  section: Fruit & Veg
+Basmati rice:
+  section: Dry Goods & Spices
+Bay leaves:
+  section: Dry Goods & Spices
+BBQ sauce:
+  section: Tinned & Jarred
+Beef stock:
+  section: Tinned & Jarred
+Black pepper:
+  section: Dry Goods & Spices
+Black peppercorns:
+  section: Dry Goods & Spices
+Black rice:
+  section: Dry Goods & Spices
+Boston butt (bone-in or boneless pork shoulder):
+  section: Meat & Fish
+Braising or stewing steak:
+  section: Meat & Fish
+Braising steak or chuck:
+  section: Meat & Fish
+Brown sugar:
+  section: Dry Goods & Spices
+Butter:
+  section: Deli & Dairy
+Butter beans:
+  section: Tinned & Jarred
+Buttermilk (or milk with 1 tbsp lemon juice):
+  section: Deli & Dairy
+Button mushrooms:
+  section: Fruit & Veg
+Cajun seasoning:
+  section: Dry Goods & Spices
+Cannellini beans:
+  section: Tinned & Jarred
+Caraway seeds:
+  section: Dry Goods & Spices
+Cardamom pods:
+  section: Dry Goods & Spices
+Carrots:
+  section: Fruit & Veg
+Caster sugar:
+  section: Dry Goods & Spices
+Cayenne pepper:
+  section: Dry Goods & Spices
+Celery stalks:
+  section: Fruit & Veg
+Celery sticks:
+  section: Fruit & Veg
+Cheddar:
+  section: Deli & Dairy
+Cheddar or gruyère:
+  section: Deli & Dairy
+Cherry tomatoes:
+  section: Fruit & Veg
+Chicken breasts:
+  section: Meat & Fish
+Chicken legs (quarters):
+  section: Meat & Fish
+Chicken pieces (thighs, drumsticks, halved breasts):
+  section: Meat & Fish
+Chicken stock:
+  section: Tinned & Jarred
+Chicken stock cube:
+  section: Tinned & Jarred
+Chicken thighs:
+  section: Meat & Fish
+Chicken thighs and legs:
+  section: Meat & Fish
+Chicken thighs or drumsticks:
+  section: Meat & Fish
+Chilli oil (optional):
+  section: Fruit & Veg
+Chilli paste:
+  section: Tinned & Jarred
+Chinese vinegar:
+  section: Dry Goods & Spices
+Chipolatas:
+  section: Meat & Fish
+Chopped tomatoes:
+  section: Fruit & Veg
+Chopped tomatoes with garlic:
+  section: Fruit & Veg
+Cider vinegar:
+  section: Dry Goods & Spices
+Cinnamon:
+  section: Dry Goods & Spices
+Cinnamon pieces:
+  section: Dry Goods & Spices
+Cinnamon stick:
+  section: Dry Goods & Spices
+Cloves:
+  section: Dry Goods & Spices
+Coconut milk:
+  section: Tinned & Jarred
+Coconut or vegetable oil:
+  section: Dry Goods & Spices
+Cooked gammon:
+  section: Meat & Fish
+Coriander seeds:
+  section: Dry Goods & Spices
+Cornflour:
+  section: Dry Goods & Spices
+Cornstarch:
+  section: Dry Goods & Spices
+Crisp eating apples:
+  section: Fruit & Veg
+Crusty bread:
+  section: Bread & Bakery
+Cumin seeds:
+  section: Dry Goods & Spices
+Dark brown sugar:
+  section: Dry Goods & Spices
+Dark soy sauce:
+  section: Dry Goods & Spices
+Dijon mustard:
+  section: Tinned & Jarred
+Dried chickpeas:
+  section: Dry Goods & Spices
+Dried chilli:
+  section: Fruit & Veg
+Dried oregano:
+  section: Dry Goods & Spices
+Dried red chillies:
+  section: Fruit & Veg
+Dried thyme:
+  section: Dry Goods & Spices
+Dry sherry or white wine (optional):
+  section: Other
+Egg yolks:
+  section: Deli & Dairy
+English mustard:
+  section: Tinned & Jarred
+Extra virgin olive oil:
+  section: Dry Goods & Spices
+Extra-virgin olive oil:
+  section: Dry Goods & Spices
+Fat-free natural yoghurt:
+  section: Deli & Dairy
+Fennel seeds:
+  section: Dry Goods & Spices
+Fine dried breadcrumbs (or matzo meal):
+  section: Bread & Bakery
+Fish sauce:
+  section: Dry Goods & Spices
+Flat-leaf parsley:
+  section: Fruit & Veg
+Floury potatoes (Maris Piper or King Edward):
+  section: Fruit & Veg
+Fresh basil:
+  section: Fruit & Veg
+Fresh coriander:
+  section: Fruit & Veg
+Fresh curry leaves:
+  section: Fruit & Veg
+Fresh ginger:
+  section: Fruit & Veg
+Fresh mint:
+  section: Fruit & Veg
+Fresh or dried thyme:
+  section: Dry Goods & Spices
+Fresh parsley:
+  section: Fruit & Veg
+Frozen seafood mix:
+  section: Meat & Fish
+Garam masala:
+  section: Dry Goods & Spices
+Garlic cloves:
+  section: Fruit & Veg
+Garlic mayonnaise (from above):
+  section: Tinned & Jarred
+Garlic powder:
+  section: Dry Goods & Spices
+Garlic powder (for coating):
+  section: Dry Goods & Spices
+Green chillies:
+  section: Fruit & Veg
+Ground cardamom:
+  section: Dry Goods & Spices
+Ground cinnamon:
+  section: Dry Goods & Spices
+Ground cloves:
+  section: Dry Goods & Spices
+Ground coriander:
+  section: Dry Goods & Spices
+Ground cumin:
+  section: Dry Goods & Spices
+Groundnut oil:
+  section: Dry Goods & Spices
+Guinness or stout:
+  section: Other
+Hard boiled eggs:
+  section: Deli & Dairy
+Honey:
+  section: Tinned & Jarred
+Hot chilli sauce:
+  section: Tinned & Jarred
+Hot smoked paprika:
+  section: Dry Goods & Spices
+Italian seasoning:
+  section: Dry Goods & Spices
+Jamaican jerk seasoning:
+  section: Dry Goods & Spices
+Japanese cucumbers:
+  section: Fruit & Veg
+Jasmine or basmati rice:
+  section: Dry Goods & Spices
+Ketchup:
+  section: Tinned & Jarred
+Lamb neck fillet:
+  section: Meat & Fish
+Large eggs:
+  section: Deli & Dairy
+Large ripe tomatoes:
+  section: Fruit & Veg
+Large tomatoes:
+  section: Fruit & Veg
+Lasagne sheets:
+  section: Dry Goods & Spices
+Lemon juice:
+  section: Fruit & Veg
+Lemon juice or vinegar:
+  section: Dry Goods & Spices
+Lemon or lime:
+  section: Fruit & Veg
+Lemongrass stalk:
+  section: Fruit & Veg
+Lemons:
+  section: Fruit & Veg
+Lime:
+  section: Fruit & Veg
+Lime juice:
+  section: Fruit & Veg
+Lime zest:
+  section: Fruit & Veg
+Little gem or iceberg lettuce leaves:
+  section: Fruit & Veg
+Macaroni:
+  section: Dry Goods & Spices
+Maris Piper potatoes:
+  section: Fruit & Veg
+Mayonnaise:
+  section: Tinned & Jarred
+Milk:
+  section: Deli & Dairy
+Mixed chopped herbs (parsley, thyme, sage or chives):
+  section: Fruit & Veg
+Mixed peppers:
+  section: Fruit & Veg
+Mixed-colour peppers:
+  section: Fruit & Veg
+Mozzarella:
+  section: Deli & Dairy
+Mushrooms:
+  section: Fruit & Veg
+Mustard:
+  section: Tinned & Jarred
+Mustard ketchup (or regular mustard):
+  section: Tinned & Jarred
+Mustard powder:
+  section: Dry Goods & Spices
+Natural red food colour (optional):
+  section: Other
+Natural yoghurt:
+  section: Deli & Dairy
+Nutmeg:
+  section: Dry Goods & Spices
+Olive oil:
+  section: Dry Goods & Spices
+Onion powder:
+  section: Dry Goods & Spices
+Onions:
+  section: Fruit & Veg
+Pad Thai noodles:
+  section: Dry Goods & Spices
+Paella or risotto rice:
+  section: Dry Goods & Spices
+Palm sugar or brown sugar:
+  section: Dry Goods & Spices
+Paprika:
+  section: Dry Goods & Spices
+Parmesan:
+  section: Deli & Dairy
+Parmesan or pecorino:
+  section: Deli & Dairy
+Parsley:
+  section: Fruit & Veg
+Parsley and sesame seeds:
+  section: Fruit & Veg
+Parsnips:
+  section: Fruit & Veg
+Peanut butter:
+  section: Tinned & Jarred
+Pinch of salt:
+  section: Dry Goods & Spices
+Pine nuts:
+  section: Dry Goods & Spices
+Pitta breads or flatbreads:
+  section: Bread & Bakery
+Plain flour:
+  section: Dry Goods & Spices
+Purple cabbage:
+  section: Fruit & Veg
+Raw prawns:
+  section: Meat & Fish
+Red cabbage:
+  section: Fruit & Veg
+Red chilli:
+  section: Fruit & Veg
+Red onions:
+  section: Fruit & Veg
+Red peppers:
+  section: Fruit & Veg
+Red wine:
+  section: Other
+Red wine vinegar:
+  section: Dry Goods & Spices
+Rice:
+  section: Dry Goods & Spices
+Rice vinegar:
+  section: Dry Goods & Spices
+Ripe tomato:
+  section: Fruit & Veg
+Roasted curry powder (from above):
+  section: Dry Goods & Spices
+Roasted peanuts:
+  section: Tinned & Jarred
+Rolled beef brisket:
+  section: Meat & Fish
+Rosemary sprig:
+  section: Dry Goods & Spices
+Salt:
+  section: Dry Goods & Spices
+Salt (for coating):
+  section: Dry Goods & Spices
+Salt and black pepper:
+  section: Dry Goods & Spices
+Salt and pepper:
+  section: Dry Goods & Spices
+Self-raising flour:
+  section: Dry Goods & Spices
+Sesame oil:
+  section: Dry Goods & Spices
+Sesame seeds:
+  section: Dry Goods & Spices
+Sesame seeds and green onion:
+  section: Dry Goods & Spices
+Shallots:
+  section: Fruit & Veg
+Shrimp paste (optional but worth it):
+  section: Dry Goods & Spices
+Single cream:
+  section: Deli & Dairy
+Small flour tortillas:
+  section: Bread & Bakery
+Smoked feta (or plain):
+  section: Deli & Dairy
+Smoked paprika:
+  section: Dry Goods & Spices
+Smoked paprika (for coating):
+  section: Dry Goods & Spices
+Soured cream:
+  section: Deli & Dairy
+Soy sauce:
+  section: Dry Goods & Spices
+Spaghetti or rigatoni:
+  section: Dry Goods & Spices
+Spring onions:
+  section: Fruit & Veg
+Sriracha sauce:
+  section: Tinned & Jarred
+Streaky bacon rashers:
+  section: Meat & Fish
+Sugar:
+  section: Dry Goods & Spices
+Sunflower oil:
+  section: Dry Goods & Spices
+Sunflower or groundnut oil:
+  section: Dry Goods & Spices
+Sweet potatoes:
+  section: Fruit & Veg
+Sweet smoked paprika:
+  section: Dry Goods & Spices
+Tamarind paste:
+  section: Tinned & Jarred
+Thick slices sourdough bread:
+  section: Bread & Bakery
+Thyme sprigs:
+  section: Dry Goods & Spices
+Toasted sesame seeds or crushed peanuts:
+  section: Tinned & Jarred
+Tomato:
+  section: Fruit & Veg
+Tomato paste:
+  section: Fruit & Veg
+Tomato purée:
+  section: Tinned & Jarred
+Turmeric:
+  section: Dry Goods & Spices
+Vegetable oil:
+  section: Dry Goods & Spices
+Vegetable oil spray or oil:
+  section: Dry Goods & Spices
+Vegetable or chicken stock:
+  section: Tinned & Jarred
+Vegetable or sunflower oil:
+  section: Dry Goods & Spices
+Waxy potatoes:
+  section: Fruit & Veg
+White wine:
+  section: Other
+Whole milk:
+  section: Deli & Dairy
+Whole-wheat spaghetti:
+  section: Dry Goods & Spices
+Worcestershire sauce:
+  section: Dry Goods & Spices

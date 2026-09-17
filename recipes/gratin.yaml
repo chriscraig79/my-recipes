@@ -1,0 +1,55 @@
+id: gratin
+title: Gammon & Potato Gratin
+titleHtml: Gammon <em>&</em> Potato Gratin
+label: Main course
+servings: '4'
+time: 1 hr 15 min
+timeMins: 75
+extra: 180°C / fan 160°C
+oven: true
+description: Rich, creamy layers of potato and gammon baked until golden and bubbling. A great way to use up a leftover joint.
+tags:
+  - pork
+  - potato
+ingredients:
+  - name: Maris Piper potatoes
+    amount: 800g
+  - name: Cooked gammon
+    amount: 300g
+    prep: diced or shredded
+  - name: Single cream
+    amount: 400ml
+  - name: Cheddar or gruyère
+    amount: 100g
+    prep: grated
+  - name: Garlic cloves
+    amount: '2'
+    prep: minced
+  - name: Dijon mustard
+    amount: 1 tbsp
+  - name: Nutmeg
+    amount: ¼ tsp
+    prep: grated
+  - name: Black pepper
+    amount: ½ tsp
+steps:
+  - title: Preheat oven
+    content: Heat your oven to 180°C (160°C fan). Lightly butter a medium baking dish — roughly 30×20cm works well.
+  - title: Slice the potatoes
+    content: Peel and slice as thinly as you can — around 3–4mm. A mandoline is ideal, but a sharp knife is fine. Don't rinse them after slicing; the starch helps the sauce thicken.
+  - title: Make the cream sauce
+    content: In a jug, mix together the cream, mustard, nutmeg, pepper, and minced garlic. Taste it — it should be well seasoned, but go easy on salt since the gammon will add plenty.
+  - title: Layer up
+    content: Arrange a layer of potato slices in the dish, slightly overlapping. Scatter over some gammon, then pour over a little of the cream mixture. Repeat the layers until everything is used up, finishing with a top layer of potatoes. Pour any remaining cream over the top.
+  - title: Add cheese and cover
+    content: Scatter the grated cheese evenly over the top. Cover the dish tightly with foil.
+  - title: Bake covered
+    content: Bake covered for 45 minutes.
+    timer: ⏱ 45 minutes
+  - title: Bake uncovered
+    content: Remove the foil and bake for a further 20–25 minutes until the top is golden and a knife slides easily through the potatoes.
+    timer: ⏱ 20–25 minutes
+  - title: Rest and serve
+    content: Leave to rest for 10 minutes before serving — it'll hold together much better. Serve with a green salad or steamed greens.
+    timer: ⏱ Rest 10 minutes
+notes: The gammon is already cooked and salty, so taste the cream sauce before adding any salt. Gruyère gives a nuttier flavour, cheddar is more robust — either works. With single cream, add a little extra cheese on top and don't skip the resting time; it helps the gratin firm up. Leftovers reheat well the next day, and the flavour actually improves.

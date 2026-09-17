@@ -1,0 +1,45 @@
+id: macaroni-cheese
+title: Macaroni Cheese
+titleHtml: Macaroni <em>Cheese</em>
+label: Light meal
+servings: '4'
+time: 40 min
+timeMins: 40
+extra: Grill finish
+oven: false
+description: Classic stovetop macaroni cheese with a smooth cheddar and Parmesan sauce, finished bubbling and golden under the grill.
+tags:
+  - pasta
+ingredients:
+  - name: Macaroni
+    amount: 250g
+  - name: Butter
+    amount: 40g
+  - name: Plain flour
+    amount: 40g
+  - name: Milk
+    amount: 600ml
+  - name: Cheddar
+    amount: 250g
+    prep: grated
+  - name: Parmesan
+    amount: 50g
+    prep: grated
+steps:
+  - title: Cook the macaroni
+    content: Cook the macaroni in a large pan of boiling salted water for 8–10 minutes until tender. Drain well and set aside.
+    timer: ⏱ 8–10 minutes
+  - title: Make the roux
+    content: Melt the butter over medium heat in a saucepan slightly larger than the one used for the macaroni. Add the flour and stir to form a roux, cooking for a couple of minutes.
+  - title: Build the sauce
+    content: Gradually whisk in the milk, a little at a time, until smooth. Cook for 10–15 minutes until thickened.
+    timer: ⏱ 10–15 minutes
+  - title: Preheat the grill
+    content: Meanwhile, preheat the grill to hot.
+  - title: Add the cheese
+    content: Take the sauce off the heat and stir in 175g of the cheddar until melted and well combined.
+  - title: Combine and transfer
+    content: Add the macaroni to the sauce and mix well. Transfer to a deep ovenproof dish.
+  - title: Grill until golden
+    content: Sprinkle over the remaining cheddar and the Parmesan. Place under the hot grill and cook until browned and bubbling. Serve straightaway.
+notes: Use a pan slightly bigger than the one you cooked the macaroni in for the sauce — it makes combining everything much easier. Don't rush the roux stage; a couple of minutes cooking out the flour stops the sauce tasting raw. Serve the moment it comes out from under the grill, while it's still bubbling.
