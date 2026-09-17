@@ -100,13 +100,15 @@ Ingredients with the same `name` are merged into a single line across recipes, l
 
 ```bash
 npm install                       # once, installs the js-yaml build dependency
-npm run build                     # compiles src/ + recipes/*.yaml + ingredients.yaml -> build/
+npm run watch                     # rebuilds build/ automatically whenever
+                                   # src/index.html, recipes/, or ingredients.yaml change
 npx serve build
 ```
 
-This opens the site at `http://localhost:3000`. There's no auto-reload —
-after editing a recipe or `src/index.html`, rerun `npm run build`, then
-refresh the browser tab.
+This opens the site at `http://localhost:3000`. `npm run watch` keeps
+`build/` up to date as you edit, but there's still no browser auto-reload —
+refresh the tab after each change to see it. (`npm run build` alone does a
+single one-off build if you'd rather not run a background watcher.)
 
 ## Editing in Claude Code
 

@@ -4,7 +4,7 @@
     {
       "name": "my-recipes",
       "runtimeExecutable": "sh",
-      "runtimeArgs": ["-c", "npm run build && npx serve build"],
+      "runtimeArgs": ["-c", "npm run watch & npx serve build"],
       "port": 3000
     }
   ]
