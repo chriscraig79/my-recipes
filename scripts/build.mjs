@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import yaml from "js-yaml";
+import * as esbuild from "esbuild";
 import { guessSection } from "./section-lookup.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -50,9 +51,27 @@ function resolveSections(recipes, registry) {
 }
 
 function serializeRecipes(recipes) {
-  // JSON.stringify already produces valid JS object/array literal syntax;
-  // pretty-print for readability, matching the file's existing indentation.
-  return JSON.stringify(recipes, null, 2);
+  // JSON.stringify already produces valid JS object/array literal syntax.
+  // Compact, not pretty-printed — this block is generated and never
+  // hand-read, and pretty-printing it was the single biggest contributor
+  // to page weight (131KB of a 162KB page).
+  return JSON.stringify(recipes);
+}
+
+function minifyHtml(html) {
+  // Top-level function names (showIndex, toggleBasket, etc.) must survive —
+  // the page calls them from inline onclick="..." attributes in the HTML,
+  // which esbuild can't see. esbuild.transform (unbundled) already leaves
+  // top-level identifiers alone for exactly this reason — verified this
+  // holds before relying on it — so plain minify:true is safe here.
+  const withStyle = html.replace(/<style>([\s\S]*?)<\/style>/, (_, css) => {
+    const { code } = esbuild.transformSync(css, { loader: "css", minify: true });
+    return `<style>${code.trim()}</style>`;
+  });
+  return withStyle.replace(/<script>([\s\S]*?)<\/script>/, (_, js) => {
+    const { code } = esbuild.transformSync(js, { minify: true });
+    return `<script>${code}</script>`;
+  });
 }
 
 function main() {
@@ -70,10 +89,15 @@ function main() {
   const before = html.slice(0, startIdx + START_MARKER.length);
   const after = html.slice(endIdx);
   const generated = `\nconst recipes = ${serializeRecipes(recipes)};\n`;
+  const assembled = before + generated + after;
+  const minified = minifyHtml(assembled);
 
   fs.mkdirSync(BUILD_DIR, { recursive: true });
-  fs.writeFileSync(BUILD_INDEX, before + generated + after);
-  console.log(`Built build/index.html from ${recipes.length} recipes (${registry.size} known ingredients).`);
+  fs.writeFileSync(BUILD_INDEX, minified);
+  console.log(
+    `Built build/index.html from ${recipes.length} recipes (${registry.size} known ingredients). ` +
+    `${assembled.length} -> ${minified.length} bytes.`
+  );
 }
 
 main();
