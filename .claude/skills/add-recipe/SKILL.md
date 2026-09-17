@@ -5,9 +5,11 @@ description: Add a new recipe to this recipe site (my-recipes) — creates the r
 
 # Add a recipe
 
-This site compiles recipe data from YAML source files into `index.html` at
-build time. Adding a recipe means writing one YAML file correctly — the
-render code never needs to change.
+This site compiles recipe data from YAML source files, plus the page
+template at `src/index.html`, into `build/index.html` at build time (never
+committed — GitHub Actions builds and deploys it fresh on every push to
+`main`). Adding a recipe means writing one YAML file correctly — the
+template and render code never need to change.
 
 ## Steps
 
@@ -41,8 +43,8 @@ render code never needs to change.
      `aubergine, bacon, beef, cabbage, carrot, chicken, chickpeas, cucumber,
      eggs, lamb, noodles, pasta, pork, potato, prawns, rice, seafood,
      vegetarian`. Adding a new tag is fine if none fit, but it won't have a
-     filter chip until one is added to `index.html`'s filter UI — mention
-     that to the user rather than silently adding an orphaned tag.
+     filter chip until one is added to `src/index.html`'s filter UI —
+     mention that to the user rather than silently adding an orphaned tag.
    - `ingredients` — list of `{ name, amount, prep? }`. **Read the "Ingredient
      naming" section below before writing any of these** — it's the part
      most likely to go wrong.
@@ -55,18 +57,21 @@ render code never needs to change.
    right (many people add new recipes near the top or group by type; there's
    no enforced convention, use judgment or ask).
 
-4. **Run the build.** `npm install` once if `node_modules` isn't there yet,
-   then `npm run build`. This compiles every `recipes/*.yaml` file plus
-   `ingredients.yaml` into the generated block inside `index.html` (between
-   the `// GENERATED:RECIPES:START` / `// GENERATED:RECIPES:END` markers).
-   Never hand-edit that block directly — it gets overwritten on the next
-   build, and any recipe change that isn't run through `npm run build`
-   simply won't show up on the site.
+4. **Build for local preview.** `npm install` once if `node_modules` isn't
+   there yet, then `npm run build`. This compiles every `recipes/*.yaml`
+   file plus `ingredients.yaml` into `build/index.html` — gitignored,
+   local-only, never committed. Deployment doesn't depend on this step:
+   pushing to `main` triggers GitHub Actions to build and deploy fresh on
+   its own.
 
-5. **Spot-check.** Serve locally (`npx serve .`) and look at the new
+5. **Spot-check.** Serve locally (`npx serve build`) and look at the new
    recipe. If it shares an ingredient with another recipe, add both to the
    shopping basket and confirm they merge into one line on the shopping
-   list — that's the payoff of getting step 6 right.
+   list — that's the payoff of getting the ingredient naming right.
+
+6. **Commit the YAML source only** (`recipes/<id>.yaml`, the updated
+   `recipes/_order.yaml`, and `ingredients.yaml` if you added an entry) —
+   never anything under `build/`.
 
 ## Ingredient naming — the part that matters most
 

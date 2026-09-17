@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Recipes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf7f2;
+    --ink: #1c1812;
+    --muted: #6b5f4e;
+    --accent: #b5470a;
+    --border: #d9cfc0;
+    --rule: #c4b8a4;
+    --step-num: #898173;
+  }
+
+  body {
+    background: var(--warm-white);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── Index ── */
+  #index {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .site-header {
+    border-top: 3px solid var(--ink);
+    padding: 2rem 0 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .site-header::after {
+    content: '';
+    display: block;
+    border-bottom: 3px solid var(--ink);
+    margin-top: 1.5rem;
+  }
+
+  .site-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .site-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.05;
+  }
+
+  .site-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  /* ── Filters ── */
+  .filters {
+    margin-bottom: 2rem;
+  }
+
+  .filter-group {
+    margin-bottom: 1rem;
+  }
+
+  .filter-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chip.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--warm-white);
+  }
+
+  .results-count {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  /* ── Recipe list ── */
+  .recipe-list { list-style: none; }
+
+  .recipe-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .recipe-list-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .recipe-card-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    padding: 1.25rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--ink);
+    gap: 1rem;
+    transition: color 0.15s;
+  }
+
+  .recipe-card-btn:hover { color: var(--accent); }
+  .recipe-card-btn:hover .recipe-card-arrow { transform: translateX(4px); }
+
+  .recipe-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .recipe-card-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.4rem;
+  }
+
+  .recipe-chip {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.45rem;
+    border-radius: 2px;
+  }
+
+  .recipe-chip.time { color: var(--accent); border-color: var(--accent); }
+
+  .recipe-card-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    margin-top: 0.2rem;
+  }
+
+  .recipe-card-arrow {
+    font-size: 1.2rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.15s;
+  }
+
+  .no-results {
+    padding: 2rem 0;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Basket toggle (index card) ── */
+  .basket-toggle {
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--accent);
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .basket-toggle:hover { border-color: var(--accent); }
+
+  .basket-toggle.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--warm-white);
+  }
+
+  /* ── Basket toggle (recipe header) ── */
+  .basket-toggle-large {
+    margin-top: 1.25rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    background: none;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .basket-toggle-large.active {
+    background: var(--accent);
+    color: var(--warm-white);
+  }
+
+  /* ── Basket badge ── */
+  .basket-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--ink);
+    color: var(--warm-white);
+    border: none;
+    border-radius: 999px;
+    padding: 0.65rem 1.1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(28, 24, 18, 0.25);
+    transition: background 0.15s;
+    z-index: 10;
+  }
+
+  .basket-badge:hover { background: var(--accent); }
+  .basket-badge[hidden] { display: none; }
+
+  /* ── Recipe view / Shopping list view ── */
+  #recipe-view, #shopping-list-view {
+    display: none;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0;
+    margin-bottom: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.15s;
+  }
+
+  .back-btn:hover { color: var(--accent); }
+
+  .recipe-header {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding: 2rem 0 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .recipe-header::after {
+    content: '';
+    display: block;
+    border-bottom: 3px solid var(--ink);
+    margin-top: 1.5rem;
+  }
+
+  .recipe-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .recipe-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .recipe-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .recipe-description {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .recipe-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.25rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    text-transform: uppercase;
+    flex-wrap: wrap;
+  }
+
+  .recipe-meta span strong {
+    color: var(--ink);
+    display: block;
+    font-size: 1.1rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+  }
+
+  section.recipe-section { margin-bottom: 2.5rem; }
+
+  h2.section-heading {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  h2.section-heading--no-gap {
+    margin-bottom: 0;
+  }
+
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+  }
+
+  .ingredient {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .ingredient:nth-child(odd) { padding-right: 1.5rem; }
+  .ingredient:nth-child(even) { padding-left: 1.5rem; border-left: 1px solid var(--border); }
+
+  .ingredient-amount {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  .steps {
+    list-style: none;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0 1.25rem;
+    margin-bottom: 1.5rem;
+    align-items: start;
+  }
+
+  .step-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--step-num);
+    line-height: 1;
+    text-align: right;
+    padding-top: 0.1rem;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .step-content {
+    font-size: 0.93rem;
+    color: #3d3427;
+    line-height: 1.65;
+  }
+
+  .step-timer {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+  }
+
+  .notes-box {
+    background: var(--cream);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .footer-rule {
+    border: none;
+    border-top: 3px solid var(--ink);
+    margin-top: 3rem;
+  }
+
+  /* ── Shopping list ── */
+  .basket-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+  }
+
+  .basket-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.25rem 0.4rem 0.25rem 0.6rem;
+  }
+
+  .basket-chip button {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .shopping-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .whatsapp-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--warm-white);
+    border: none;
+    border-radius: 2px;
+    padding: 0.7rem 1.4rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .whatsapp-btn:hover { opacity: 0.85; }
+
+  .clear-list-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .shopping-items { list-style: none; }
+
+  .shopping-item {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+
+  .shopping-item-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+  }
+
+  .shopping-item-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    margin-top: 0.2rem;
+    width: 1.15rem;
+    height: 1.15rem;
+    flex-shrink: 0;
+    border: 1.5px solid var(--muted);
+    border-radius: 3px;
+    background: var(--warm-white);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .shopping-item-checkbox:hover { border-color: var(--accent); }
+
+  .shopping-item-checkbox:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .shopping-item-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 0.36rem;
+    top: 0.16rem;
+    width: 0.3rem;
+    height: 0.58rem;
+    border: solid var(--warm-white);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .shopping-item-checkbox:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .shopping-item-main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shopping-item-recipe {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    margin-top: 0.1rem;
+  }
+
+  .shopping-item.checked .shopping-item-name,
+  .shopping-item.checked .shopping-item-recipe {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .all-checked-note {
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  @media (max-width: 500px) {
+    .ingredients-grid { grid-template-columns: 1fr; }
+    .ingredient:nth-child(even) { padding-left: 0; border-left: none; }
+    .ingredient:nth-child(odd) { padding-right: 0; }
+    .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="index">
+  <header class="site-header">
+    <p class="site-label">Recipe collection</p>
+    <h1 class="site-title" id="site-title" tabindex="-1">My <em>Recipes</em></h1>
+  </header>
+
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label" id="ingredient-filter-label">Ingredient</span>
+      <div class="filter-chips" id="ingredient-chips" role="group" aria-labelledby="ingredient-filter-label"></div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label" id="time-filter-label">Time</span>
+      <div class="filter-chips" id="time-chips" role="group" aria-labelledby="time-filter-label"></div>
+    </div>
+  </div>
+
+  <p class="results-count" id="results-count" aria-live="polite"></p>
+  <ul class="recipe-list" id="recipe-list"></ul>
+</div>
+
+<div id="recipe-view">
+  <button class="back-btn" onclick="showIndex()">← All recipes</button>
+  <div id="recipe-content"></div>
+</div>
+
+<div id="shopping-list-view">
+  <button class="back-btn" onclick="showIndex()">← All recipes</button>
+  <div id="shopping-list-content"></div>
+</div>
+
+<button id="basket-badge" class="basket-badge" hidden onclick="showShoppingList()"></button>
+
+<script>
+// ─────────────────────────────────────────────
+//  RECIPE DATA — GENERATED, DO NOT EDIT BY HAND
+//
+//  Source of truth is recipes/*.yaml + ingredients.yaml. Edit those,
+//  then run `npm run build` to regenerate the block below.
+//  Shape per recipe: see any file in recipes/ for the fields
+//  (id, title, titleHtml, label, servings, time, timeMins, extra,
+//  oven, description, tags, ingredients, steps, notes).
+// ─────────────────────────────────────────────
+
+// GENERATED:RECIPES:START
+
+const recipes = []; // placeholder — real data injected by `npm run build` into build/index.html
+// GENERATED:RECIPES:END
+
+// ─────────────────────────────────────────────
+//  SHOPPING BASKET
+//
+//  Each ingredient's `section` is precomputed at build time from
+//  ingredients.yaml (see scripts/build.mjs) — no runtime guessing.
+// ─────────────────────────────────────────────
+
+const SECTION_ORDER = ["Fruit & Veg", "Meat & Fish", "Deli & Dairy", "Dry Goods & Spices", "Tinned & Jarred", "Bread & Bakery", "Other"];
+
+function loadBasket() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem('recipeBasket')) || []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveBasket() {
+  try {
+    localStorage.setItem('recipeBasket', JSON.stringify([...basket]));
+  } catch {}
+}
+
+let basket = loadBasket();
+
+function loadCheckedItems() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem('shoppingChecked')) || []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveCheckedItems() {
+  try {
+    localStorage.setItem('shoppingChecked', JSON.stringify([...checkedItems]));
+  } catch {}
+}
+
+let checkedItems = loadCheckedItems();
+
+function toggleChecked(name) {
+  checkedItems.has(name) ? checkedItems.delete(name) : checkedItems.add(name);
+  saveCheckedItems();
+  renderShoppingListContent();
+}
+
+function toggleBasket(id) {
+  basket.has(id) ? basket.delete(id) : basket.add(id);
+  saveBasket();
+  renderBasketBadge();
+  refreshCurrentView();
+}
+
+function removeFromBasket(id) {
+  basket.delete(id);
+  saveBasket();
+  renderBasketBadge();
+  renderShoppingListContent();
+}
+
+function clearBasket() {
+  basket.clear();
+  checkedItems.clear();
+  saveBasket();
+  saveCheckedItems();
+  renderBasketBadge();
+  renderShoppingListContent();
+}
+
+function renderBasketBadge() {
+  const badge = document.getElementById('basket-badge');
+  badge.hidden = basket.size === 0;
+  badge.textContent = `🛒 Shopping list (${basket.size})`;
+}
+
+// Ingredients with the same name (across recipes, or repeated within one)
+// are combined into a single line listing every recipe that needs it —
+// no amount shown, since amounts from different recipes aren't merged.
+function buildShoppingList() {
+  const grouped = new Map();
+  basket.forEach(id => {
+    const r = recipes.find(x => x.id === id);
+    if (!r) return;
+    r.ingredients.forEach(ing => {
+      const section = ing.section;
+      if (!grouped.has(section)) grouped.set(section, new Map());
+      const bySection = grouped.get(section);
+      if (!bySection.has(ing.name)) {
+        bySection.set(ing.name, { name: ing.name, recipeTitles: [] });
+      }
+      const item = bySection.get(ing.name);
+      if (!item.recipeTitles.includes(r.title)) item.recipeTitles.push(r.title);
+    });
+  });
+
+  // Drop any checked state for items no longer in the list (e.g. after
+  // removing a recipe) so it doesn't linger in storage indefinitely.
+  const presentNames = new Set();
+  grouped.forEach(bySection => bySection.forEach(item => presentNames.add(item.name)));
+  let checkedChanged = false;
+  checkedItems.forEach(name => {
+    if (!presentNames.has(name)) { checkedItems.delete(name); checkedChanged = true; }
+  });
+  if (checkedChanged) saveCheckedItems();
+
+  return SECTION_ORDER
+    .filter(section => grouped.has(section))
+    .map(section => ({ section, items: [...grouped.get(section).values()] }));
+}
+
+function buildShoppingListText(groups) {
+  const lines = ['Shopping List', ''];
+  groups.forEach(({ section, items }) => {
+    const unchecked = items.filter(item => !checkedItems.has(item.name));
+    if (unchecked.length === 0) return;
+    lines.push(section.toUpperCase());
+    unchecked.forEach(item => lines.push(`- ${item.name} (${item.recipeTitles.join(', ')})`));
+    lines.push('');
+  });
+  return lines.join('\n').trim();
+}
+
+function buildWhatsAppUrl(groups) {
+  const text = buildShoppingListText(groups);
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+}
+
+// ─────────────────────────────────────────────
+//  FILTER STATE & LOGIC
+// ─────────────────────────────────────────────
+
+const TIME_BANDS = [
+  { label: "Under 30 min", key: "under30", test: m => m < 30 },
+  { label: "30–60 min",    key: "30to60",  test: m => m >= 30 && m <= 60 },
+  { label: "Over 1 hr",    key: "over60",  test: m => m > 60 },
+];
+
+let activeIngredients = new Set();
+let activeTime = null;
+
+function getAllTags() {
+  const tags = new Set();
+  recipes.forEach(r => r.tags.forEach(t => tags.add(t)));
+  return [...tags].sort();
+}
+
+function getTimeBandsPresent() {
+  return TIME_BANDS.filter(band => recipes.some(r => band.test(r.timeMins)));
+}
+
+function filteredRecipes() {
+  return recipes.filter(r => {
+    const ingredientMatch = activeIngredients.size === 0 || [...activeIngredients].every(t => r.tags.includes(t));
+    const timeMatch = !activeTime || TIME_BANDS.find(b => b.key === activeTime)?.test(r.timeMins);
+    return ingredientMatch && timeMatch;
+  });
+}
+
+function buildFilters() {
+  const ingContainer = document.getElementById('ingredient-chips');
+  const timeContainer = document.getElementById('time-chips');
+
+  const tags = getAllTags();
+  ingContainer.innerHTML = tags.map(tag => `
+    <button class="chip" data-tag="${tag}" aria-pressed="false" onclick="toggleIngredient('${tag}')">${tag}</button>
+  `).join('');
+
+  const bands = getTimeBandsPresent();
+  timeContainer.innerHTML = bands.map(band => `
+    <button class="chip" data-band="${band.key}" aria-pressed="false" onclick="toggleTime('${band.key}')">${band.label}</button>
+  `).join('');
+}
+
+function toggleIngredient(tag) {
+  if (activeIngredients.has(tag)) {
+    activeIngredients.delete(tag);
+  } else {
+    activeIngredients.add(tag);
+  }
+  updateChips();
+  renderList();
+}
+
+function toggleTime(key) {
+  activeTime = activeTime === key ? null : key;
+  updateChips();
+  renderList();
+}
+
+function updateChips() {
+  document.querySelectorAll('#ingredient-chips .chip').forEach(chip => {
+    const isActive = activeIngredients.has(chip.dataset.tag);
+    chip.classList.toggle('active', isActive);
+    chip.setAttribute('aria-pressed', isActive);
+  });
+  document.querySelectorAll('#time-chips .chip').forEach(chip => {
+    const isActive = chip.dataset.band === activeTime;
+    chip.classList.toggle('active', isActive);
+    chip.setAttribute('aria-pressed', isActive);
+  });
+}
+
+// ─────────────────────────────────────────────
+//  RENDERING
+// ─────────────────────────────────────────────
+
+function renderList() {
+  const list = document.getElementById('recipe-list');
+  const count = document.getElementById('results-count');
+  const results = filteredRecipes();
+
+  count.textContent = `${results.length} recipe${results.length !== 1 ? 's' : ''}`;
+
+  if (results.length === 0) {
+    list.innerHTML = '<p class="no-results">No recipes match those filters.</p>';
+    return;
+  }
+
+  list.innerHTML = results.map(r => {
+    const tagChips = r.tags.map(t => `<span class="recipe-chip">${t}</span>`).join('');
+    const timeBand = TIME_BANDS.find(b => b.test(r.timeMins));
+    const timeChip = timeBand ? `<span class="recipe-chip time">${r.time}</span>` : '';
+    const inBasket = basket.has(r.id);
+    return `
+      <li class="recipe-list-item">
+        <button class="recipe-card-btn" onclick="showRecipe('${r.id}')">
+          <div class="recipe-card-text">
+            <span class="recipe-card-title">${r.title}</span>
+            <div class="recipe-card-chips">${tagChips}${timeChip}</div>
+            <span class="recipe-card-desc">${r.description}</span>
+          </div>
+          <span class="recipe-card-arrow">→</span>
+        </button>
+        <button class="basket-toggle${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" aria-label="${inBasket ? 'Remove from shopping list' : 'Add to shopping list'}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓' : '+'}</button>
+      </li>
+    `;
+  }).join('');
+}
+
+function renderRecipe(r) {
+  const ingredientsHtml = r.ingredients.map(ing => `
+    <li class="ingredient">
+      <span class="ingredient-name">${ing.name}${ing.prep ? `, ${ing.prep}` : ''}</span>
+      <span class="ingredient-amount">${ing.amount}</span>
+    </li>
+  `).join('');
+
+  const stepsHtml = r.steps.map((step, i) => `
+    <li class="step">
+      <div class="step-number">${i + 1}</div>
+      <div class="step-body">
+        <div class="step-title">${step.title}</div>
+        <div class="step-content">${step.content}</div>
+        ${step.timer ? `<span class="step-timer">${step.timer}</span>` : ''}
+      </div>
+    </li>
+  `).join('');
+
+  const inBasket = basket.has(r.id);
+
+  document.getElementById('recipe-content').innerHTML = `
+    <header class="recipe-header">
+      <p class="recipe-label">${r.label} — serves ${r.servings}</p>
+      <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
+      <p class="recipe-description">${r.description}</p>
+      <div class="recipe-meta">
+        <span><strong>${r.time}</strong> total time</span>
+        ${r.extra ? `<span><strong>${r.extra}</strong>${r.oven ? ' oven' : ''}</span>` : ''}
+        <span><strong>${r.servings}</strong> servings</span>
+      </div>
+      <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
+    </header>
+
+    <section class="recipe-section">
+      <h2 class="section-heading section-heading--no-gap">Ingredients</h2>
+      <ul class="ingredients-grid">${ingredientsHtml}</ul>
+    </section>
+
+    <section class="recipe-section">
+      <h2 class="section-heading">Method</h2>
+      <ol class="steps">${stepsHtml}</ol>
+    </section>
+
+    <section class="recipe-section">
+      <h2 class="section-heading">Notes</h2>
+      <div class="notes-box">${r.notes}</div>
+    </section>
+
+    <hr class="footer-rule">
+  `;
+
+  showView('recipe');
+  document.title = `${r.title} – My Recipes`;
+  window.scrollTo(0, 0);
+  document.getElementById('recipe-title').focus();
+}
+
+function renderIndexView() {
+  // The index list isn't re-rendered while it's hidden, so its "+"/"✓"
+  // basket toggles can go stale if the basket changed elsewhere (e.g.
+  // clearing the list from the shopping list view). Refresh it here so
+  // it's always accurate by the time it's shown.
+  renderList();
+  showView('index');
+  document.title = 'My Recipes';
+  window.scrollTo(0, 0);
+  document.getElementById('site-title').focus();
+}
+
+// Rebuilds the shopping list content in place — used for interactions
+// that happen while already on the view (checking an item, removing a
+// recipe chip, clearing the list) so they don't reset scroll or steal
+// focus the way a full view transition does.
+function renderShoppingListContent() {
+  // Replacing the DOM below would otherwise jump the page back to the
+  // top, since the browser resets scroll when it loses track of the
+  // interacted element. Preserve the scroll position explicitly so an
+  // in-place update (checking an item, removing a chip, clearing) never
+  // moves the page.
+  const scrollY = window.scrollY;
+
+  const basketRecipes = [...basket].map(id => recipes.find(r => r.id === id)).filter(Boolean);
+  const groups = buildShoppingList();
+
+  const chipsHtml = basketRecipes.map(r => `
+    <span class="basket-chip">${r.title} <button onclick="removeFromBasket('${r.id}')" aria-label="Remove ${r.title} from shopping list">×</button></span>
+  `).join('');
+
+  const sectionsHtml = groups.map(({ section, items }) => `
+    <section class="recipe-section">
+      <h2 class="section-heading">${section}</h2>
+      <ul class="shopping-items">
+        ${items.map(item => {
+          const checked = checkedItems.has(item.name);
+          return `
+          <li class="shopping-item${checked ? ' checked' : ''}">
+            <label class="shopping-item-label">
+              <input type="checkbox" class="shopping-item-checkbox" data-name="${item.name}" ${checked ? 'checked' : ''} onchange="toggleChecked(this.dataset.name)">
+              <div class="shopping-item-main">
+                <span class="shopping-item-name">${item.name}</span>
+                <span class="shopping-item-recipe">${item.recipeTitles.join(', ')}</span>
+              </div>
+            </label>
+          </li>
+        `;
+        }).join('')}
+      </ul>
+    </section>
+  `).join('');
+
+  const hasUnchecked = groups.some(({ items }) => items.some(item => !checkedItems.has(item.name)));
+
+  document.getElementById('shopping-list-content').innerHTML = `
+    <header class="recipe-header">
+      <p class="recipe-label">Shopping list — ${basketRecipes.length} recipe${basketRecipes.length !== 1 ? 's' : ''}</p>
+      <h1 class="recipe-title" id="shopping-list-title" tabindex="-1">Shopping <em>List</em></h1>
+      ${basketRecipes.length ? `<div class="basket-chips">${chipsHtml}</div>` : ''}
+    </header>
+
+    ${basketRecipes.length ? `
+      <div class="shopping-actions">
+        ${hasUnchecked ? `<a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>` : `<span class="all-checked-note">Everything's checked off</span>`}
+        <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
+      </div>
+      ${sectionsHtml}
+    ` : `<p class="no-results">Your shopping list is empty. Add recipes from the index or a recipe page.</p>`}
+
+    <hr class="footer-rule">
+  `;
+
+  window.scrollTo(0, scrollY);
+}
+
+// Full transition into the shopping list view — scrolls to top and
+// moves focus to the heading. Only call this when actually navigating
+// to the view; use renderShoppingListContent() for in-place updates.
+function renderShoppingListView() {
+  renderShoppingListContent();
+  showView('shopping-list');
+  document.title = 'Shopping List – My Recipes';
+  window.scrollTo(0, 0);
+  document.getElementById('shopping-list-title').focus();
+}
+
+function showView(name) {
+  document.getElementById('index').style.display = name === 'index' ? 'block' : 'none';
+  document.getElementById('recipe-view').style.display = name === 'recipe' ? 'block' : 'none';
+  document.getElementById('shopping-list-view').style.display = name === 'shopping-list' ? 'block' : 'none';
+}
+
+// ─────────────────────────────────────────────
+//  ROUTING — each recipe gets a shareable #slug URL
+// ─────────────────────────────────────────────
+
+function route() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (id === 'shopping-list') {
+    renderShoppingListView();
+    return;
+  }
+  const recipe = recipes.find(r => r.id === id);
+  if (recipe) {
+    renderRecipe(recipe);
+  } else {
+    renderIndexView();
+  }
+}
+
+// Re-renders whichever view is currently on screen, without the
+// scroll/focus/display side effects `route()` triggers — used after
+// a basket change so the visible toggle buttons stay in sync.
+function refreshCurrentView() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (id === 'shopping-list') {
+    renderShoppingListView();
+    return;
+  }
+  const recipe = recipes.find(r => r.id === id);
+  if (recipe) {
+    renderRecipe(recipe);
+  } else {
+    renderList();
+  }
+}
+
+function showRecipe(id) {
+  location.hash = id;
+}
+
+function showShoppingList() {
+  location.hash = 'shopping-list';
+}
+
+function showIndex() {
+  if (location.hash) {
+    history.pushState('', document.title, location.pathname + location.search);
+  }
+  renderIndexView();
+}
+
+window.addEventListener('hashchange', route);
+
+buildFilters();
+renderList();
+renderBasketBadge();
+
+const initialId = decodeURIComponent(location.hash.slice(1));
+if (initialId === 'shopping-list') {
+  renderShoppingListView();
+} else {
+  const initialRecipe = recipes.find(r => r.id === initialId);
+  if (initialRecipe) renderRecipe(initialRecipe);
+}
+</script>
+</body>
+</html>
