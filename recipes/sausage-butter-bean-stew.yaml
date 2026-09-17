@@ -1,0 +1,60 @@
+id: sausage-butter-bean-stew
+title: Sausage & Butter Bean Stew
+titleHtml: Sausage <em>&</em> Butter Bean Stew
+label: Main course
+servings: '4'
+time: 45 min
+timeMins: 45
+extra: One pan
+oven: false
+description: Browned chipolatas simmered with softened onion, celery and garlic, finished with butter beans, butter and lemon zest for a quick, comforting one-pot supper.
+tags:
+  - pork
+ingredients:
+  - name: Sunflower oil
+    amount: 1 tbsp
+  - name: Chipolatas
+    amount: '16'
+  - name: Onions
+    amount: '2'
+    prep: sliced
+  - name: Celery sticks
+    amount: '2'
+    prep: sliced
+  - name: Garlic cloves
+    amount: '8'
+    prep: sliced
+  - name: Rosemary sprig
+    amount: '1'
+  - name: Chicken stock
+    amount: 600ml
+  - name: Butter beans
+    amount: 2 x 400g
+    prep: tinned, drained
+  - name: Butter
+    amount: 75g
+    prep: cubed
+  - name: Parsley
+    amount: 1 small bunch
+    prep: chopped
+  - name: Lemons
+    amount: '2'
+    prep: zested
+  - name: Crusty bread
+    amount: to taste
+    prep: to serve
+steps:
+  - title: Brown the sausages
+    content: Gently heat the oil in a large pan. Fry the sausages all over until browned, then remove and set aside.
+  - title: Soften the veg
+    content: Add the onion to the pan and fry for 5–10 minutes until golden and soft. Add the celery, garlic and rosemary, and cook for 2 minutes more.
+    timer: ⏱ 7–12 minutes
+  - title: Simmer
+    content: Pour over the stock and bring to the boil. Reduce the heat and simmer for 20 minutes.
+    timer: ⏱ 20 minutes
+  - title: Add the sausages and beans
+    content: Return the sausages to the pan with the butter beans. Simmer for 8 minutes.
+    timer: ⏱ 8 minutes
+  - title: Finish
+    content: Stir in the butter, parsley and lemon zest. Ladle into bowls and serve piping hot with plenty of crusty bread.
+notes: Chorizo-style chipolatas add a welcome chilli kick if you want more heat. The butter stirred in at the end is what gives the broth its rich, silky finish — add it off the heat so it doesn't split. From bbcgoodfood.com/recipes/sausage-butter-bean-stew.

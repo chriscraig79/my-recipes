@@ -1,0 +1,55 @@
+id: instant-pot-honey-garlic-chicken
+title: Instant Pot Honey Garlic Chicken
+titleHtml: Instant Pot <em>Honey Garlic Chicken</em>
+label: Main course
+servings: '4'
+time: 30 min
+timeMins: 30
+extra: Instant Pot
+oven: false
+description: Chicken breasts pressure-cooked in a honey, soy and garlic sauce, thickened to a glaze and tossed through at the end — quick enough for a weeknight.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken breasts
+    amount: 3–4
+    prep: boneless and skinless
+  - name: Salt and pepper
+    amount: to taste
+  - name: Honey
+    amount: ½ cup
+  - name: Soy sauce
+    amount: ⅓ cup
+  - name: Onions
+    amount: ⅓ cup
+    prep: diced
+  - name: Ketchup
+    amount: ¼ cup
+  - name: Vegetable oil
+    amount: 2 tbsp
+  - name: Garlic cloves
+    amount: '4'
+    prep: minced
+  - name: Cornstarch
+    amount: 3 tsp
+    prep: dissolved in ¼ cup water
+  - name: Sesame seeds and green onion
+    amount: to taste
+    prep: to serve
+  - name: Rice
+    amount: to taste
+    prep: to serve
+steps:
+  - title: Season the chicken
+    content: Place the chicken in the bottom of the Instant Pot and season well with salt and pepper.
+  - title: Add the sauce
+    content: Combine the honey, soy sauce, onion, ketchup, oil and garlic in a small bowl and pour over the chicken.
+  - title: Pressure cook
+    content: Seal the lid and cook on the meat setting (or high pressure) for 15 minutes, then quick release. Remove the chicken from the pot, leaving the sauce behind.
+    timer: ⏱ 15 minutes
+  - title: Thicken the sauce
+    content: Dissolve the cornstarch in the water and stir into the pot. Press sauté and cook the sauce for about 5 minutes until slightly thickened.
+    timer: ⏱ 5 minutes
+  - title: Combine and serve
+    content: Cut the chicken into bite-sized pieces, return to the pot and toss with the sauce. Sprinkle with sesame seeds and green onion, and serve over rice.
+notes: Cutting the chicken into pieces after cooking rather than before helps it stay juicier through the pressure cooking. Adapted from familyfreshmeals.com.

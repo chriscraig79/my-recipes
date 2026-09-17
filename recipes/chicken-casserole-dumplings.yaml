@@ -1,0 +1,63 @@
+id: chicken-casserole-dumplings
+title: Chicken Casserole with Herby Dumplings
+titleHtml: Chicken Casserole with <em>Herby Dumplings</em>
+label: Main course
+servings: '6'
+time: 1 hr 10 min
+timeMins: 70
+extra: 180°C / fan 160°C
+oven: true
+description: A rich red wine chicken casserole with smoky bacon lardons, topped with fluffy herb dumplings baked until golden.
+tags:
+  - chicken
+  - bacon
+ingredients:
+  - name: Chicken pieces (thighs, drumsticks, halved breasts)
+    amount: '12'
+    prep: skinless, bone-in
+  - name: Plain flour
+    amount: 3 tbsp
+  - name: Sunflower oil
+    amount: 2 tbsp
+  - name: Onions
+    amount: '2'
+    prep: sliced
+  - name: Carrots
+    amount: '2'
+    prep: diced
+  - name: Bacon lardons
+    amount: 200g
+  - name: Bay leaves
+    amount: '3'
+  - name: Thyme sprigs
+    amount: '3'
+  - name: Red wine
+    amount: 250ml
+  - name: Tomato paste
+    amount: 3 tbsp
+  - name: Chicken stock cube
+    amount: '1'
+  - name: Butter
+    amount: 140g
+    prep: cold, diced
+  - name: Self-raising flour
+    amount: 250g
+  - name: Mixed chopped herbs (parsley, thyme, sage or chives)
+    amount: 2 tbsp
+steps:
+  - title: Preheat oven
+    content: Heat the oven to 180°C (160°C fan).
+  - title: Coat the chicken
+    content: Toss the chicken pieces with the plain flour and some salt and pepper — easiest done in a plastic food bag.
+  - title: Brown the chicken
+    content: Heat the oil in a casserole with a lid. Brown the chicken well on all sides, working in batches. Remove to a plate, then add the onions, carrot, lardons, bay and thyme to the pan and cook gently for 10 minutes until the onion softens.
+    timer: ⏱ 10 minutes
+  - title: Braise
+    content: Return the chicken and its juices to the pan. Pour in the red wine, 250ml water and the tomato paste, and crumble in the stock cube. Top up with a splash more water if needed until the chicken is almost covered. Bring to the boil, cover, and bake for 20 minutes. Remove the lid and bake for a further 10 minutes.
+    timer: ⏱ 30 minutes
+  - title: Make the dumplings
+    content: Rub the butter into the self-raising flour with your fingertips until it resembles fine breadcrumbs. Stir in the herbs with ½ tsp salt and some pepper. Drizzle in 150ml water and stir quickly with a cutlery knife to form a light dough. Shape into ping pong-sized balls with floured hands.
+  - title: Top and bake
+    content: Place the dumplings on top of the stew and bake for a further 20 minutes until the dumplings are cooked through.
+    timer: ⏱ 20 minutes
+notes: Browning the chicken properly before braising builds most of the flavour — don't rush this step. The dumplings should sit on top of the stew, not be submerged, so they steam and puff rather than turn stodgy. Leftovers reheat well the next day.

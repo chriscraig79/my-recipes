@@ -1,0 +1,85 @@
+id: chicken-schnitzel
+title: Chicken Schnitzel with Coleslaw
+titleHtml: Chicken <em>Schnitzel</em> with Coleslaw
+label: Main course
+servings: '4'
+time: 45 min
+timeMins: 45
+extra: Pan-fried
+oven: false
+description: Crisp, sesame-crumbed schnitzel with a punchy garlic mayonnaise and a bright, caraway-spiced red cabbage slaw.
+tags:
+  - chicken
+  - cabbage
+  - eggs
+ingredients:
+  - name: Plain flour
+    amount: 50g
+  - name: Smoked paprika
+    amount: 1 tsp
+  - name: Mustard powder
+    amount: 1 tsp
+  - name: Large eggs
+    amount: '2'
+    prep: beaten
+  - name: Fine dried breadcrumbs (or matzo meal)
+    amount: 100g
+  - name: Sesame seeds
+    amount: 1 tbsp
+  - name: Chicken breasts
+    amount: '4'
+    prep: butterflied and flattened
+  - name: Salt
+    amount: to taste
+  - name: Vegetable oil
+    amount: as needed
+    prep: for frying
+  - name: Garlic cloves
+    amount: '2'
+    prep: finely chopped
+  - name: Egg yolks
+    amount: '2'
+  - name: Mustard
+    amount: 1 tsp
+  - name: Sunflower or groundnut oil
+    amount: 250ml
+  - name: Lemon juice or vinegar
+    amount: '1'
+    prep: a squeeze/few drops
+  - name: Red cabbage
+    amount: 300g
+    prep: shredded
+  - name: Carrots
+    amount: '1'
+    prep: julienned
+  - name: Onions
+    amount: 1 small
+    prep: finely chopped
+  - name: Crisp eating apples
+    amount: '2'
+    prep: peeled, cored and chopped
+  - name: Lemon juice
+    amount: 1 tbsp
+  - name: Caraway seeds
+    amount: 1 tsp
+  - name: Cider vinegar
+    amount: 2 tsp
+  - name: Garlic mayonnaise (from above)
+    amount: 2 tbsp
+  - name: Caster sugar
+    amount: 1 pinch
+steps:
+  - title: Coat the chicken
+    content: Put the flour on a large plate and mix in the smoked paprika, mustard powder and ½ tsp salt. Put the beaten eggs in a shallow bowl, and mix the breadcrumbs with the sesame seeds in another. Coat each chicken breast in the flour, patting off the excess, then dip in the egg and finally the breadcrumb mixture.
+  - title: Fry the schnitzels
+    content: Pour oil into a large frying pan to a depth of about 2cm and heat to medium. Test with a cube of bread — it should turn golden in 2–3 minutes. Fry the chicken for 3–4 minutes on each side until deep golden-brown, working in batches and keeping cooked pieces warm in a low oven.
+    timer: ⏱ 6–8 minutes per batch
+  - title: Make the garlic mayonnaise
+    content: Mash the garlic to a paste with a little salt. Whisk with the egg yolks and mustard in a bowl, then start drizzling in the oil a few drops at a time, whisking constantly, until it emulsifies. Keep adding the oil gradually until it's all incorporated. Loosen with a few drops of warm water if it gets too thick, and season with lemon juice or vinegar to taste.
+  - title: Make the coleslaw
+    content: Put the red cabbage, carrot and onion in a bowl. Toss the apple in the lemon juice to stop it browning, then add to the cabbage with the caraway seeds and mix well.
+  - title: Dress the coleslaw
+    content: Whisk the cider vinegar with 2 tbsp of the garlic mayonnaise, the sugar, and salt and pepper to taste. Pour over the coleslaw and stir well.
+  - title: Serve
+    content: Serve the schnitzel hot with the coleslaw alongside. Keep any remaining garlic mayonnaise in the fridge.
+notes: Watch the oil temperature closely — too hot and the coating burns before the chicken cooks through, too cool and it turns greasy. Adding the mayonnaise oil too fast is the classic way to split it; slow and steady is worth the patience. Adapted from a BBC Food recipe (bbc.co.uk/food/recipes/israeli_chicken_76953).

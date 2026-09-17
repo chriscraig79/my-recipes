@@ -1,0 +1,54 @@
+id: bang-bang-chicken
+title: Bang-Bang Chicken
+titleHtml: Bang-Bang <em>Chicken</em>
+label: Main course
+servings: '4'
+time: 30 min
+timeMins: 30
+extra: No frying required
+oven: false
+description: 'Poached, hand-shredded chicken tossed through a nutty, garlicky peanut-sesame sauce with shredded cucumber. Author: Spice the Plate.'
+tags:
+  - chicken
+  - cucumber
+ingredients:
+  - name: Chicken breasts
+    amount: 2 (about 450g)
+    prep: boneless and skinless, cut into strips
+  - name: Fresh ginger
+    amount: 3–4 slices
+    prep: sliced
+  - name: Japanese cucumbers
+    amount: '2'
+    prep: shredded
+  - name: Garlic cloves
+    amount: '4'
+    prep: grated
+  - name: Soy sauce
+    amount: ¼ cup
+  - name: Chinese vinegar
+    amount: ¼ cup
+  - name: Salt
+    amount: ½ tsp
+  - name: Sugar
+    amount: 1 tsp
+  - name: Peanut butter
+    amount: ½ cup
+  - name: Sesame oil
+    amount: 2 tbsp
+  - name: Chilli oil (optional)
+    amount: ¼ cup
+  - name: Toasted sesame seeds or crushed peanuts
+    amount: to taste
+    prep: to serve
+steps:
+  - title: Make the sauce
+    content: Whisk together the garlic, soy sauce, Chinese vinegar, salt, sugar, peanut butter, sesame oil and chilli oil in a bowl. Set aside.
+  - title: Poach the chicken
+    content: Place the chicken in the bottom of a large pot with the ginger slices. Cover with about 1 inch of water and bring to a soft boil. Reduce to a simmer and cook for 15–20 minutes (in quarters) or 10–15 minutes (in strips), until the chicken reaches 74°C in the centre.
+    timer: ⏱ 10–20 minutes
+  - title: Shred
+    content: While the chicken poaches, shred the cucumbers with a grater and transfer to a large mixing bowl. Once the chicken is cooked, transfer to a plate and pull into shreds with two forks.
+  - title: Combine and serve
+    content: Add the shredded chicken to the bowl of cucumber and pour over the sauce. Mix well, transfer to a plate, and top with sesame seeds or crushed peanuts to serve.
+notes: Cutting the chicken into quarters or strips before poaching shortens the cooking time and helps it cook through evenly. Japanese cucumber has a thinner skin and fewer seeds than regular cucumber — a good swap if you can't find it.

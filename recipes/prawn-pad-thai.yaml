@@ -1,0 +1,62 @@
+id: prawn-pad-thai
+title: Quick Prawn Pad Thai
+titleHtml: Quick Prawn <em>Pad Thai</em>
+label: Main course
+servings: '2'
+time: 20 min
+timeMins: 20
+extra: One pan
+oven: false
+description: A fast, tangy pad thai built on a tamarind, soy and sugar sauce — glossy noodles, juicy prawns, ready in the time it takes to boil the kettle.
+tags:
+  - prawns
+  - eggs
+  - noodles
+ingredients:
+  - name: Tamarind paste
+    amount: 1 tbsp
+  - name: Soy sauce
+    amount: 1–2 tbsp
+  - name: Sugar
+    amount: 1 tsp
+  - name: Chicken stock
+    amount: 2–3 tbsp
+  - name: Pad Thai noodles
+    amount: 150g
+  - name: Raw prawns
+    amount: 200g
+  - name: Large eggs
+    amount: '1'
+  - name: Spring onions
+    amount: '3'
+    prep: sliced
+  - name: Red peppers
+    amount: '1'
+    prep: sliced
+  - name: Mushrooms
+    amount: 100g
+    prep: sliced
+  - name: Vegetable oil
+    amount: 2 tbsp
+  - name: Lemon or lime
+    amount: ½
+    prep: to finish (optional)
+steps:
+  - title: Make the sauce
+    content: 'Mix the tamarind paste, soy sauce, sugar and chicken stock in a small bowl. Taste and adjust: too sharp, add a little more sugar; too flat, add a little more soy. You''re after a sweet, sour, salty balance.'
+  - title: Prep everything
+    content: Soak the noodles if needed, according to packet instructions. Slice the spring onions, red pepper and mushrooms. Lightly beat the egg if using.
+  - title: Cook the prawns
+    content: Heat the oil in a wok or large frying pan over high heat. Cook the prawns for 1–2 minutes each side until just pink. Remove and set aside.
+    timer: ⏱ 2–4 minutes
+  - title: Stir-fry the veg
+    content: In the same pan, cook the mushrooms and red pepper for 2–3 minutes, then add most of the spring onions.
+    timer: ⏱ 2–3 minutes
+  - title: Add noodles and sauce
+    content: Add the noodles, pour in the sauce, and toss over medium-high heat until glossy, not watery. Add a splash more stock if it looks dry.
+  - title: Add the egg
+    content: Push everything to one side of the pan, crack the egg into the empty space, scramble quickly, then mix through.
+  - title: Combine and finish
+    content: Add the prawns back in and toss over high heat for 1–2 minutes. Adjust with a squeeze of lemon or lime for brightness, more soy for salt, or more sugar to balance. Top with the remaining spring onions.
+    timer: ⏱ 1–2 minutes
+notes: Don't overcook the prawns or they'll turn rubbery — 1–2 minutes a side over high heat is plenty. The dish should look glossy and coated, not soupy, so go easy on the liquid. High heat throughout is what gives pad thai its proper wok-fried flavour.

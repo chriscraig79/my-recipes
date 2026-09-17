@@ -1,0 +1,60 @@
+id: honey-garlic-chicken-thighs
+title: Honey Garlic Chicken Thighs
+titleHtml: Honey <em>Garlic Chicken Thighs</em>
+label: Main course
+servings: '4'
+time: 35 min
+timeMins: 35
+extra: One pan
+oven: false
+description: Floured chicken thighs pan-seared then simmered in a sticky honey, garlic and soy sauce until glossy and thick.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken thighs
+    amount: '6'
+    prep: skinless
+  - name: Cornflour
+    amount: 4 tbsp
+  - name: Garlic powder
+    amount: 1 tsp
+  - name: Salt
+    amount: ½ tsp
+  - name: Black pepper
+    amount: ½ tsp
+  - name: Paprika
+    amount: 1 tsp
+  - name: Garlic cloves
+    amount: 5 large
+    prep: chopped
+  - name: Butter
+    amount: 1 tbsp
+    prep: unsalted
+  - name: Honey
+    amount: ⅓ cup
+  - name: Rice vinegar
+    amount: 1 tbsp
+  - name: Chicken stock
+    amount: ½ cup
+  - name: Dark soy sauce
+    amount: 1 tbsp
+  - name: Vegetable oil
+    amount: 2 tbsp
+    prep: for frying
+  - name: Parsley and sesame seeds
+    amount: to taste
+    prep: to serve
+steps:
+  - title: Season and dust
+    content: Pat the chicken thighs dry and season both sides with salt and pepper. In a shallow bowl, whisk together the cornflour, paprika, salt, garlic powder and black pepper. Dust the chicken in the mixture, shaking off the excess.
+  - title: Sear the chicken
+    content: Heat the oil in a pan over medium-high heat. Add the chicken and sear undisturbed for 3–4 minutes, then flip and cook the other side for a further 3 minutes until golden. Work in batches if needed.
+    timer: ⏱ 6–7 minutes
+  - title: Build the sauce
+    content: Push the chicken to one side, add the butter and garlic to the pan and cook until fragrant. Stir in the honey, vinegar, soy sauce and chicken stock.
+  - title: Simmer
+    content: Simmer over medium heat for 10–15 minutes until the sauce thickens and reduces, flipping the chicken or spooning sauce over it occasionally so it's evenly coated.
+    timer: ⏱ 10–15 minutes
+  - title: Serve
+    content: Serve over rice or mashed potato with some vegetables. Scatter with chopped parsley and sesame seeds.
+notes: Don't skip drying the chicken before seasoning — a wet surface stops the coating crisping properly. The sauce should coat the back of a spoon by the time it's ready; keep simmering a little longer if it's still thin. Adapted from thedinnerbite.com.

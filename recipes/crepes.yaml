@@ -1,0 +1,41 @@
+id: crepes
+title: Crêpes
+titleHtml: <em>Crêpes</em>
+label: Breakfast / dessert
+servings: '4'
+time: 45 min
+timeMins: 45
+extra: Incl. rest time
+oven: false
+description: Light, thin pancakes that work with anything — lemon and sugar, Nutella, jam, or just butter. The batter rests while you get everything else ready.
+tags:
+  - eggs
+ingredients:
+  - name: Plain flour
+    amount: 125g
+  - name: Large eggs
+    amount: '2'
+  - name: Whole milk
+    amount: 300ml
+  - name: Butter
+    amount: 1 tbsp
+    prep: melted (or vegetable oil)
+  - name: Pinch of salt
+    amount: '1'
+  - name: Butter
+    amount: 1 tbsp
+    prep: for frying (or oil)
+steps:
+  - title: Make the batter
+    content: Sift the flour into a bowl with a pinch of salt. Make a well in the centre and crack in the eggs. Whisk from the middle outward, gradually drawing in the flour. Add the milk a little at a time, whisking until you have a smooth, thin batter with no lumps. Stir in the melted butter. The batter should be about the consistency of single cream.
+  - title: Rest the batter
+    content: Cover and leave to rest for at least 30 minutes at room temperature, or up to a few hours in the fridge. You can skip this if you're in a hurry — 10–15 minutes is better than nothing, and the first crêpe is always a test one anyway.
+    timer: ⏱ 30 minutes
+  - title: Heat the pan
+    content: Heat a non-stick frying pan (about 20–24cm) over medium-high heat. Add a small knob of butter and swirl to coat. When it starts to foam, pour in a small ladleful of batter — roughly 3–4 tbsp — and immediately swirl the pan so it spreads into a thin, even circle.
+  - title: Cook each crêpe
+    content: Cook for about 1 minute until the edges lift and the underside is lightly golden. Flip with a spatula or — if you're feeling brave — a toss. Cook for 30 seconds on the other side.
+    timer: ⏱ 90 seconds per crêpe
+  - title: Serve
+    content: Serve immediately with lemon juice and sugar, Nutella, or jam. Stack on a warm plate if making a batch and serve together.
+notes: The resting time is worth it — it relaxes the gluten and gives you a more tender, even crêpe. If the first one comes out thick or tears, don't worry — it's always a test pancake. The pan temperature and butter amount settle in after the first one. Stack finished crêpes on a warm plate; they won't stick together.

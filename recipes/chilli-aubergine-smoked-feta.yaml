@@ -1,0 +1,51 @@
+id: chilli-aubergine-smoked-feta
+title: Chilli Aubergine with Smoked Feta
+titleHtml: Chilli Aubergine with <em>Smoked Feta</em>
+label: Side / snack
+servings: '4'
+time: 20 min
+timeMins: 20
+extra: One pan
+oven: false
+description: Pan-fried aubergine glazed in a sticky sweet-sour-chilli sauce, topped with crumbled smoked feta — great as a starter or a side with rice crackers.
+tags:
+  - aubergine
+ingredients:
+  - name: Aubergines
+    amount: '2'
+    prep: cut into chunks
+  - name: Smoked feta (or plain)
+    amount: 125g
+    prep: crumbled
+  - name: Sesame seeds
+    amount: 1 tbsp
+  - name: Spring onions
+    amount: '2'
+    prep: finely chopped
+  - name: Red chilli
+    amount: '1'
+    prep: finely sliced
+  - name: Brown sugar
+    amount: 30g
+  - name: Rice vinegar
+    amount: 50ml
+  - name: Soy sauce
+    amount: 50ml
+  - name: Chilli paste
+    amount: 50g
+  - name: Lime
+    amount: '1'
+    prep: juiced and zested
+steps:
+  - title: Make the sauce
+    content: Put all the sauce ingredients in a saucepan and boil for 5 minutes, then remove from the heat.
+    timer: ⏱ 5 minutes
+  - title: Fry the aubergine
+    content: In a separate pan, fry the aubergine chunks in oil for 5–6 minutes until cooked and soft.
+    timer: ⏱ 5–6 minutes
+  - title: Glaze
+    content: Add the sauce to the aubergine and cook until sticky, 2–3 minutes.
+    timer: ⏱ 2–3 minutes
+  - title: Serve
+    content: Serve in a bowl topped with the feta, sesame seeds, spring onions and chilli. Delicious with mini rice crackers.
+notes: Smoked feta gives this a real edge over plain, but either works if that's what you've got. Best served straightaway while the aubergine is still hot and the sauce is glossy.

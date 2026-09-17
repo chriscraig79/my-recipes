@@ -1,0 +1,81 @@
+id: chicken-massaman
+title: Chicken Massaman Curry
+titleHtml: Chicken <em>Massaman Curry</em>
+label: Main course
+servings: '4'
+time: 55 min
+timeMins: 55
+extra: One pan
+oven: false
+description: A rich, mildly spiced curry with warmth from dried spices, sweetness from coconut milk, and depth from tamarind. One of the great curries.
+tags:
+  - chicken
+  - potato
+ingredients:
+  - name: Chicken thighs
+    amount: 800g
+    prep: bone-in or boneless
+  - name: Coconut milk
+    amount: 400ml
+    prep: full fat tin
+  - name: Chicken stock
+    amount: 200ml
+  - name: Waxy potatoes
+    amount: 300g
+    prep: cut into chunks
+  - name: Onions
+    amount: '1'
+    prep: cut into wedges
+  - name: Roasted peanuts
+    amount: 50g
+  - name: Fish sauce
+    amount: 2 tbsp
+  - name: Tamarind paste
+    amount: 1 tbsp
+  - name: Palm sugar or brown sugar
+    amount: 2 tsp
+  - name: Vegetable oil
+    amount: 1 tbsp
+  - name: Dried red chillies
+    amount: '3'
+    prep: soaked in hot water 10 min
+  - name: Lemongrass stalk
+    amount: '1'
+    prep: lower third only, chopped
+  - name: Garlic cloves
+    amount: '3'
+  - name: Shallots
+    amount: '2'
+    prep: roughly chopped
+  - name: Fresh ginger
+    amount: 1 tbsp
+    prep: roughly chopped
+  - name: Ground coriander
+    amount: 1 tsp
+  - name: Ground cumin
+    amount: 1 tsp
+  - name: Ground cinnamon
+    amount: ½ tsp
+  - name: Ground cardamom
+    amount: ½ tsp
+  - name: Ground cloves
+    amount: ½ tsp
+  - name: Shrimp paste (optional but worth it)
+    amount: 1 tsp
+steps:
+  - title: Make the paste
+    content: Drain the chillies and blitz with the lemongrass, garlic, shallots, ginger, ground coriander, cumin, cinnamon, cardamom, cloves, and shrimp paste in a small food processor with a splash of water until you have a rough paste. It won't be completely smooth — that's fine.
+  - title: Fry the paste
+    content: Heat the oil in a large heavy pan over medium heat. Add the paste and fry for 3–4 minutes, stirring constantly, until darkened and very fragrant.
+    timer: ⏱ 3–4 minutes
+  - title: Add chicken
+    content: Add a few tablespoons of coconut milk and stir to loosen the paste. Add the chicken and turn to coat in the paste. Cook for 3–4 minutes until lightly coloured on the outside.
+    timer: ⏱ 3–4 minutes
+  - title: Simmer
+    content: Pour in the remaining coconut milk and stock. Add the onion and potatoes. Bring to a gentle simmer, cover and cook for 30–35 minutes until the chicken is cooked through and the potatoes are tender.
+    timer: ⏱ 30–35 minutes
+  - title: Season
+    content: Stir in the fish sauce, tamarind paste, and sugar. Taste and adjust — it should be rich, mildly spiced, gently sour and sweet. Add more fish sauce for salt, more tamarind for sourness, more sugar to balance.
+  - title: Finish and serve
+    content: Stir in most of the peanuts, saving a few to scatter on top. Serve over jasmine rice with the remaining peanuts on top.
+notes: Bone-in thighs give more flavour but boneless are easier to eat. Don't skip the tamarind — it's what gives massaman its distinctive sour-sweet balance; lime juice is a decent substitute in a pinch. The curry improves overnight. Leftovers freeze well. If you can't find shrimp paste, leave it out rather than substituting.

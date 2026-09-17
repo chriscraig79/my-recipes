@@ -1,0 +1,71 @@
+id: thai-chicken-curry
+title: Green Thai Chicken Curry
+titleHtml: Green Thai <em>Chicken Curry</em>
+label: Main course
+servings: '4'
+time: 40 min
+timeMins: 40
+extra: One pan
+oven: false
+description: A fragrant, from-scratch green curry paste with coconut milk and chicken breast. Fresh and aromatic without needing a specialist shop.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken breasts
+    amount: 600g
+    prep: cut into bite-sized pieces
+  - name: Coconut milk
+    amount: 400ml
+    prep: full fat tin
+  - name: Vegetable or chicken stock
+    amount: 150ml
+  - name: Fish sauce
+    amount: 2 tbsp
+  - name: Lime juice
+    amount: 1 tbsp
+  - name: Brown sugar
+    amount: 1 tsp
+  - name: Vegetable oil
+    amount: 1 tbsp
+  - name: Green chillies
+    amount: '3'
+    prep: mild or hot to taste
+  - name: Garlic cloves
+    amount: '4'
+  - name: Fresh ginger
+    amount: 3 tbsp
+    prep: roughly chopped
+  - name: Spring onions
+    amount: '4'
+    prep: roughly chopped
+  - name: Ground coriander
+    amount: 1 tsp
+  - name: Ground cumin
+    amount: 1 tsp
+  - name: Lime zest
+    amount: 1 tsp
+  - name: Fresh coriander
+    amount: 30g
+    prep: stalks and leaves
+  - name: Jasmine or basmati rice
+    amount: 300g
+    prep: to serve
+steps:
+  - title: Make the paste
+    content: Blitz the chillies, garlic, ginger, spring onions, ground coriander, ground cumin, lime zest, and coriander stalks (save leaves for later) in a small food processor or blender with a splash of water until you have a rough paste. A stick blender in a jug works well too.
+  - title: Cook the paste
+    content: Heat the oil in a wide pan or wok over medium-high heat. Add the paste and fry for 2–3 minutes, stirring constantly, until fragrant and starting to darken slightly.
+    timer: ⏱ 2–3 minutes
+  - title: Add coconut milk
+    content: Pour in the coconut milk and stir to combine with the paste. Let it come to a gentle simmer.
+  - title: Cook the chicken
+    content: Add the chicken and stock. Simmer gently for 12–15 minutes until the chicken is cooked through. Don't boil hard or the chicken will tighten up.
+    timer: ⏱ 12–15 minutes
+  - title: Season
+    content: Stir in the fish sauce, lime juice, and sugar. Taste and adjust — more fish sauce for saltiness, more lime for brightness, more sugar to balance. This is where you get it right.
+  - title: Cook the rice
+    content: Cook the rice according to packet instructions while the curry simmers.
+    timer: ⏱ ~12 minutes
+  - title: Serve
+    content: Ladle over rice and scatter with the reserved fresh coriander leaves. A wedge of lime on the side doesn't hurt.
+notes: The paste works best with lemongrass if you can get it — bash a stalk and blitz it in with everything else. Kaffir lime leaves added to the simmering curry add a lot of fragrance. If you want more veg, baby spinach, courgette, or sugar snaps all work well added in the last 5 minutes. Fish sauce is salty, so don't add extra salt — taste first.
