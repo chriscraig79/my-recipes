@@ -1,15 +1,19 @@
 # My Recipes
 
 A personal recipe collection. Recipe data is authored as one YAML file per
-recipe and compiled by a small local build script into `index.html`, which
-renders everything dynamically with ingredient tag filtering and time band
-filtering. The shipped site is still a single static HTML file with zero
-runtime dependencies — the build step only exists to keep the *source* data
-easy to edit and review; nothing changes about how the site loads or runs.
+recipe; `src/index.html` is the hand-written page template (rendering
+logic, styles, markup); a small build script compiles the two together
+into `build/index.html`, which is what actually gets deployed. The shipped
+site is still a single static HTML file with zero runtime dependencies —
+the build step exists to keep the *source* easy to edit and review, and to
+keep generated content out of git history, not to add any framework or
+runtime machinery to the page itself.
 
 ## Live site
 
-Hosted on GitHub Pages at: `https://chriscraig79.github.io/my-recipes`
+Hosted on GitHub Pages at: `https://chriscraig79.github.io/my-recipes`,
+deployed automatically by GitHub Actions on every push to `main` (see
+"Deploying" below) — there's nothing to run manually to publish a change.
 
 ## How it works
 
@@ -18,12 +22,12 @@ lists every recipe id in the order they should appear on the index page.
 `ingredients.yaml` is a shared registry mapping each canonical ingredient
 name to the supermarket section it belongs to.
 
-Running `npm run build` reads all of that and compiles it into the
-generated block inside `index.html` (between the
-`// GENERATED:RECIPES:START` / `// GENERATED:RECIPES:END` markers), which
-is what the page actually renders from at runtime. **That generated block
-should never be hand-edited** — edit the YAML source and rebuild instead;
-see "Local development" below.
+Running `npm run build` reads all of that plus `src/index.html` (the page
+template) and compiles the result into `build/index.html` — the generated
+block sits between `// GENERATED:RECIPES:START` / `// GENERATED:RECIPES:END`
+markers in the template. **`build/` is gitignored and never committed** —
+it only exists locally (for preview) and as CI's build output; the only
+things ever committed are the YAML source and `src/index.html`.
 
 Each recipe file has this shape:
 
@@ -95,14 +99,14 @@ Ingredients with the same `name` are merged into a single line across recipes, l
 ## Local development
 
 ```bash
-npm install       # once, installs the js-yaml build dependency
-npm run build      # compiles recipes/*.yaml + ingredients.yaml into index.html
-npx serve .
+npm install                       # once, installs the js-yaml build dependency
+npm run build                     # compiles src/ + recipes/*.yaml + ingredients.yaml -> build/
+npx serve build
 ```
 
-This opens the site at `http://localhost:3000`. There's no auto-reload for
-either step — after editing a recipe, rerun `npm run build`, then refresh
-the browser tab.
+This opens the site at `http://localhost:3000`. There's no auto-reload —
+after editing a recipe or `src/index.html`, rerun `npm run build`, then
+refresh the browser tab.
 
 ## Editing in Claude Code
 
@@ -114,19 +118,18 @@ Once you've cloned the repo, you can continue building the recipe collection wit
 This is handled by the `add-recipe` skill (`.claude/skills/add-recipe/`), which knows the YAML schema, checks `ingredients.yaml` for existing ingredient names before inventing new ones, updates `recipes/_order.yaml`, and runs the build.
 
 **Updating an existing recipe**
-> "In recipes/[recipe id].yaml, update the recipe to change [what you want changed]." Rerun `npm run build` afterward.
+> "In recipes/[recipe id].yaml, update the recipe to change [what you want changed]." Rerun `npm run build` to preview it.
 
 **Fixing a bug**
-> "There's a YAML syntax error in recipes/[recipe id].yaml — find and fix it." or "The build script is failing, here's the error: [paste it]."
+> "There's a YAML syntax error in recipes/[recipe id].yaml — find and fix it." or "The build script is failing, here's the error: [paste it]." or "Something's wrong with the page layout/styling — it's in src/index.html."
 
 **Checking for errors before pushing**
 > "Run `npm run build` and check the output for warnings or errors."
 
 **Deploying after changes**
-After editing locally, rebuild, commit the YAML source *and* the regenerated `index.html`, then push to main — GitHub Pages will update within a couple of minutes:
+Just commit the YAML source (and `src/index.html`, if changed) and push to `main` — a GitHub Actions workflow (`.github/workflows/deploy.yml`) runs `npm run build` and publishes `build/` to GitHub Pages automatically. **Never commit anything under `build/`** — it's gitignored and CI produces it fresh on every push.
 ```bash
-npm run build
-git add index.html recipes/ ingredients.yaml
+git add recipes/ ingredients.yaml src/index.html
 git commit -m "Add [recipe name] recipe"
 git push
 ```
@@ -135,16 +138,19 @@ git push
 
 ```
 my-recipes/
-├── index.html          # Compiled output — rendering logic + generated recipe data
-├── ingredients.yaml     # Canonical ingredient name -> shopping-list section
+├── src/
+│   └── index.html         # Hand-written template — markup, styles, rendering logic
+├── build/                  # Gitignored — build output, what actually gets deployed
+├── ingredients.yaml        # Canonical ingredient name -> shopping-list section
 ├── recipes/
-│   ├── _order.yaml       # Index-page display order
-│   └── <id>.yaml         # One file per recipe (source of truth)
+│   ├── _order.yaml          # Index-page display order
+│   └── <id>.yaml            # One file per recipe (source of truth)
 ├── scripts/
-│   ├── build.mjs          # Compiles recipes/*.yaml -> index.html
-│   └── section-lookup.mjs # Keyword-guess fallback used by build.mjs
-├── .claude/skills/add-recipe/   # Claude Code skill for adding recipes
-├── package.json          # js-yaml build dependency
+│   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
+│   └── section-lookup.mjs    # Keyword-guess fallback used by build.mjs
+├── .github/workflows/deploy.yml   # Builds and deploys to GitHub Pages on push to main
+├── .claude/skills/add-recipe/     # Claude Code skill for adding recipes
+├── package.json             # js-yaml build dependency
 ├── .gitignore
 ├── README.md
 └── LICENSE

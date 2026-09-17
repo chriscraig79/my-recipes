@@ -6,7 +6,9 @@ import { guessSection } from "./section-lookup.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
-const INDEX = path.join(ROOT, "index.html");
+const SRC_INDEX = path.join(ROOT, "src", "index.html");
+const BUILD_DIR = path.join(ROOT, "build");
+const BUILD_INDEX = path.join(BUILD_DIR, "index.html");
 const START_MARKER = "// GENERATED:RECIPES:START";
 const END_MARKER = "// GENERATED:RECIPES:END";
 
@@ -58,19 +60,20 @@ function main() {
   const recipes = loadRecipes();
   resolveSections(recipes, registry);
 
-  const html = fs.readFileSync(INDEX, "utf8");
+  const html = fs.readFileSync(SRC_INDEX, "utf8");
   const startIdx = html.indexOf(START_MARKER);
   const endIdx = html.indexOf(END_MARKER);
   if (startIdx === -1 || endIdx === -1) {
-    throw new Error(`Could not find ${START_MARKER} / ${END_MARKER} markers in index.html`);
+    throw new Error(`Could not find ${START_MARKER} / ${END_MARKER} markers in src/index.html`);
   }
 
   const before = html.slice(0, startIdx + START_MARKER.length);
   const after = html.slice(endIdx);
   const generated = `\nconst recipes = ${serializeRecipes(recipes)};\n`;
 
-  fs.writeFileSync(INDEX, before + generated + after);
-  console.log(`Built index.html from ${recipes.length} recipes (${registry.size} known ingredients).`);
+  fs.mkdirSync(BUILD_DIR, { recursive: true });
+  fs.writeFileSync(BUILD_INDEX, before + generated + after);
+  console.log(`Built build/index.html from ${recipes.length} recipes (${registry.size} known ingredients).`);
 }
 
 main();
