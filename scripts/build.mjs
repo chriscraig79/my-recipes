@@ -74,6 +74,19 @@ function minifyHtml(html) {
   });
 }
 
+function copyImages() {
+  const src = path.join(ROOT, "recipes", "images");
+  if (!fs.existsSync(src)) return 0;
+  const files = fs.readdirSync(src).filter(f => !f.startsWith("."));
+  if (!files.length) return 0;
+  const dest = path.join(BUILD_DIR, "images");
+  fs.mkdirSync(dest, { recursive: true });
+  for (const file of files) {
+    fs.copyFileSync(path.join(src, file), path.join(dest, file));
+  }
+  return files.length;
+}
+
 function main() {
   const registry = loadIngredientRegistry();
   const recipes = loadRecipes();
@@ -94,9 +107,10 @@ function main() {
 
   fs.mkdirSync(BUILD_DIR, { recursive: true });
   fs.writeFileSync(BUILD_INDEX, minified);
+  const imageCount = copyImages();
   console.log(
     `Built build/index.html from ${recipes.length} recipes (${registry.size} known ingredients). ` +
-    `${assembled.length} -> ${minified.length} bytes.`
+    `${assembled.length} -> ${minified.length} bytes. ${imageCount} image(s) copied.`
   );
 }
 

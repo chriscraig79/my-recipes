@@ -51,6 +51,12 @@ template and render code never need to change.
    - `steps` — list of `{ title, content, timer? }`. `timer` is optional,
      free text like `"⏱ 20 minutes"`, only on steps with a real wait/cook time.
    - `notes` — one paragraph of tips, shown at the bottom of the recipe.
+   - `image` — optional. If the user has a photo of the dish, save it to
+     `recipes/images/<id>.<ext>` and set `image: <filename>` (filename
+     only, not a path). Without it, the index card shows a tag-colored
+     monogram panel and the recipe page shows no hero image — both are
+     the normal, complete default, so never invent or fetch a photo just
+     to fill this field.
 
 3. **Add the id to `recipes/_order.yaml`.** This list controls the order
    recipes appear on the index page — insert the new id wherever feels
@@ -69,9 +75,10 @@ template and render code never need to change.
    shopping basket and confirm they merge into one line on the shopping
    list — that's the payoff of getting the ingredient naming right.
 
-6. **Commit the YAML source only** (`recipes/<id>.yaml`, the updated
-   `recipes/_order.yaml`, and `ingredients.yaml` if you added an entry) —
-   never anything under `build/`.
+6. **Commit the source only** (`recipes/<id>.yaml`, the updated
+   `recipes/_order.yaml`, `ingredients.yaml` if you added an entry, and
+   `recipes/images/<id>.<ext>` if a photo was added) — never anything
+   under `build/`.
 
 ## Ingredient naming — the part that matters most
 

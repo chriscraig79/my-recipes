@@ -4,25 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Recipes</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:wght@300;400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --cream: #f5f0e8;
     --warm-white: #faf7f2;
+    --card-bg: #ffffff;
     --ink: #1c1812;
     --muted: #6b5f4e;
     --accent: #b5470a;
+    --accent-soft: #f1e2d3;
     --border: #d9cfc0;
     --rule: #c4b8a4;
-    --step-num: #898173;
+    --step-num: #ece5d8;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-pill: 999px;
+    --shadow-card: 0 1px 2px rgba(28, 24, 18, 0.04), 0 6px 16px rgba(28, 24, 18, 0.06);
+    --font-serif: 'Playfair Display', serif;
+    --font-body: 'Source Serif 4', Georgia, serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
   }
 
   body {
     background: var(--warm-white);
     color: var(--ink);
-    font-family: 'Source Serif 4', Georgia, serif;
+    font-family: var(--font-body);
     font-weight: 300;
     line-height: 1.7;
     min-height: 100vh;
@@ -30,7 +39,7 @@
 
   /* ── Index ── */
   #index {
-    max-width: 680px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 3rem 2rem 5rem;
   }
@@ -49,6 +58,7 @@
   }
 
   .site-label {
+    font-family: var(--font-sans);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -79,6 +89,7 @@
   }
 
   .filter-label {
+    font-family: var(--font-sans);
     font-size: 0.62rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -94,12 +105,12 @@
   }
 
   .chip {
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.78rem;
-    font-weight: 300;
-    padding: 0.25rem 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    font-weight: 500;
+    padding: 0.3rem 0.85rem;
     border: 1px solid var(--border);
-    border-radius: 2px;
+    border-radius: var(--radius-pill);
     background: none;
     color: var(--muted);
     cursor: pointer;
@@ -119,86 +130,130 @@
   }
 
   .results-count {
+    font-family: var(--font-sans);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   /* ── Recipe list ── */
-  .recipe-list { list-style: none; }
-
-  .recipe-list-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-bottom: 1px solid var(--border);
+  .recipe-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
   }
 
-  .recipe-list-item:first-child {
-    border-top: 1px solid var(--border);
+  .recipe-list-item {
+    position: relative;
   }
 
   .recipe-card-btn {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-    padding: 1.25rem 0;
-    background: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: var(--card-bg);
     border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
     cursor: pointer;
     text-align: left;
     color: var(--ink);
-    gap: 1rem;
-    transition: color 0.15s;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
   }
 
-  .recipe-card-btn:hover { color: var(--accent); }
-  .recipe-card-btn:hover .recipe-card-arrow { transform: translateX(4px); }
+  .recipe-card-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(28, 24, 18, 0.06), 0 12px 24px rgba(28, 24, 18, 0.1);
+  }
+
+  .recipe-card-panel {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--accent-soft);
+  }
+
+  .recipe-card-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .recipe-card-monogram {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 4rem;
+    color: var(--ink);
+    opacity: 0.22;
+    line-height: 1;
+  }
+
+  .panel-chicken { background: #f1e2d3; }
+  .panel-eggs { background: #f6ecc9; }
+  .panel-pasta { background: #f3e6d6; }
+  .panel-vegetarian { background: #dfe6d4; }
+  .panel-pork { background: #f0d9cf; }
+  .panel-potato { background: #e8dcc4; }
+  .panel-beef { background: #e6d2ca; }
+  .panel-seafood { background: #d9e2e2; }
+  .panel-default { background: var(--accent-soft); }
+
+  .recipe-card-text {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.1rem 1.25rem;
+    flex: 1;
+  }
 
   .recipe-card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 600;
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.35rem;
   }
 
   .recipe-card-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem;
-    margin-top: 0.4rem;
+    margin-bottom: 0.45rem;
   }
 
   .recipe-chip {
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
+    font-family: var(--font-sans);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--muted);
     border: 1px solid var(--border);
-    padding: 0.1rem 0.45rem;
-    border-radius: 2px;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-pill);
   }
 
   .recipe-chip.time { color: var(--accent); border-color: var(--accent); }
 
   .recipe-card-desc {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--muted);
     font-style: italic;
     font-family: 'Playfair Display', serif;
-    margin-top: 0.2rem;
-  }
-
-  .recipe-card-arrow {
-    font-size: 1.2rem;
-    color: var(--accent);
-    flex-shrink: 0;
-    transition: transform 0.15s;
+    margin-top: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .no-results {
@@ -211,38 +266,46 @@
 
   /* ── Basket toggle (index card) ── */
   .basket-toggle {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
     flex-shrink: 0;
     width: 2.25rem;
     height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
-    border: 1px solid var(--border);
-    background: none;
-    color: var(--accent);
-    font-family: 'Source Serif 4', serif;
-    font-size: 1rem;
-    line-height: 1;
+    border: none;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    color: var(--ink);
     cursor: pointer;
     transition: all 0.15s;
   }
 
-  .basket-toggle:hover { border-color: var(--accent); }
+  .basket-toggle svg { width: 1.05rem; height: 1.05rem; }
+
+  .basket-toggle:hover { color: var(--accent); }
 
   .basket-toggle.active {
     background: var(--accent);
-    border-color: var(--accent);
     color: var(--warm-white);
   }
 
-  /* ── Basket toggle (recipe header) ── */
+  /* ── Basket toggle (ingredients heading row) ── */
   .basket-toggle-large {
-    margin-top: 1.25rem;
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
-    padding: 0.5rem 1rem;
+    padding: 0.45rem 1rem;
     border: 1px solid var(--accent);
-    border-radius: 2px;
+    border-radius: var(--radius-pill);
     background: none;
     color: var(--accent);
     cursor: pointer;
@@ -262,9 +325,10 @@
     background: var(--ink);
     color: var(--warm-white);
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.65rem 1.1rem;
-    font-family: 'Source Serif 4', serif;
+    font-family: var(--font-sans);
+    font-weight: 500;
     font-size: 0.8rem;
     letter-spacing: 0.03em;
     cursor: pointer;
@@ -279,18 +343,34 @@
   /* ── Recipe view / Shopping list view ── */
   #recipe-view, #shopping-list-view {
     display: none;
-    max-width: 680px;
+    max-width: 720px;
     margin: 0 auto;
     padding: 3rem 2rem 5rem;
+  }
+
+  .recipe-hero {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    max-height: 420px;
+  }
+
+  .recipe-hero img {
+    width: 100%;
+    height: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 16 / 9;
   }
 
   .back-btn {
     background: none;
     border: none;
     cursor: pointer;
-    font-family: 'Source Serif 4', serif;
+    font-family: var(--font-sans);
     font-size: 0.75rem;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
     padding: 0;
@@ -305,19 +385,13 @@
 
   .recipe-header {
     border-top: 3px solid var(--ink);
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 3px solid var(--ink);
     padding: 2rem 0 1.5rem;
     margin-bottom: 2.5rem;
   }
 
-  .recipe-header::after {
-    content: '';
-    display: block;
-    border-bottom: 3px solid var(--ink);
-    margin-top: 1.5rem;
-  }
-
   .recipe-label {
+    font-family: var(--font-sans);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -346,69 +420,90 @@
     font-family: 'Playfair Display', serif;
   }
 
-  .recipe-meta {
-    display: flex;
-    gap: 2rem;
-    margin-top: 1.25rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    text-transform: uppercase;
-    flex-wrap: wrap;
+  .recipe-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    margin-top: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
   }
 
-  .recipe-meta span strong {
-    color: var(--ink);
+  .recipe-stat {
+    padding: 0.9rem 1.1rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .recipe-stat:last-child { border-right: none; }
+
+  .stat-label {
     display: block;
-    font-size: 1.1rem;
-    text-transform: none;
-    letter-spacing: 0;
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-value {
+    display: block;
     font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
     font-weight: 600;
+    color: var(--ink);
   }
 
   section.recipe-section { margin-bottom: 2.5rem; }
 
   h2.section-heading {
+    font-family: var(--font-sans);
     font-size: 0.65rem;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
   }
 
-  h2.section-heading--no-gap {
+  .section-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-heading-row .section-heading {
     margin-bottom: 0;
   }
 
-  .ingredients-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .ingredients-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     list-style: none;
   }
 
   .ingredient {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0.55rem 0;
-    border-bottom: 1px solid var(--border);
-    gap: 1rem;
-    font-size: 0.95rem;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 2px rgba(28, 24, 18, 0.05), 0 1px 5px rgba(28, 24, 18, 0.05);
+    padding: 0.55rem 0.95rem;
+    font-size: 0.88rem;
+    line-height: 1.4;
   }
 
-  .ingredient:nth-child(odd) { padding-right: 1.5rem; }
-  .ingredient:nth-child(even) { padding-left: 1.5rem; border-left: 1px solid var(--border); }
+  .ingredient-name { display: block; }
 
   .ingredient-amount {
+    display: block;
     font-family: 'Playfair Display', serif;
     font-weight: 600;
     color: var(--accent);
     white-space: nowrap;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
   }
 
   .steps {
@@ -417,20 +512,22 @@
 
   .step {
     display: grid;
-    grid-template-columns: 2.5rem 1fr;
+    grid-template-columns: 4rem 1fr;
     gap: 0 1.25rem;
-    margin-bottom: 1.5rem;
-    align-items: start;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1.1rem 1.35rem;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
   }
 
   .step-number {
     font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
+    font-size: clamp(3rem, 8vw, 4.5rem);
     font-weight: 600;
     color: var(--step-num);
     line-height: 1;
     text-align: right;
-    padding-top: 0.1rem;
   }
 
   .step-title {
@@ -449,18 +546,21 @@
   .step-timer {
     display: inline-block;
     margin-top: 0.4rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--accent);
     border: 1px solid var(--accent);
-    padding: 0.15rem 0.5rem;
-    border-radius: 2px;
+    padding: 0.15rem 0.6rem;
+    border-radius: var(--radius-pill);
   }
 
   .notes-box {
     background: var(--cream);
     border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
     padding: 1.25rem 1.5rem;
     font-size: 0.88rem;
     color: var(--muted);
@@ -486,11 +586,12 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     color: var(--muted);
     border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 0.25rem 0.4rem 0.25rem 0.6rem;
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.4rem 0.25rem 0.7rem;
   }
 
   .basket-chip button {
@@ -515,11 +616,12 @@
     background: var(--accent);
     color: var(--warm-white);
     border: none;
-    border-radius: 2px;
+    border-radius: var(--radius-pill);
     padding: 0.7rem 1.4rem;
-    font-family: 'Source Serif 4', serif;
+    font-family: var(--font-sans);
+    font-weight: 500;
     font-size: 0.82rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
@@ -532,9 +634,9 @@
     background: none;
     border: none;
     color: var(--muted);
-    font-family: 'Source Serif 4', serif;
+    font-family: var(--font-sans);
     font-size: 0.75rem;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: underline;
     cursor: pointer;
@@ -623,9 +725,8 @@
   }
 
   @media (max-width: 500px) {
-    .ingredients-grid { grid-template-columns: 1fr; }
-    .ingredient:nth-child(even) { padding-left: 0; border-left: none; }
-    .ingredient:nth-child(odd) { padding-right: 0; }
+    .recipe-list { grid-template-columns: 1fr; }
+    .recipe-stats { grid-template-columns: repeat(2, 1fr); }
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
   }
 </style>
@@ -892,6 +993,18 @@ function updateChips() {
 //  RENDERING
 // ─────────────────────────────────────────────
 
+// Homepage cards with no photo yet fall back to a tag-colored panel with
+// a large monogram — a typographic stand-in, never a fake photo.
+const PANEL_TAGS = ['chicken', 'eggs', 'pasta', 'vegetarian', 'pork', 'potato', 'beef', 'seafood'];
+
+function tagPanelClass(tags) {
+  const match = tags.find(t => PANEL_TAGS.includes(t));
+  return match ? `panel-${match}` : 'panel-default';
+}
+
+const BOOKMARK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>';
+const BOOKMARK_ICON_FILLED = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>';
+
 function renderList() {
   const list = document.getElementById('recipe-list');
   const count = document.getElementById('results-count');
@@ -909,17 +1022,20 @@ function renderList() {
     const timeBand = TIME_BANDS.find(b => b.test(r.timeMins));
     const timeChip = timeBand ? `<span class="recipe-chip time">${r.time}</span>` : '';
     const inBasket = basket.has(r.id);
+    const panel = r.image
+      ? `<img class="recipe-card-photo" src="images/${r.image}" alt="" loading="lazy">`
+      : `<span class="recipe-card-monogram">${r.title.charAt(0)}</span>`;
     return `
       <li class="recipe-list-item">
         <button class="recipe-card-btn" onclick="showRecipe('${r.id}')">
+          <div class="recipe-card-panel ${tagPanelClass(r.tags)}">${panel}</div>
           <div class="recipe-card-text">
             <span class="recipe-card-title">${r.title}</span>
             <div class="recipe-card-chips">${tagChips}${timeChip}</div>
             <span class="recipe-card-desc">${r.description}</span>
           </div>
-          <span class="recipe-card-arrow">→</span>
         </button>
-        <button class="basket-toggle${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" aria-label="${inBasket ? 'Remove from shopping list' : 'Add to shopping list'}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓' : '+'}</button>
+        <button class="basket-toggle${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" aria-label="${inBasket ? 'Remove from shopping list' : 'Add to shopping list'}" onclick="toggleBasket('${r.id}')">${inBasket ? BOOKMARK_ICON_FILLED : BOOKMARK_ICON}</button>
       </li>
     `;
   }).join('');
@@ -946,22 +1062,37 @@ function renderRecipe(r) {
 
   const inBasket = basket.has(r.id);
 
+  const heroHtml = r.image
+    ? `<div class="recipe-hero"><img src="images/${r.image}" alt="${r.title}"></div>`
+    : '';
+
+  const stats = [
+    { label: 'Time', value: r.time },
+    { label: 'Servings', value: r.servings }
+  ];
+  if (r.extra) stats.push({ label: r.oven ? 'Oven' : 'Extra', value: r.extra });
+  const statsHtml = stats.map(s => `
+    <div class="recipe-stat">
+      <span class="stat-label">${s.label}</span>
+      <span class="stat-value">${s.value}</span>
+    </div>
+  `).join('');
+
   document.getElementById('recipe-content').innerHTML = `
+    ${heroHtml}
     <header class="recipe-header">
       <p class="recipe-label">${r.label} — serves ${r.servings}</p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
       <p class="recipe-description">${r.description}</p>
-      <div class="recipe-meta">
-        <span><strong>${r.time}</strong> total time</span>
-        ${r.extra ? `<span><strong>${r.extra}</strong>${r.oven ? ' oven' : ''}</span>` : ''}
-        <span><strong>${r.servings}</strong> servings</span>
-      </div>
-      <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
+      <div class="recipe-stats">${statsHtml}</div>
     </header>
 
     <section class="recipe-section">
-      <h2 class="section-heading section-heading--no-gap">Ingredients</h2>
-      <ul class="ingredients-grid">${ingredientsHtml}</ul>
+      <div class="section-heading-row">
+        <h2 class="section-heading">Ingredients</h2>
+        <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
+      </div>
+      <ul class="ingredients-chips">${ingredientsHtml}</ul>
     </section>
 
     <section class="recipe-section">

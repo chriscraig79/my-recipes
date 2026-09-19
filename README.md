@@ -43,6 +43,7 @@ extra: 180°C / fan 160°C
 oven: true             # shows "oven" label under temperature
 description: One line description shown in the index.
 tags: [chicken, potato]     # ingredient tags for filtering
+image: dish-name.jpg  # optional — filename only, see "Photos" below
 ingredients:
   - { name: Ingredient name, amount: 200g }
   # `prep` is optional — shown on the recipe page as "Carrots, thinly
@@ -74,6 +75,15 @@ If a recipe needs a genuinely new ingredient, add it to `ingredients.yaml`
 with a section. The build has a keyword-guessing fallback for anything
 missing from the registry (and prints a warning when it kicks in), but
 that's a safety net, not a substitute for a real entry.
+
+### Photos
+
+`image` is optional. A recipe with no `image` field shows a tag-colored
+monogram panel on its index card and no hero photo on its own page — that's
+the default for every recipe today. To add a photo, save the file to
+`recipes/images/<id>.<ext>` and set `image: <filename>` in the recipe's
+YAML; `npm run build` (and `npm run watch`) copy `recipes/images/` into
+`build/images/` automatically, so no other wiring is needed.
 
 ### Time bands
 
@@ -146,7 +156,8 @@ my-recipes/
 ├── ingredients.yaml        # Canonical ingredient name -> shopping-list section
 ├── recipes/
 │   ├── _order.yaml          # Index-page display order
-│   └── <id>.yaml            # One file per recipe (source of truth)
+│   ├── <id>.yaml            # One file per recipe (source of truth)
+│   └── images/               # Optional recipe photos, <id>.<ext> — copied to build/images/
 ├── scripts/
 │   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
 │   └── section-lookup.mjs    # Keyword-guess fallback used by build.mjs
