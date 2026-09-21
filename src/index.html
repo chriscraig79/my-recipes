@@ -41,34 +41,34 @@
   #index {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 3rem 2rem 5rem;
+    padding: 1.5rem 2rem 5rem;
   }
 
   .site-header {
     border-top: 3px solid var(--ink);
-    padding: 2rem 0 1.5rem;
-    margin-bottom: 2rem;
+    padding: 0.85rem 0 0.65rem;
+    margin-bottom: 0.85rem;
   }
 
   .site-header::after {
     content: '';
     display: block;
     border-bottom: 3px solid var(--ink);
-    margin-top: 1.5rem;
+    margin-top: 0.65rem;
   }
 
   .site-label {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .site-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
     font-weight: 600;
     line-height: 1.05;
   }
@@ -81,34 +81,39 @@
 
   /* ── Filters ── */
   .filters {
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem;
   }
 
   .filter-group {
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
   }
 
   .filter-label {
     font-family: var(--font-sans);
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 0.5rem;
-    display: block;
+    flex-shrink: 0;
+    min-width: 3.6rem;
   }
 
   .filter-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.3rem;
+    flex: 1;
   }
 
   .chip {
     font-family: var(--font-sans);
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     font-weight: 500;
-    padding: 0.3rem 0.85rem;
+    padding: 0.22rem 0.7rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
     background: none;
@@ -728,6 +733,16 @@
     .recipe-list { grid-template-columns: 1fr; }
     .recipe-stats { grid-template-columns: repeat(2, 1fr); }
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
+
+    #index { padding: 1rem 1rem 3rem; }
+    .site-header { padding: 0.65rem 0 0.5rem; margin-bottom: 0.65rem; }
+    .site-header::after { margin-top: 0.5rem; }
+    .site-label { margin-bottom: 0.2rem; }
+    .filters { margin-bottom: 0.85rem; }
+    .filter-group { flex-direction: column; gap: 0.3rem; margin-bottom: 0.5rem; }
+    .filter-label { min-width: 0; }
+    .chip { padding: 0.2rem 0.55rem; font-size: 0.7rem; }
+    .results-count { margin-bottom: 0.65rem; }
   }
 </style>
 </head>
@@ -742,10 +757,7 @@
   </header>
 
   <div class="filters">
-    <div class="filter-group">
-      <span class="filter-label" id="ingredient-filter-label">Ingredient</span>
-      <div class="filter-chips" id="ingredient-chips" role="group" aria-labelledby="ingredient-filter-label"></div>
-    </div>
+    <div id="ingredient-filter-groups"></div>
     <div class="filter-group">
       <span class="filter-label" id="time-filter-label">Time</span>
       <div class="filter-chips" id="time-chips" role="group" aria-labelledby="time-filter-label"></div>
@@ -924,6 +936,15 @@ const TIME_BANDS = [
   { label: "Over 1 hr",    key: "over60",  test: m => m > 60 },
 ];
 
+// Groups ingredient tags by type so the filter chips can be organised
+// under a shared label instead of one long flat row.
+const TAG_CATEGORIES = {
+  bacon: "Meat", beef: "Meat", chicken: "Meat", lamb: "Meat", pork: "Meat", turkey: "Meat", gammon: "Meat",
+  prawns: "Fish", seafood: "Fish", salmon: "Fish", tuna: "Fish", cod: "Fish", mussels: "Fish",
+  aubergine: "Veg", cabbage: "Veg", carrot: "Veg", chickpeas: "Veg", potato: "Veg", vegetarian: "Veg", cucumber: "Veg", courgette: "Veg", mushroom: "Veg", spinach: "Veg", tomato: "Veg",
+};
+const CATEGORY_ORDER = ["Meat", "Fish", "Veg", "Other"];
+
 let activeIngredients = new Set();
 let activeTime = null;
 
@@ -931,6 +952,18 @@ function getAllTags() {
   const tags = new Set();
   recipes.forEach(r => r.tags.forEach(t => tags.add(t)));
   return [...tags].sort();
+}
+
+function getTagsByCategory() {
+  const groups = new Map();
+  getAllTags().forEach(tag => {
+    const category = TAG_CATEGORIES[tag] || "Other";
+    if (!groups.has(category)) groups.set(category, []);
+    groups.get(category).push(tag);
+  });
+  return CATEGORY_ORDER
+    .filter(category => groups.has(category))
+    .map(category => ({ category, tags: groups.get(category) }));
 }
 
 function getTimeBandsPresent() {
@@ -946,13 +979,22 @@ function filteredRecipes() {
 }
 
 function buildFilters() {
-  const ingContainer = document.getElementById('ingredient-chips');
+  const groupsContainer = document.getElementById('ingredient-filter-groups');
   const timeContainer = document.getElementById('time-chips');
 
-  const tags = getAllTags();
-  ingContainer.innerHTML = tags.map(tag => `
-    <button class="chip" data-tag="${tag}" aria-pressed="false" onclick="toggleIngredient('${tag}')">${tag}</button>
-  `).join('');
+  const categories = getTagsByCategory();
+  groupsContainer.innerHTML = categories.map(({ category, tags }) => {
+    const labelId = `${category.toLowerCase()}-filter-label`;
+    const chips = tags.map(tag => `
+      <button class="chip" data-tag="${tag}" aria-pressed="false" onclick="toggleIngredient('${tag}')">${tag}</button>
+    `).join('');
+    return `
+      <div class="filter-group">
+        <span class="filter-label" id="${labelId}">${category}</span>
+        <div class="filter-chips" role="group" aria-labelledby="${labelId}">${chips}</div>
+      </div>
+    `;
+  }).join('');
 
   const bands = getTimeBandsPresent();
   timeContainer.innerHTML = bands.map(band => `
@@ -977,7 +1019,7 @@ function toggleTime(key) {
 }
 
 function updateChips() {
-  document.querySelectorAll('#ingredient-chips .chip').forEach(chip => {
+  document.querySelectorAll('#ingredient-filter-groups .chip').forEach(chip => {
     const isActive = activeIngredients.has(chip.dataset.tag);
     chip.classList.toggle('active', isActive);
     chip.setAttribute('aria-pressed', isActive);
