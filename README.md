@@ -95,7 +95,7 @@ YAML; `npm run build` (and `npm run watch`) copy `recipes/images/` into
 
 ## Shopping list
 
-Any recipe can be added to a shopping basket — via the "+" button on its index card or "Add to shopping list" on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
+Any recipe can be added to a shopping basket — via the bookmark icon on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
 
 The shopping list groups every basket recipe's ingredients into supermarket sections, in walking order:
 
@@ -109,7 +109,7 @@ Ingredients with the same `name` are merged into a single line across recipes, l
 ## Local development
 
 ```bash
-npm install                       # once, installs the js-yaml build dependency
+npm install                       # once, installs the js-yaml and esbuild build dependencies
 npm run watch                     # rebuilds build/ automatically whenever
                                    # src/index.html, recipes/, or ingredients.yaml change
 npx serve build
@@ -139,11 +139,13 @@ This is handled by the `add-recipe` skill (`.claude/skills/add-recipe/`), which 
 > "Run `npm run build` and check the output for warnings or errors."
 
 **Deploying after changes**
-Just commit the YAML source (and `src/index.html`, if changed) and push to `main` — a GitHub Actions workflow (`.github/workflows/deploy.yml`) runs `npm run build` and publishes `build/` to GitHub Pages automatically. **Never commit anything under `build/`** — it's gitignored and CI produces it fresh on every push.
+Changes are made on `dev`, then merged into `main` via a pull request — `main` is what's live, so nothing lands there directly. Commit the YAML source (and `src/index.html`, if changed), push to `dev`, open a PR into `main`, and merge it. A GitHub Actions workflow (`.github/workflows/deploy.yml`) then runs `npm run build` and publishes `build/` to GitHub Pages automatically on that push to `main`. **Never commit anything under `build/`** — it's gitignored and CI produces it fresh on every push.
 ```bash
+git checkout dev
 git add recipes/ ingredients.yaml src/index.html
 git commit -m "Add [recipe name] recipe"
 git push
+# then open a PR from dev into main and merge it
 ```
 
 ## Project structure
@@ -160,10 +162,14 @@ my-recipes/
 │   └── images/               # Optional recipe photos, <id>.<ext> — copied to build/images/
 ├── scripts/
 │   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
+│   ├── watch.mjs             # Rebuilds automatically on changes (npm run watch)
 │   └── section-lookup.mjs    # Keyword-guess fallback used by build.mjs
 ├── .github/workflows/deploy.yml   # Builds and deploys to GitHub Pages on push to main
-├── .claude/skills/add-recipe/     # Claude Code skill for adding recipes
-├── package.json             # js-yaml build dependency
+├── .claude/
+│   ├── launch.json           # Editor run config — npm run watch & npx serve build
+│   └── skills/add-recipe/    # Claude Code skill for adding recipes
+├── package.json             # js-yaml and esbuild build dependencies
+├── package-lock.json
 ├── .gitignore
 ├── README.md
 └── LICENSE
