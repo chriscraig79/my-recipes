@@ -41,34 +41,34 @@
   #index {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 2rem 2rem 5rem;
+    padding: 1.5rem 2rem 5rem;
   }
 
   .site-header {
     border-top: 3px solid var(--ink);
-    padding: 1.25rem 0 1rem;
-    margin-bottom: 1.25rem;
+    padding: 0.85rem 0 0.65rem;
+    margin-bottom: 0.85rem;
   }
 
   .site-header::after {
     content: '';
     display: block;
     border-bottom: 3px solid var(--ink);
-    margin-top: 1rem;
+    margin-top: 0.65rem;
   }
 
   .site-label {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.25rem;
   }
 
   .site-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 6vw, 3rem);
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
     font-weight: 600;
     line-height: 1.05;
   }
@@ -734,14 +734,15 @@
     .recipe-stats { grid-template-columns: repeat(2, 1fr); }
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
 
-    #index { padding: 1.25rem 1rem 3.5rem; }
-    .site-header { padding: 1rem 0 0.75rem; margin-bottom: 1rem; }
-    .site-header::after { margin-top: 0.75rem; }
-    .filters { margin-bottom: 1rem; }
-    .filter-group { flex-direction: column; gap: 0.35rem; margin-bottom: 0.6rem; }
+    #index { padding: 1rem 1rem 3rem; }
+    .site-header { padding: 0.65rem 0 0.5rem; margin-bottom: 0.65rem; }
+    .site-header::after { margin-top: 0.5rem; }
+    .site-label { margin-bottom: 0.2rem; }
+    .filters { margin-bottom: 0.85rem; }
+    .filter-group { flex-direction: column; gap: 0.3rem; margin-bottom: 0.5rem; }
     .filter-label { min-width: 0; }
     .chip { padding: 0.2rem 0.55rem; font-size: 0.7rem; }
-    .results-count { margin-bottom: 0.75rem; }
+    .results-count { margin-bottom: 0.65rem; }
   }
 </style>
 </head>
