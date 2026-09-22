@@ -5,8 +5,7 @@ label: Main course
 servings: '3'
 time: 35 min
 timeMins: 35
-extra: Instant Pot
-oven: false
+cookedIn: Pressure cooker
 description: Chicken legs browned then pressure-cooked in a garlicky lemon and herb broth — a fast, hands-off midweek roast dinner alternative.
 tags:
   - chicken

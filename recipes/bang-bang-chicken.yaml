@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 30 min
 timeMins: 30
-extra: No frying required
-oven: false
+cookedIn: Hob
 description: 'Poached, hand-shredded chicken tossed through a nutty, garlicky peanut-sesame sauce with shredded cucumber. Author: Spice the Plate.'
 tags:
   - chicken

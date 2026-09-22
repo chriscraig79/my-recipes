@@ -5,8 +5,7 @@ label: Light meal
 servings: '4'
 time: 45 min
 timeMins: 45
-extra: One pan
-oven: false
+cookedIn: Hob
 description: The real thing — potato, onion, eggs, olive oil. Served warm or at room temperature, it's one of the great simple dishes.
 tags:
   - eggs

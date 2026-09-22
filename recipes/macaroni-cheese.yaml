@@ -5,8 +5,7 @@ label: Light meal
 servings: '4'
 time: 40 min
 timeMins: 40
-extra: Grill finish
-oven: false
+cookedIn: Hob
 description: Classic stovetop macaroni cheese with a smooth cheddar and Parmesan sauce, finished bubbling and golden under the grill.
 tags:
   - pasta

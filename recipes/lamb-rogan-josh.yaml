@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 1 hr 10 min
 timeMins: 70
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A rich, warmly spiced Kashmiri curry — lamb neck fillet simmered slowly in a coriander and paprika paste until tender.
 tags:
   - lamb

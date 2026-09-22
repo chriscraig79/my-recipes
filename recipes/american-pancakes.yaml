@@ -5,8 +5,7 @@ label: Breakfast / dessert
 servings: '2'
 time: 20 min
 timeMins: 20
-extra: No resting needed
-oven: false
+cookedIn: Hob
 description: Thick, fluffy American-style pancakes with a simple batter — ready in the time it takes to heat the pan.
 tags:
   - eggs

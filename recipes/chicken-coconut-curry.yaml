@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 1 hr
 timeMins: 60
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A creamy coconut chicken curry built on a from-scratch roasted curry powder, toasted until fragrant for a deep, smoky aroma. By George and Fran Alagiah, from Recipes That Made Me.
 tags:
   - chicken

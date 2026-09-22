@@ -5,8 +5,7 @@ label: Side / snack
 servings: '2'
 time: 55 min
 timeMins: 55
-extra: Air fryer
-oven: false
+cookedIn: Air fryer
 description: Crispy air fryer fries with a smoky, punchy Cajun spice blend. Close as you'll get to the real thing at home.
 tags:
   - potato

@@ -5,8 +5,7 @@ label: Breakfast / dessert
 servings: '4'
 time: 45 min
 timeMins: 45
-extra: Incl. rest time
-oven: false
+cookedIn: Hob
 description: Light, thin pancakes that work with anything — lemon and sugar, Nutella, jam, or just butter. The batter rests while you get everything else ready.
 tags:
   - eggs

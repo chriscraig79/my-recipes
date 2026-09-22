@@ -41,8 +41,9 @@ label: Main course
 servings: "4"
 time: 45 min
 timeMins: 45          # number — used for time band filtering
-extra: 180°C / fan 160°C
-oven: true             # shows "oven" label under temperature
+cookedIn: Oven          # one of: Oven, Hob, Grill, Slow cooker, Air fryer,
+                        # Pressure cooker, No cooking — shown as the
+                        # "Cooked in" stat on the recipe page
 description: One line description shown in the index.
 tags: [chicken, potato]     # ingredient tags for filtering
 image: dish-name.jpg  # optional — filename only, see "Photos" below

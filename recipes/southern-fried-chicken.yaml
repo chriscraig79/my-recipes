@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 4 hrs+
 timeMins: 270
-extra: Air fryer
-oven: false
+cookedIn: Air fryer
 description: Crispy Southern-style fried chicken thighs and legs, air fried with a spiced buttermilk marinade and craggy seasoned crust. Family friendly — heat optional.
 tags:
   - chicken

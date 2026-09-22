@@ -5,8 +5,7 @@ label: Main course
 servings: '2'
 time: 20 min
 timeMins: 20
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A fast, tangy pad thai built on a tamarind, soy and sugar sauce — glossy noodles, juicy prawns, ready in the time it takes to boil the kettle.
 tags:
   - prawns

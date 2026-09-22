@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 55 min
 timeMins: 55
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A rich, mildly spiced curry with warmth from dried spices, sweetness from coconut milk, and depth from tamarind. One of the great curries.
 tags:
   - chicken

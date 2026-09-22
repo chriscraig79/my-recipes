@@ -79,6 +79,8 @@ check("opening a recipe shows its detail view", async page => {
   assert.ok(title && title.trim().length > 0, "expected a non-empty recipe title");
   const stepCount = await page.locator(".step").count();
   assert.ok(stepCount > 0, "expected at least one method step");
+  const statLabels = await page.locator(".stat-label").allTextContents();
+  assert.ok(statLabels.includes("Cooked in"), `missing "Cooked in" stat, got: ${statLabels}`);
   await page.locator("#recipe-view .back-btn").click();
   await page.waitForSelector("#index", { state: "visible" });
 });

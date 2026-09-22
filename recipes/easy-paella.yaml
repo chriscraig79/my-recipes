@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 30 min
 timeMins: 30
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A fast, frying-pan paella built on smoked paprika and paella rice, finished with a frozen seafood mix and a squeeze of lemon.
 tags:
   - seafood

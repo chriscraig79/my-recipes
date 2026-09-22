@@ -34,9 +34,12 @@ template and render code never need to change.
    - `time` — display string, e.g. `"45 min"`, `"1 hr 15 min"`
    - `timeMins` — a plain number in minutes. This drives the site's time
      filter (Under 30 / 30–60 / Over 1 hr), so it must match `time`.
-   - `extra` — optional third meta item, most often an oven temperature
-     (e.g. `180°C / fan 160°C`). Pair with `oven: true` if it's an oven temp
-     — that adds the "oven" label under it. Omit both if not applicable.
+   - `cookedIn` — how the dish is cooked, shown as the "Cooked in" stat.
+     One of a fixed vocabulary: `Oven`, `Hob`, `Grill`, `Slow cooker`,
+     `Air fryer`, `Pressure cooker`, `No cooking`. Pick whichever best
+     describes the primary cooking method — don't invent a new value or a
+     temperature/timing note; that level of detail belongs in the steps
+     or `notes`, not this field.
    - `description` — one sentence, shown on the index card.
    - `tags` — ingredient-type strings that drive the index filter chips.
      Reuse existing tags where the dish genuinely contains that ingredient:

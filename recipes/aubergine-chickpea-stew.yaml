@@ -5,8 +5,7 @@ label: Main course
 servings: '6'
 time: 9 hrs+
 timeMins: 540
-extra: Slow cooker
-oven: false
+cookedIn: Slow cooker
 description: A slow-cooked Middle Eastern stew of tender aubergine and chickpeas in a cinnamon and baharat-spiced tomato sauce, finished with pine nuts and lemon.
 tags:
   - chickpeas

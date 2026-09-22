@@ -5,8 +5,7 @@ label: Main course
 servings: '6'
 time: 1 hr 10 min
 timeMins: 70
-extra: 180°C / fan 160°C
-oven: true
+cookedIn: Oven
 description: A rich red wine chicken casserole with smoky bacon lardons, topped with fluffy herb dumplings baked until golden.
 tags:
   - chicken

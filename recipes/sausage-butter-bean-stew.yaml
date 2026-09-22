@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 45 min
 timeMins: 45
-extra: One pan
-oven: false
+cookedIn: Hob
 description: Browned chipolatas simmered with softened onion, celery and garlic, finished with butter beans, butter and lemon zest for a quick, comforting one-pot supper.
 tags:
   - pork

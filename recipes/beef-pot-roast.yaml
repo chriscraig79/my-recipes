@@ -5,8 +5,7 @@ label: Main course
 servings: '6'
 time: 7 hrs 30 min
 timeMins: 450
-extra: Slow cooker + oven finish
-oven: true
+cookedIn: Slow cooker
 description: Rolled beef brisket slow-cooked over root vegetables in red wine and stock, then roasted to finish and sliced into a rich, gravy-laden Sunday roast.
 tags:
   - beef
