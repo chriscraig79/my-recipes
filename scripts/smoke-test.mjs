@@ -25,7 +25,7 @@ check("page loads with recipe cards", async page => {
 
 check("ingredient filter chips are grouped by category", async page => {
   const labels = await page.locator(".filter-label").allTextContents();
-  for (const expected of ["Meat", "Fish", "Veg", "Time"]) {
+  for (const expected of ["Protein", "Carbs", "Veg", "Time"]) {
     assert.ok(labels.includes(expected), `missing "${expected}" filter group label`);
   }
 });
