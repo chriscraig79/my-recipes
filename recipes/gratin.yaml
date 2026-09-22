@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 1 hr 15 min
 timeMins: 75
-extra: 180°C / fan 160°C
-oven: true
+cookedIn: Oven
 description: Rich, creamy layers of potato and gammon baked until golden and bubbling. A great way to use up a leftover joint.
 tags:
   - pork

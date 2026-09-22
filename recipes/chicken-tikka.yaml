@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 20 min
 timeMins: 20
-extra: Marinate overnight
-oven: false
+cookedIn: Grill
 description: A punchy, spiced yoghurt marinade turns chicken breast into proper chicken tikka — grill, pan-fry, or air fry, whichever you've got.
 tags:
   - chicken

@@ -5,8 +5,7 @@ label: Main course
 servings: '8'
 time: 9 hrs+
 timeMins: 570
-extra: Slow cooker
-oven: false
+cookedIn: Slow cooker
 description: Boston butt rubbed with a smoky spice mix and left to the slow cooker until it shreds at the touch of a fork. No oven, no thermometer, minimal effort.
 tags:
   - pork

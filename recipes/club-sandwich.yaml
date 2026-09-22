@@ -5,8 +5,7 @@ label: Lunch
 servings: '2'
 time: 20 min
 timeMins: 20
-extra: No cooking required
-oven: false
+cookedIn: Hob
 description: The classic triple-decker, done properly. Sourdough, crispy bacon, chicken, egg, and all the trimmings.
 tags:
   - chicken

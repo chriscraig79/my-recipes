@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 30 min
 timeMins: 30
-extra: Instant Pot
-oven: false
+cookedIn: Pressure cooker
 description: Chicken breasts pressure-cooked in a honey, soy and garlic sauce, thickened to a glaze and tossed through at the end — quick enough for a weeknight.
 tags:
   - chicken

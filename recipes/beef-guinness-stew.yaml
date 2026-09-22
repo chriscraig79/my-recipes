@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 3 hrs
 timeMins: 180
-extra: 160°C / fan 140°C
-oven: true
+cookedIn: Oven
 description: A deep, rich stew with fall-apart beef and a dark, slightly bitter gravy. Better the next day, and the day after that.
 tags:
   - beef

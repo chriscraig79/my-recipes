@@ -5,8 +5,7 @@ label: Breakfast / snack
 servings: '4'
 time: 20 min
 timeMins: 20
-extra: No rest needed
-oven: false
+cookedIn: Hob
 description: Thick, fluffy drop scones — faster than crêpes, no resting needed. Ready in 20 minutes and good with butter and jam, golden syrup, or fresh fruit.
 tags:
   - eggs

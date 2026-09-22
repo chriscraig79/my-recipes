@@ -731,7 +731,9 @@
 
   @media (max-width: 500px) {
     .recipe-list { grid-template-columns: 1fr; }
-    .recipe-stats { grid-template-columns: repeat(2, 1fr); }
+    .recipe-stats { grid-template-columns: 1fr; }
+    .recipe-stat { border-right: none; border-bottom: 1px solid var(--border); }
+    .recipe-stat:last-child { border-bottom: none; }
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
 
     #index { padding: 1rem 1rem 3rem; }
@@ -789,8 +791,8 @@
 //  Source of truth is recipes/*.yaml + ingredients.yaml. Edit those,
 //  then run `npm run build` to regenerate the block below.
 //  Shape per recipe: see any file in recipes/ for the fields
-//  (id, title, titleHtml, label, servings, time, timeMins, extra,
-//  oven, description, tags, ingredients, steps, notes).
+//  (id, title, titleHtml, label, servings, time, timeMins, cookedIn,
+//  description, tags, ingredients, steps, notes).
 // ─────────────────────────────────────────────
 
 // GENERATED:RECIPES:START
@@ -1114,9 +1116,9 @@ function renderRecipe(r) {
 
   const stats = [
     { label: 'Time', value: r.time },
-    { label: 'Servings', value: r.servings }
+    { label: 'Servings', value: r.servings },
+    { label: 'Cooked in', value: r.cookedIn }
   ];
-  if (r.extra) stats.push({ label: r.oven ? 'Oven' : 'Extra', value: r.extra });
   const statsHtml = stats.map(s => `
     <div class="recipe-stat">
       <span class="stat-label">${s.label}</span>

@@ -5,8 +5,7 @@ label: Main course
 servings: '6'
 time: 1 hr 45 min
 timeMins: 105
-extra: 200°C / fan 180°C
-oven: true
+cookedIn: Oven
 description: Roasted peppers and aubergine layered with a slow-cooked tomato sauce, a silky white sauce and mozzarella — a proper vegetarian centrepiece.
 tags:
   - aubergine

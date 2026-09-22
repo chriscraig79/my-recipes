@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 30 min
 timeMins: 30
-extra: Instant Pot
-oven: false
+cookedIn: Pressure cooker
 description: Chicken thighs pressure-cooked in a sweet, smoky jerk and ketchup sauce, then finished on the grill for proper char and colour.
 tags:
   - chicken

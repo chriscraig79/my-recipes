@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 45 min
 timeMins: 45
-extra: Pan-fried
-oven: false
+cookedIn: Hob
 description: Crisp, sesame-crumbed schnitzel with a punchy garlic mayonnaise and a bright, caraway-spiced red cabbage slaw.
 tags:
   - chicken

@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 50 min
 timeMins: 50
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A chargrilled sweet potato, pepper and cannellini bean chilli with black rice, a raw veg salsa, and warm tortillas — hearty, bright, and properly vegetarian.
 tags:
   - vegetarian

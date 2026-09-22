@@ -5,8 +5,7 @@ label: Main course
 servings: '4'
 time: 40 min
 timeMins: 40
-extra: One pan
-oven: false
+cookedIn: Hob
 description: A fragrant, from-scratch green curry paste with coconut milk and chicken breast. Fresh and aromatic without needing a specialist shop.
 tags:
   - chicken
