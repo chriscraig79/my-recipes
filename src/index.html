@@ -936,14 +936,18 @@ const TIME_BANDS = [
   { label: "Over 1 hr",    key: "over60",  test: m => m > 60 },
 ];
 
-// Groups ingredient tags by type so the filter chips can be organised
+// Groups ingredient tags by the role they play in a meal — closer to how
+// you'd actually plan one ("what's my protein, what's my carb, what veg")
+// than a strict ingredient taxonomy — so the filter chips can be organised
 // under a shared label instead of one long flat row.
 const TAG_CATEGORIES = {
-  bacon: "Meat", beef: "Meat", chicken: "Meat", lamb: "Meat", pork: "Meat", turkey: "Meat", gammon: "Meat",
-  prawns: "Fish", seafood: "Fish", salmon: "Fish", tuna: "Fish", cod: "Fish", mussels: "Fish",
-  aubergine: "Veg", cabbage: "Veg", carrot: "Veg", chickpeas: "Veg", potato: "Veg", vegetarian: "Veg", cucumber: "Veg", courgette: "Veg", mushroom: "Veg", spinach: "Veg", tomato: "Veg",
+  bacon: "Protein", beef: "Protein", chicken: "Protein", lamb: "Protein", pork: "Protein", turkey: "Protein", gammon: "Protein",
+  prawns: "Protein", seafood: "Protein", salmon: "Protein", tuna: "Protein", cod: "Protein", mussels: "Protein",
+  eggs: "Protein", chickpeas: "Protein",
+  potato: "Carbs", pasta: "Carbs", rice: "Carbs", noodles: "Carbs",
+  aubergine: "Veg", cabbage: "Veg", carrot: "Veg", vegetarian: "Veg", cucumber: "Veg", courgette: "Veg", mushroom: "Veg", spinach: "Veg", tomato: "Veg",
 };
-const CATEGORY_ORDER = ["Meat", "Fish", "Veg", "Other"];
+const CATEGORY_ORDER = ["Protein", "Carbs", "Veg", "Other"];
 
 let activeIngredients = new Set();
 let activeTime = null;
