@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "watch": "node scripts/watch.mjs"
+    "watch": "node scripts/watch.mjs",
+    "test": "npm run build && node scripts/smoke-test.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "playwright": "^1.56.0"
   }
 }

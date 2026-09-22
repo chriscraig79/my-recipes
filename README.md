@@ -14,6 +14,8 @@ runtime machinery to the page itself.
 Hosted on GitHub Pages at: `https://chriscraig79.github.io/my-recipes`,
 deployed automatically by GitHub Actions on every push to `main` (see
 "Deploying" below) — there's nothing to run manually to publish a change.
+Every pull request into `main` also runs a Playwright smoke test (see
+"Testing" below) before it's mergeable.
 
 ## How it works
 
@@ -109,7 +111,8 @@ Ingredients with the same `name` are merged into a single line across recipes, l
 ## Local development
 
 ```bash
-npm install                       # once, installs the js-yaml and esbuild build dependencies
+npm install                       # once, installs the js-yaml, esbuild, and
+                                   # playwright dependencies
 npm run watch                     # rebuilds build/ automatically whenever
                                    # src/index.html, recipes/, or ingredients.yaml change
 npx serve build
@@ -119,6 +122,23 @@ This opens the site at `http://localhost:3000`. `npm run watch` keeps
 `build/` up to date as you edit, but there's still no browser auto-reload —
 refresh the tab after each change to see it. (`npm run build` alone does a
 single one-off build if you'd rather not run a background watcher.)
+
+## Testing
+
+```bash
+npm test    # builds, then runs the Playwright smoke test against build/index.html
+```
+
+`scripts/smoke-test.mjs` is a plain script (not a test framework) that opens
+the built page in headless Chromium and checks the things that a YAML/HTML
+syntax check can't: filter chips are grouped and actually filter the list,
+the no-results state shows up, adding a recipe to the basket flips its
+icon and updates the badge, and opening a recipe renders its detail view.
+It's meant to catch a broken `onclick` handler or a renamed class/id before
+it ships — not to be exhaustive. This runs automatically on every pull
+request into `main` (`.github/workflows/test.yml`) and again before every
+deploy (`.github/workflows/deploy.yml`), so a regression blocks the merge
+or the publish rather than going live silently.
 
 ## Editing in Claude Code
 
@@ -136,7 +156,7 @@ This is handled by the `add-recipe` skill (`.claude/skills/add-recipe/`), which 
 > "There's a YAML syntax error in recipes/[recipe id].yaml — find and fix it." or "The build script is failing, here's the error: [paste it]." or "Something's wrong with the page layout/styling — it's in src/index.html."
 
 **Checking for errors before pushing**
-> "Run `npm run build` and check the output for warnings or errors."
+> "Run `npm test` and check the output for warnings or failures." (This builds and runs the smoke test — see "Testing" above.)
 
 **Deploying after changes**
 Changes are made on `dev`, then merged into `main` via a pull request — `main` is what's live, so nothing lands there directly. Commit the YAML source (and `src/index.html`, if changed), push to `dev`, open a PR into `main`, and merge it. A GitHub Actions workflow (`.github/workflows/deploy.yml`) then runs `npm run build` and publishes `build/` to GitHub Pages automatically on that push to `main`. **Never commit anything under `build/`** — it's gitignored and CI produces it fresh on every push.
@@ -163,12 +183,15 @@ my-recipes/
 ├── scripts/
 │   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
 │   ├── watch.mjs             # Rebuilds automatically on changes (npm run watch)
+│   ├── smoke-test.mjs        # Playwright checks against build/index.html (npm test)
 │   └── section-lookup.mjs    # Keyword-guess fallback used by build.mjs
-├── .github/workflows/deploy.yml   # Builds and deploys to GitHub Pages on push to main
+├── .github/workflows/
+│   ├── deploy.yml            # Tests, builds, and deploys to GitHub Pages on push to main
+│   └── test.yml              # Runs the smoke test on every pull request into main
 ├── .claude/
 │   ├── launch.json           # Editor run config — npm run watch & npx serve build
 │   └── skills/add-recipe/    # Claude Code skill for adding recipes
-├── package.json             # js-yaml and esbuild build dependencies
+├── package.json             # js-yaml, esbuild, and playwright dependencies
 ├── package-lock.json
 ├── .gitignore
 ├── README.md
