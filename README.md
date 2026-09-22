@@ -95,7 +95,7 @@ YAML; `npm run build` (and `npm run watch`) copy `recipes/images/` into
 
 ## Shopping list
 
-Any recipe can be added to a shopping basket — via the bookmark icon on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
+Any recipe can be added to a shopping basket — via the "+" button on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
 
 The shopping list groups every basket recipe's ingredients into supermarket sections, in walking order:
 
