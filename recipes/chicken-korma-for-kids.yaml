@@ -1,0 +1,69 @@
+id: chicken-korma-for-kids
+title: Mild Chicken Korma for Kids
+titleHtml: Mild Chicken <em>Korma</em> for Kids
+label: Main course
+servings: '4'
+time: 45 min
+timeMins: 45
+cookedIn: Hob
+description: A creamy, gently spiced korma with no chilli heat, made to win over young curry eaters.
+tags:
+  - chicken
+ingredients:
+  - name: Chicken thighs
+    amount: 500g
+    prep: boneless, cut into bite-size pieces
+  - name: Natural yoghurt
+    amount: 3 tbsp
+  - name: Turmeric
+    amount: ½ tsp
+  - name: Vegetable oil
+    amount: 1 tbsp
+  - name: Butter
+    amount: 1 tbsp
+  - name: Onions
+    amount: '1'
+    prep: large, finely chopped
+  - name: Garlic cloves
+    amount: '2'
+    prep: grated
+  - name: Fresh ginger
+    amount: 1 tsp
+    prep: grated
+  - name: Ground cumin
+    amount: 1 tsp
+  - name: Ground coriander
+    amount: 1 tsp
+  - name: Garam masala
+    amount: ½ tsp
+  - name: Ground almonds
+    amount: 50g
+  - name: Coconut milk
+    amount: 400ml (1 tin)
+  - name: Honey
+    amount: 1 tsp
+    prep: (or sugar)
+  - name: Salt
+    amount: ½ tsp
+  - name: Double cream
+    amount: 100ml
+steps:
+  - title: Marinate
+    content: Mix the chicken with the yoghurt and turmeric. Leave for 20 minutes while you prep (optional).
+    timer: ⏱ 20 minutes (optional)
+  - title: Soften the onion
+    content: Heat the oil and butter over a medium-low heat. Cook the onion gently until very soft and lightly golden.
+    timer: ⏱ ~10 minutes
+  - title: Garlic and ginger
+    content: Stir in the garlic and ginger and cook for 1 minute.
+  - title: Spices
+    content: Add the cumin, coriander and garam masala. Stir for 1 minute, adding a splash of water if it catches.
+  - title: Make the sauce
+    content: Stir in the almonds, coconut milk, honey and salt. Simmer until it starts to thicken. Blitz with a stick blender now if you want it smooth.
+    timer: ⏱ ~5 minutes
+  - title: Add the chicken
+    content: Add the chicken with any marinade. Simmer gently, stirring now and then, until cooked through with no pink in the middle.
+    timer: ⏱ 15–20 minutes
+  - title: Finish
+    content: Stir in the cream and warm through for 2 minutes without boiling. Taste and adjust.
+notes: If the kids don't like bits of onion, blitz the sauce smooth with a stick blender before adding the chicken. Serve with rice or naan. For grown-ups, add chilli flakes or a sliced green chilli to their portions. For a nut-free version, skip the almonds and thicken with 1 tbsp desiccated coconut or extra cream.
