@@ -1,0 +1,69 @@
+id: soy-lime-salmon-noodles
+title: Sticky Soy-Lime Salmon Noodles
+titleHtml: Sticky Soy-Lime <em>Salmon Noodles</em>
+label: Main course
+servings: '2'
+time: 25 min
+timeMins: 25
+cookedIn: Hob
+description: Crisp-skinned salmon glazed in a sticky soy, honey and lime sauce, served over sesame noodles with quick-pickled carrot and plenty of spring onion.
+tags:
+  - seafood
+  - noodles
+  - carrot
+ingredients:
+  - name: Carrots
+    amount: '2'
+    prep: julienned or peeled into ribbons
+  - name: Rice vinegar
+    amount: 3 tbsp
+    prep: 2 tbsp for the pickle, 1 tbsp for the sauce
+  - name: Sugar
+    amount: 1 tsp
+  - name: Salt
+    amount: ¼ tsp
+  - name: Soy sauce
+    amount: 3 tbsp
+  - name: Honey
+    amount: 1 tbsp
+    prep: or brown sugar
+  - name: Lime
+    amount: '1'
+    prep: zested and juiced
+  - name: Garlic cloves
+    amount: '2'
+    prep: grated
+  - name: Fresh ginger
+    amount: 1 tbsp
+    prep: grated (optional)
+  - name: Sesame oil
+    amount: 1 tbsp
+  - name: Salmon fillets
+    amount: '2'
+    prep: skin on
+  - name: Vegetable oil
+    amount: 1 tbsp
+  - name: Egg noodles
+    amount: 200g
+    prep: or rice noodles or udon
+  - name: Spring onions
+    amount: '4'
+    prep: thinly sliced
+steps:
+  - title: Quick-pickle the carrots
+    content: Toss the carrots with 2 tbsp of the rice vinegar, the sugar and the salt. Set aside while you cook — they'll soften slightly and turn tangy.
+    timer: ⏱ 10 minutes
+  - title: Make the sauce
+    content: Whisk together the soy sauce, honey, lime juice, the remaining 1 tbsp rice vinegar, garlic, ginger (if using) and sesame oil.
+  - title: Sear the salmon
+    content: Heat the vegetable oil in a frying pan over medium-high heat. Pat the salmon dry and cook skin-side down, without moving it, until the skin is crisp and the flesh has turned opaque most of the way up.
+    timer: ⏱ 4 minutes
+  - title: Flip and glaze
+    content: Flip the salmon, pour in about half the sauce and let it bubble and thicken, spooning it over the fish as it goes.
+    timer: ⏱ 2–3 minutes
+  - title: Cook the noodles
+    content: Meanwhile, cook the noodles according to the packet instructions, then drain.
+    timer: ⏱ 4 minutes
+  - title: Toss and serve
+    content: Toss the noodles with the remaining sauce and most of the spring onions. Top with the salmon, whole or flaked, then the drained carrots, the rest of the spring onions and the lime zest.
+notes: Don't add the glaze too early — the honey burns quickly, so it only needs the last couple of minutes. For heat, add chilli flakes or a squeeze of sriracha to the sauce; for crunch, scatter over sesame seeds or crushed peanuts. A bit of cucumber can go into the pickle alongside the carrots.
