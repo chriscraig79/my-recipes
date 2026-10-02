@@ -1,0 +1,57 @@
+id: creamy-lemon-salmon-pasta
+title: Creamy Lemon Salmon Pasta
+titleHtml: Creamy Lemon <em>Salmon</em> Pasta
+label: Pasta
+servings: '2'
+time: 20 min
+timeMins: 20
+cookedIn: Hob
+description: Flaked salmon in a silky cream cheese, lemon and garlic sauce with wilted spinach — a one-pan sauce that's ready by the time the pasta is.
+tags:
+  - salmon
+  - pasta
+  - spinach
+ingredients:
+  - name: Tagliatelle
+    amount: 200g
+    prep: or penne or fusilli
+  - name: Salmon fillets
+    amount: '2'
+    prep: skinless
+  - name: Olive oil
+    amount: 1 tbsp
+  - name: Garlic cloves
+    amount: '2'
+    prep: finely chopped
+  - name: Cream cheese
+    amount: 120g
+    prep: full-fat
+  - name: Lemons
+    amount: '1'
+    prep: zested and juiced
+  - name: Baby spinach
+    amount: 100g
+  - name: Salt
+    amount: ½ tsp
+  - name: Black pepper
+    amount: ¼ tsp
+  - name: Fresh parsley
+    amount: 1 tbsp
+    prep: or dill, chopped (optional)
+steps:
+  - title: Boil the pasta
+    content: Cook the pasta in well-salted boiling water until al dente. Scoop out a mugful of the pasta water before draining.
+    timer: ⏱ 10 minutes
+  - title: Cook the salmon
+    content: Meanwhile, heat the olive oil in a large frying pan over medium-high heat. Season the salmon with the salt and pepper, then fry for 3–4 minutes per side until just cooked through. Lift out onto a plate and flake into large chunks.
+    timer: ⏱ 7 minutes
+  - title: Start the sauce
+    content: Turn the heat to low. In the same pan, cook the garlic for 30 seconds until fragrant, without letting it brown.
+  - title: Make it creamy
+    content: Add the cream cheese and a good splash (about 100ml) of the reserved pasta water. Stir until melted into a smooth sauce, then stir in the lemon zest and half the juice.
+  - title: Wilt the spinach
+    content: Add the spinach and stir until just wilted.
+    timer: ⏱ 1 minute
+  - title: Combine
+    content: Toss the drained pasta through the sauce, loosening with more pasta water if needed. Gently fold in the flaked salmon, taste, and adjust with more lemon juice, salt or pepper. Finish with the parsley or dill.
+notes: For a smoked salmon version, skip cooking the salmon and fold 120g of torn smoked salmon in at the very end, off the heat — and go easy on the salt. Good extras are frozen peas (add to the pasta water for the last 2 minutes), capers, a pinch of chilli flakes, or a little grated parmesan.
