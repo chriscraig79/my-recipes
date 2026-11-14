@@ -1,0 +1,82 @@
+id: saucy-lentil-gnocchi-ragu
+title: Saucy Lentil Gnocchi Ragù
+titleHtml: Saucy Lentil <em>Gnocchi</em> Ragù
+label: Main course
+servings: '4'
+time: 40 min
+timeMins: 40
+cookedIn: Hob
+description: A meat-free, one-pot ragù of lentils, mushrooms and veg with the gnocchi cooked straight in the sauce. From BBC Food.
+tags:
+  - vegetarian
+  - mushroom
+  - carrot
+ingredients:
+  - name: Olive oil
+    amount: 1 tbsp
+  - name: Paprika
+    amount: 1 tsp
+  - name: Dried oregano
+    amount: 1 tsp
+  - name: Chilli flakes
+    amount: ½ tsp
+    prep: optional
+  - name: Garlic cloves
+    amount: '5'
+    prep: blitzed or finely chopped
+  - name: Onions
+    amount: '1'
+    prep: blitzed or finely chopped
+  - name: Celery sticks
+    amount: '2'
+    prep: blitzed or finely chopped
+  - name: Mushrooms
+    amount: 250g
+    prep: chestnut, blitzed or finely chopped
+  - name: Carrots
+    amount: '2'
+    prep: peeled, blitzed or finely chopped
+  - name: Tomato purée
+    amount: 2 tbsp
+  - name: Dark soy sauce
+    amount: 3 tbsp
+  - name: Chopped tomatoes
+    amount: 400g tin
+  - name: Vegetable stock cube
+    amount: '1'
+  - name: Green lentils
+    amount: 400g tin
+    prep: drained
+  - name: Sugar
+    amount: 1 tsp
+  - name: Fresh gnocchi
+    amount: 800g
+    prep: 2 x 400g packs
+  - name: Salt and black pepper
+    amount: to taste
+  - name: Fresh basil
+    amount: 1 handful
+    prep: sliced, to garnish
+  - name: Vegetarian hard cheese
+    amount: to serve
+    prep: finely grated (or Parmesan), optional
+steps:
+  - title: Prep the veg
+    content: Blitz the garlic, onion, celery, mushrooms and carrots in a food processor, or chop them all finely by hand. Keep the carrots separate as they go in a little later.
+  - title: Bloom the spices
+    content: Heat the olive oil in a large saucepan and fry the paprika, oregano and chilli flakes (if using) for 1 minute.
+    timer: ⏱ 1 minute
+  - title: Soften the veg
+    content: Add the garlic, onion and celery and cook for a few minutes until soft. Add the mushrooms and cook for about 5 minutes until they release their liquid, then add the carrots and cook for 2 minutes more.
+    timer: ⏱ 10 minutes
+  - title: Build the sauce
+    content: Stir in the tomato purée and dark soy sauce, then the chopped tomatoes. Fill the empty tin with boiling water, crumble in the stock cube to dissolve, and pour it into the pan. Add the drained lentils and sugar and stir well.
+  - title: Simmer
+    content: Simmer for about 15 minutes, stirring now and then, until it starts to thicken but is still saucy. Season well with salt and pepper.
+    timer: ⏱ 15 minutes
+  - title: Cook the gnocchi
+    content: Tip the gnocchi straight into the sauce — no need to boil it first — and stir. Cook for a few minutes until soft.
+    timer: ⏱ 3–4 minutes
+  - title: Serve
+    content: Spoon into bowls and top with the basil and grated cheese, if using.
+notes: Gnocchi is often sold in 500g packs rather than 400g — a bit extra is fine. The ragù (without the gnocchi) freezes well for up to 3 months; defrost, reheat in a pan and add fresh gnocchi. Leftovers keep in the fridge for up to 3 days — loosen with a splash of water when reheating. For a vegan version, use dairy-free cheese or skip it.

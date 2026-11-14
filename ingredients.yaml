@@ -88,6 +88,8 @@ Chicken thighs and legs:
   section: Meat & Fish
 Chicken thighs or drumsticks:
   section: Meat & Fish
+Chilli flakes:
+  section: Dry Goods & Spices
 Chilli oil:
   section: Tinned & Jarred
 Chilli paste:
@@ -182,6 +184,8 @@ Fresh curry leaves:
   section: Fruit & Veg
 Fresh ginger:
   section: Fruit & Veg
+Fresh gnocchi:
+  section: Deli & Dairy
 Fresh mint:
   section: Fruit & Veg
 Fresh or dried thyme:
@@ -204,6 +208,8 @@ Garlic powder (for coating):
   section: Dry Goods & Spices
 Green chillies:
   section: Fruit & Veg
+Green lentils:
+  section: Tinned & Jarred
 Ground almonds:
   section: Dry Goods & Spices
 Ground cardamom:
@@ -440,6 +446,10 @@ Vegetable or chicken stock:
   section: Tinned & Jarred
 Vegetable or sunflower oil:
   section: Dry Goods & Spices
+Vegetable stock cube:
+  section: Tinned & Jarred
+Vegetarian hard cheese:
+  section: Deli & Dairy
 Waxy potatoes:
   section: Fruit & Veg
 White wine:
