@@ -35,8 +35,9 @@ ingredients:
     amount: ½ cup
   - name: Sesame oil
     amount: 2 tbsp
-  - name: Chilli oil (optional)
+  - name: Chilli oil
     amount: ¼ cup
+    prep: optional
   - name: Toasted sesame seeds or crushed peanuts
     amount: to taste
     prep: to serve

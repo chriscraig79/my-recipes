@@ -88,8 +88,8 @@ Chicken thighs and legs:
   section: Meat & Fish
 Chicken thighs or drumsticks:
   section: Meat & Fish
-Chilli oil (optional):
-  section: Fruit & Veg
+Chilli oil:
+  section: Tinned & Jarred
 Chilli paste:
   section: Tinned & Jarred
 Chinese vinegar:
@@ -130,6 +130,8 @@ Crusty bread:
   section: Bread & Bakery
 Cumin seeds:
   section: Dry Goods & Spices
+Curry paste:
+  section: Tinned & Jarred
 Dark brown sugar:
   section: Dry Goods & Spices
 Dark soy sauce:
@@ -186,6 +188,8 @@ Fresh or dried thyme:
   section: Dry Goods & Spices
 Fresh parsley:
   section: Fruit & Veg
+Frozen dumplings:
+  section: Other
 Frozen seafood mix:
   section: Meat & Fish
 Garam masala:
