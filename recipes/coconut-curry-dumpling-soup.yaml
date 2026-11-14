@@ -1,0 +1,45 @@
+id: coconut-curry-dumpling-soup
+title: Coconut Curry Dumpling Soup
+titleHtml: Coconut Curry <em>Dumpling</em> Soup
+label: Light meal
+servings: '2'
+time: 20 min
+timeMins: 20
+cookedIn: Hob
+description: Frozen dumplings simmered in a quick coconut and curry paste broth, finished with coriander and a good drizzle of chilli oil. From BBC Food.
+tags:
+  - dumplings
+ingredients:
+  - name: Coconut milk
+    amount: 400g tin
+  - name: Curry paste
+    amount: 1 heaped tbsp
+    prep: any type — red, green or yellow
+  - name: Soy sauce
+    amount: 1 tbsp
+    prep: or liquid seasoning, plus extra to taste
+  - name: Black pepper
+    amount: 1 pinch
+  - name: Frozen dumplings
+    amount: 250g
+    prep: Asian-style, any filling
+  - name: Fresh coriander
+    amount: 1 handful
+    prep: chopped, to garnish
+  - name: Chilli oil
+    amount: to taste
+    prep: to garnish
+  - name: Lime
+    amount: '1'
+    prep: cut into wedges, to serve (optional)
+steps:
+  - title: Make the broth
+    content: Stir the coconut milk and curry paste together in a saucepan until smooth. Add 200ml hot water to loosen it — a splash more if you like a thinner broth — then add the soy sauce and black pepper. Bring to a gentle simmer over a medium heat.
+  - title: Cook the dumplings
+    content: Drop the frozen dumplings into the simmering broth and cook according to the packet instructions until piping hot all the way through.
+    timer: ⏱ 6–8 minutes
+  - title: Season
+    content: Taste the broth and add a little more soy sauce if it needs it.
+  - title: Serve
+    content: Ladle the dumplings and broth into bowls. Scatter over the coriander, drizzle generously with chilli oil, and squeeze over lime wedges if using.
+notes: Any dumplings work — vegetable, prawn or chicken — and so does any curry paste, so it's a good one for using up whatever's in the freezer and fridge. Vegetable dumplings make it vegetarian if you use a veggie curry paste (many red and green Thai pastes contain shrimp paste). For a more filling meal, serve with steamed rice and broccoli.
