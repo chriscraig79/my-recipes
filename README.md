@@ -113,7 +113,7 @@ Fruit & Veg → Meat & Fish → Deli & Dairy → Dry Goods & Spices → Tinned &
 Each ingredient's section comes from `ingredients.yaml`, resolved at build
 time — see "Ingredient names" above.
 
-Ingredients with the same `name` are merged into a single line across recipes, listing every recipe it came from (no unit math or amounts shown — just the name and its source recipes). Since `name` excludes prep notes (see `prep` above), "Carrots, thinly sliced" in one recipe and "Carrots, chopped" in another merge into one "Carrots" line — the prep text still shows on each recipe's own page, just not on the shopping list. A "Send to WhatsApp" button opens `wa.me` with the list pre-filled, ready to pick a chat and send.
+Ingredients with the same `name` are merged into a single line across recipes, listing every recipe it came from (no unit math or amounts shown — just the name and its source recipes). Since `name` excludes prep notes (see `prep` above), "Carrots, thinly sliced" in one recipe and "Carrots, chopped" in another merge into one "Carrots" line — the prep text still shows on each recipe's own page, just not on the shopping list. A "Send to WhatsApp" button opens `wa.me` with the list pre-filled, ready to pick a chat and send, and a "Copy list" button next to it copies exactly the same text to the clipboard (for devices without WhatsApp, like an iPad). Both leave out anything you've already ticked off.
 
 ## Local development
 

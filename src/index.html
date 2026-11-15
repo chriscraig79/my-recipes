@@ -717,7 +717,8 @@
   .shopping-actions {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
     margin-bottom: 2.5rem;
   }
 
@@ -734,11 +735,36 @@
     letter-spacing: 0.03em;
     text-transform: uppercase;
     text-decoration: none;
+    line-height: 1.2;
     cursor: pointer;
     transition: opacity 0.15s;
   }
 
   .whatsapp-btn:hover { opacity: 0.85; }
+
+  /* Same shape as the WhatsApp button, outlined so WhatsApp stays the
+     primary action. */
+  .copy-list-btn {
+    background: var(--card-bg);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-pill);
+    padding: calc(0.7rem - 1px) 1.4rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .copy-list-btn:hover,
+  .copy-list-btn.copied {
+    background: var(--accent);
+    color: var(--warm-white);
+  }
 
   .clear-list-btn {
     background: none;
@@ -1028,6 +1054,36 @@ function buildShoppingListText(groups) {
     lines.push('');
   });
   return lines.join('\n').trim();
+}
+
+// Copies the same text the WhatsApp button sends (unchecked items only) —
+// for devices without WhatsApp, e.g. an iPad. Falls back to a hidden
+// textarea + execCommand where the async Clipboard API isn't available.
+async function copyShoppingList(btn) {
+  const text = buildShoppingListText(buildShoppingList());
+  let ok = false;
+  try {
+    await navigator.clipboard.writeText(text);
+    ok = true;
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+    ta.remove();
+  }
+  btn.textContent = ok ? '✓ Copied' : 'Copy failed';
+  btn.classList.toggle('copied', ok);
+  clearTimeout(btn._resetTimer);
+  btn._resetTimer = setTimeout(() => {
+    btn.textContent = 'Copy list';
+    btn.classList.remove('copied');
+  }, 2000);
 }
 
 function buildWhatsAppUrl(groups) {
@@ -1400,7 +1456,10 @@ function renderShoppingListContent() {
 
     ${basketRecipes.length ? `
       <div class="shopping-actions">
-        ${hasUnchecked ? `<a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>` : `<span class="all-checked-note">Everything's checked off</span>`}
+        ${hasUnchecked ? `
+          <a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>
+          <button class="copy-list-btn" aria-live="polite" onclick="copyShoppingList(this)">Copy list</button>
+        ` : `<span class="all-checked-note">Everything's checked off</span>`}
         <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
       </div>
       ${sectionsHtml}
