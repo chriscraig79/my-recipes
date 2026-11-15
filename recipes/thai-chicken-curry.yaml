@@ -16,8 +16,9 @@ ingredients:
   - name: Coconut milk
     amount: 400ml
     prep: full fat tin
-  - name: Vegetable or chicken stock
+  - name: Chicken stock
     amount: 150ml
+    prep: or vegetable stock
   - name: Fish sauce
     amount: 2 tbsp
   - name: Lime juice
@@ -46,9 +47,9 @@ ingredients:
   - name: Fresh coriander
     amount: 30g
     prep: stalks and leaves
-  - name: Jasmine or basmati rice
+  - name: Jasmine rice
     amount: 300g
-    prep: to serve
+    prep: or basmati, to serve
 steps:
   - title: Make the paste
     content: Blitz the chillies, garlic, ginger, spring onions, ground coriander, ground cumin, lime zest, and coriander stalks (save leaves for later) in a small food processor or blender with a splash of water until you have a rough paste. A stick blender in a jug works well too.

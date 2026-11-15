@@ -10,8 +10,9 @@ description: Chicken legs browned then pressure-cooked in a garlicky lemon and h
 tags:
   - chicken
 ingredients:
-  - name: Chicken legs (quarters)
+  - name: Chicken legs
     amount: 3 large
+    prep: quarters
   - name: Onions
     amount: ½ medium
     prep: chopped
@@ -26,7 +27,9 @@ ingredients:
   - name: Lemons
     amount: '1'
     prep: zested
-  - name: Salt and black pepper
+  - name: Salt
+    amount: to taste
+  - name: Black pepper
     amount: to taste
   - name: Butter
     amount: 1 tbsp

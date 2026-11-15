@@ -20,10 +20,12 @@ ingredients:
     amount: 1 tsp
   - name: Dried thyme
     amount: 1 tsp
-  - name: Paella or risotto rice
+  - name: Paella rice
     amount: 300g
-  - name: Dry sherry or white wine (optional)
+    prep: or risotto rice
+  - name: Dry sherry
     amount: 3 tbsp
+    prep: or white wine, optional
   - name: Chopped tomatoes with garlic
     amount: 400g
     prep: tinned

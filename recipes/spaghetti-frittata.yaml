@@ -11,32 +11,32 @@ tags:
   - pasta
   - eggs
 ingredients:
-  - name: Whole-wheat spaghetti
+  - name: Spaghetti
     amount: 8 oz
-    prep: uncooked (or 4 cups cooked)
-  - name: Extra-virgin olive oil
+    prep: whole-wheat, uncooked (or 4 cups cooked)
+  - name: Extra virgin olive oil
     amount: 4 tsp
   - name: Onions
     amount: 3 medium
     prep: chopped
-  - name: Large eggs
-    amount: '4'
+  - name: Eggs
+    amount: 4 large
   - name: Milk
     amount: ½ cup
   - name: Parmesan
     amount: ⅓ cup
     prep: grated
-  - name: Fresh parsley
+  - name: Parsley
     amount: 2 tbsp
     prep: chopped
-  - name: Fresh basil
+  - name: Basil
     amount: 2 tbsp
     prep: chopped
   - name: Salt
     amount: 1 tsp
   - name: Black pepper
     amount: ½ tsp
-  - name: Tomato
+  - name: Tomatoes
     amount: '1'
     prep: diced (optional)
 steps:

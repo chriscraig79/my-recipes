@@ -27,7 +27,7 @@ ingredients:
     amount: ½ tsp
   - name: Turmeric
     amount: ½ tsp
-  - name: Cinnamon
+  - name: Ground cinnamon
     amount: ¼ tsp
   - name: Garlic cloves
     amount: '3'
@@ -35,8 +35,9 @@ ingredients:
   - name: Fresh ginger
     amount: 1 tbsp
     prep: grated
-  - name: Natural red food colour (optional)
+  - name: Red food colouring
     amount: 1 tsp
+    prep: natural, optional
   - name: Salt
     amount: 1 pinch
 steps:

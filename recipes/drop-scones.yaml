@@ -16,12 +16,13 @@ ingredients:
     amount: 1 tsp
   - name: Caster sugar
     amount: 2 tbsp
-  - name: Pinch of salt
-    amount: '1'
-  - name: Large eggs
-    amount: '2'
-  - name: Whole milk
+  - name: Salt
+    amount: 1 pinch
+  - name: Eggs
+    amount: 2 large
+  - name: Milk
     amount: 150ml
+    prep: whole
   - name: Butter
     amount: 2 tbsp
     prep: melted

@@ -10,10 +10,12 @@ description: Crispy air fryer fries with a smoky, punchy Cajun spice blend. Clos
 tags:
   - potato
 ingredients:
-  - name: Floury potatoes (Maris Piper or King Edward)
+  - name: Floury potatoes
     amount: 600g
-  - name: Vegetable or sunflower oil
+    prep: Maris Piper or King Edward
+  - name: Vegetable oil
     amount: 2 tbsp
+    prep: or sunflower oil
   - name: Smoked paprika
     amount: 1 tsp
   - name: Cayenne pepper

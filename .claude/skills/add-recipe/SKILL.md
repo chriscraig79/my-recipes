@@ -117,16 +117,33 @@ shopping list until someone notices and fixes it.
 
 **`prep` is separate from `name` on purpose.** `prep` holds how the
 ingredient is prepared or a short variant note — `thinly sliced`, `melted`,
-`for frying`, `(or vegetable oil)` — and is shown after the name on the
-recipe page (`Carrots, thinly sliced`), but it plays no part in shopping-list
+`for frying`, `or vegetable oil` — and is shown in smaller italic text under
+the name on the recipe page, but it plays no part in shopping-list
 merging. Put cutting/prep instructions and variant notes in `prep`, not
 baked into `name` — that's what keeps "Carrots, thinly sliced" in one
 recipe and "Carrots, diced" in another merging into a single "Carrots" line.
+
+`name` should be **just the ingredient** — something another recipe could
+reuse verbatim. Keep everything else out of it:
+
+- **Size or count words go in `amount`**: `{ name: Eggs, amount: "3 large" }`,
+  `{ name: Tomatoes, amount: "4 large" }`, `{ name: Eggs, amount: "2 yolks" }`,
+  `{ name: Sourdough bread, amount: "6 thick slices" }` — not `Large eggs`,
+  `Egg yolks`, `Thick slices sourdough bread`.
+- **Alternatives go in `prep`**, with the first option as the `name`:
+  `{ name: Parmesan, prep: or pecorino, grated }`,
+  `{ name: Vegetable oil, prep: or sunflower oil }` — not
+  `Parmesan or pecorino`.
+- **Parenthetical notes go in `prep`**: `optional`, `for coating`,
+  `from above`, `Maris Piper or King Edward` — not `Salt (for coating)`.
+- **One ingredient per line**: split `Salt and black pepper` into separate
+  `Salt` and `Black pepper` lines (`amount: to taste`).
 
 ```yaml
 ingredients:
   - { name: Onions, amount: "1", prep: halved and thinly sliced }
   - { name: Garlic cloves, amount: "2", prep: minced }
   - { name: Butter, amount: "1 tbsp", prep: melted (or vegetable oil) }
+  - { name: Eggs, amount: "2 large", prep: beaten }
   - { name: Plain flour, amount: "200g" }
 ```

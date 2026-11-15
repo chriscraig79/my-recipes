@@ -24,8 +24,8 @@ ingredients:
     amount: 150g
   - name: Raw prawns
     amount: 200g
-  - name: Large eggs
-    amount: '1'
+  - name: Eggs
+    amount: 1 large
   - name: Spring onions
     amount: '3'
     prep: sliced
@@ -37,9 +37,9 @@ ingredients:
     prep: sliced
   - name: Vegetable oil
     amount: 2 tbsp
-  - name: Lemon or lime
+  - name: Lemons
     amount: ½
-    prep: to finish (optional)
+    prep: or lime, to finish (optional)
 steps:
   - title: Make the sauce
     content: 'Mix the tamarind paste, soy sauce, sugar and chicken stock in a small bowl. Taste and adjust: too sharp, add a little more sugar; too flat, add a little more soy. You''re after a sweet, sour, salty balance.'

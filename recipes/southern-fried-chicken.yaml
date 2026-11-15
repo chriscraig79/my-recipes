@@ -10,11 +10,12 @@ description: Crispy Southern-style fried chicken thighs and legs, air fried with
 tags:
   - chicken
 ingredients:
-  - name: Chicken thighs and legs
+  - name: Chicken pieces
     amount: '8'
-    prep: bone-in skin-on
-  - name: Buttermilk (or milk with 1 tbsp lemon juice)
+    prep: thighs and legs, bone-in skin-on
+  - name: Buttermilk
     amount: 300ml
+    prep: or milk with 1 tbsp lemon juice
   - name: Garlic powder
     amount: 1 tsp
   - name: Onion powder
@@ -31,14 +32,18 @@ ingredients:
     amount: 50g
   - name: Baking powder
     amount: 1 tsp
-  - name: Garlic powder (for coating)
+  - name: Garlic powder
     amount: 1 tsp
-  - name: Smoked paprika (for coating)
+    prep: for coating
+  - name: Smoked paprika
     amount: 1 tsp
-  - name: Salt (for coating)
+    prep: for coating
+  - name: Salt
     amount: 1 tsp
-  - name: Vegetable oil spray or oil
+    prep: for coating
+  - name: Vegetable oil
     amount: 2 tbsp
+    prep: or oil spray
 steps:
   - title: Marinate the chicken
     content: Mix the buttermilk with the garlic powder, onion powder, smoked paprika, salt, and pepper in a large bowl. Add the chicken and turn to coat. Cover and refrigerate for at least 4 hours, ideally overnight.

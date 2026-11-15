@@ -13,15 +13,15 @@ ingredients:
   - name: Aubergines
     amount: '2'
     prep: cut into chunks
-  - name: Smoked feta (or plain)
+  - name: Feta
     amount: 125g
-    prep: crumbled
+    prep: smoked or plain, crumbled
   - name: Sesame seeds
     amount: 1 tbsp
   - name: Spring onions
     amount: '2'
     prep: finely chopped
-  - name: Red chilli
+  - name: Red chillies
     amount: '1'
     prep: finely sliced
   - name: Brown sugar
@@ -32,7 +32,7 @@ ingredients:
     amount: 50ml
   - name: Chilli paste
     amount: 50g
-  - name: Lime
+  - name: Limes
     amount: '1'
     prep: juiced and zested
 steps:
