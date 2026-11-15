@@ -100,6 +100,35 @@ check("recipe jump bar scrolls to and highlights Method / Ingredients", async pa
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("Copy list copies the same unchecked items as Send to WhatsApp", async page => {
+  // Capture clipboard writes instead of relying on real clipboard
+  // permissions in headless Chromium.
+  await page.evaluate(() => {
+    window.__copied = null;
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async text => { window.__copied = text; } },
+    });
+  });
+  await page.locator(".basket-toggle").first().click();
+  await page.locator("#basket-badge").click();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  const firstItem = page.locator(".shopping-item-checkbox").first();
+  const tickedName = await firstItem.getAttribute("data-name");
+  await firstItem.check();
+  await page.locator(".copy-list-btn").click();
+  await page.waitForFunction(() => window.__copied !== null);
+  const copied = await page.evaluate(() => window.__copied);
+  const waHref = await page.getAttribute(".whatsapp-btn", "href");
+  const waText = decodeURIComponent(new URL(waHref).searchParams.get("text"));
+  assert.equal(copied, waText, "expected copied text to match the WhatsApp text");
+  assert.ok(!copied.includes(`- ${tickedName} (`), `ticked item "${tickedName}" should be left out`);
+  assert.match(await page.textContent(".copy-list-btn"), /Copied/, "expected copied confirmation");
+  await page.locator(".clear-list-btn").click(); // reset
+  await page.evaluate(() => { location.hash = ""; });
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 async function main() {
   if (!fs.existsSync(BUILD_INDEX)) {
     console.error(`build/index.html not found — run \`npm run build\` first.`);
