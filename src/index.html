@@ -22,7 +22,10 @@
     --radius-sm: 10px;
     --radius-md: 14px;
     --radius-pill: 999px;
-    --shadow-card: 0 1px 2px rgba(28, 24, 18, 0.04), 0 6px 16px rgba(28, 24, 18, 0.06);
+    /* Shared card look (index cards, recipe overview, ingredients, steps):
+       white, thin border, small soft shadow. */
+    --card-border: 1px solid var(--border);
+    --shadow-card: 0 1px 2px rgba(28, 24, 18, 0.05), 0 2px 6px rgba(28, 24, 18, 0.05);
     --font-serif: 'Playfair Display', serif;
     --font-body: 'Source Serif 4', Georgia, serif;
     --font-sans: 'Inter', system-ui, sans-serif;
@@ -163,7 +166,7 @@
     height: 100%;
     padding: 0;
     background: var(--card-bg);
-    border: none;
+    border: var(--card-border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-card);
     cursor: pointer;
@@ -429,10 +432,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     margin-top: 1.5rem;
-    border: 1px solid var(--border);
+    border: var(--card-border);
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--card-bg);
+    box-shadow: var(--shadow-card);
   }
 
   .recipe-stat {
@@ -545,8 +549,9 @@
      column. */
   .ingredients-card {
     background: var(--card-bg);
+    border: var(--card-border);
     border-radius: var(--radius-md);
-    box-shadow: 0 1px 2px rgba(28, 24, 18, 0.05), 0 1px 5px rgba(28, 24, 18, 0.05);
+    box-shadow: var(--shadow-card);
     padding: 0 1.35rem;
   }
 
@@ -607,7 +612,9 @@
     margin-bottom: 1rem;
     padding: 1rem 1.35rem 1.1rem;
     background: var(--card-bg);
+    border: var(--card-border);
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
   }
 
   .step-head {
