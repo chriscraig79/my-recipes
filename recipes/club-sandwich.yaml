@@ -11,6 +11,7 @@ tags:
   - chicken
   - bacon
   - eggs
+  - sandwich
 ingredients:
   - name: Sourdough bread
     amount: 6 thick slices
