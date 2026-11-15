@@ -546,31 +546,44 @@
     list-style: none;
   }
 
+  /* Step number is a small filled badge on the title line; the step's text
+     runs the full width of the card underneath instead of sitting beside a
+     wide number column. */
   .step {
-    display: grid;
-    grid-template-columns: 4rem 1fr;
-    gap: 0 1.25rem;
-    align-items: center;
     margin-bottom: 1rem;
-    padding: 1.1rem 1.35rem;
+    padding: 1rem 1.35rem 1.1rem;
     background: var(--card-bg);
     border-radius: var(--radius-md);
   }
 
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.35rem;
+  }
+
   .step-number {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 8vw, 4.5rem);
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--warm-white);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
     font-weight: 600;
-    color: var(--step-num);
     line-height: 1;
-    text-align: right;
   }
 
   .step-title {
     font-family: 'Playfair Display', serif;
     font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 0.2rem;
+    line-height: 1.3;
   }
 
   .step-content {
@@ -1141,12 +1154,12 @@ function renderRecipe(r) {
 
   const stepsHtml = r.steps.map((step, i) => `
     <li class="step">
-      <div class="step-number">${i + 1}</div>
-      <div class="step-body">
+      <div class="step-head">
+        <span class="step-number" aria-hidden="true">${i + 1}</span>
         <div class="step-title">${step.title}</div>
-        <div class="step-content">${step.content}</div>
-        ${step.timer ? `<span class="step-timer">${step.timer}</span>` : ''}
       </div>
+      <div class="step-content">${step.content}</div>
+      ${step.timer ? `<span class="step-timer">${step.timer}</span>` : ''}
     </li>
   `).join('');
 
