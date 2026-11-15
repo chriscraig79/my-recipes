@@ -1044,13 +1044,22 @@ function buildShoppingList() {
     .map(section => ({ section, items: [...grouped.get(section).values()] }));
 }
 
+// Plain-text list shared by "Send to WhatsApp" and "Copy list": the basket's
+// recipes under the title, then unchecked ingredients by section (names
+// only — which recipe needs what is shown in the app, not the message).
 function buildShoppingListText(groups) {
+  const recipeTitles = [...basket].map(id => recipes.find(r => r.id === id)).filter(Boolean).map(r => r.title);
   const lines = ['Shopping List', ''];
+  if (recipeTitles.length) {
+    lines.push('RECIPES');
+    recipeTitles.forEach(title => lines.push(`- ${title}`));
+    lines.push('');
+  }
   groups.forEach(({ section, items }) => {
     const unchecked = items.filter(item => !checkedItems.has(item.name));
     if (unchecked.length === 0) return;
     lines.push(section.toUpperCase());
-    unchecked.forEach(item => lines.push(`- ${item.name} (${item.recipeTitles.join(', ')})`));
+    unchecked.forEach(item => lines.push(`- ${item.name}`));
     lines.push('');
   });
   return lines.join('\n').trim();
