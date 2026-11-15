@@ -48,7 +48,7 @@ template and render code never need to change.
        noodles, pasta, pork, potato, prawns, rice, salmon, seafood, spinach,
        vegetarian`.
      - **Dish type** — at least one, listed after the ingredient tags:
-       `curry, stew, soup, roast, bake, fried, glazed, stir-fry, salad,
+       `curry, stew, soup, roast, bake, fried, sticky, stir-fry, salad,
        omelette, pancakes, sandwich`. A pasta, noodle or rice dish can skip
        this when the carb tag already says what it is.
      Adding a new tag is fine if none fit, but map it to a group in
