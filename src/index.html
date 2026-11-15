@@ -1110,18 +1110,21 @@ const TIME_BANDS = [
   { label: "Over 1 hr",    key: "over60",  test: m => m > 60 },
 ];
 
-// Groups ingredient tags by the role they play in a meal — closer to how
-// you'd actually plan one ("what's my protein, what's my carb, what veg")
-// than a strict ingredient taxonomy — so the filter chips can be organised
-// under a shared label instead of one long flat row.
+// Groups tags by the role they play in a meal — closer to how you'd
+// actually plan one ("what's my protein, what's my carb, what veg") than a
+// strict ingredient taxonomy — plus a "Dish" group for the kind of dish it
+// is (curry, stew, bake…), so the filter chips can be organised under a
+// shared label instead of one long flat row. Unknown tags fall into "Other".
 const TAG_CATEGORIES = {
   bacon: "Protein", beef: "Protein", chicken: "Protein", lamb: "Protein", pork: "Protein", turkey: "Protein", gammon: "Protein",
   prawns: "Protein", seafood: "Protein", salmon: "Protein", tuna: "Protein", cod: "Protein", mussels: "Protein",
   eggs: "Protein", chickpeas: "Protein",
-  potato: "Carbs", pasta: "Carbs", rice: "Carbs", noodles: "Carbs",
+  potato: "Carbs", pasta: "Carbs", rice: "Carbs", noodles: "Carbs", dumplings: "Carbs",
   aubergine: "Veg", cabbage: "Veg", carrot: "Veg", vegetarian: "Veg", cucumber: "Veg", courgette: "Veg", mushroom: "Veg", spinach: "Veg", tomato: "Veg",
+  curry: "Dish", stew: "Dish", soup: "Dish", roast: "Dish", bake: "Dish", fried: "Dish", glazed: "Dish",
+  "stir-fry": "Dish", salad: "Dish", omelette: "Dish", pancakes: "Dish", sandwich: "Dish",
 };
-const CATEGORY_ORDER = ["Protein", "Carbs", "Veg", "Other"];
+const CATEGORY_ORDER = ["Protein", "Carbs", "Veg", "Dish", "Other"];
 
 let activeIngredients = new Set();
 let activeTime = null;

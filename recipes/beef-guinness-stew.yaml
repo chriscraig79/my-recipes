@@ -9,6 +9,7 @@ cookedIn: Oven
 description: A deep, rich stew with fall-apart beef and a dark, slightly bitter gravy. Better the next day, and the day after that.
 tags:
   - beef
+  - stew
 ingredients:
   - name: Braising steak
     amount: 800g

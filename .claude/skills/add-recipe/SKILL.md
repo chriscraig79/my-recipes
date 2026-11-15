@@ -41,12 +41,18 @@ template and render code never need to change.
      temperature/timing note; that level of detail belongs in the steps
      or `notes`, not this field.
    - `description` — one sentence, shown on the index card.
-   - `tags` — ingredient-type strings that drive the index filter chips.
-     Reuse existing tags where the dish genuinely contains that ingredient:
-     `aubergine, bacon, beef, cabbage, carrot, chicken, chickpeas, cucumber,
-     eggs, lamb, noodles, pasta, pork, potato, prawns, rice, seafood,
-     vegetarian`. Adding a new tag is fine if none fit, but it won't have a
-     filter chip until one is added to `src/index.html`'s filter UI —
+   - `tags` — strings that drive the index filter chips, of two kinds:
+     - **Ingredients** — reuse existing tags where the dish genuinely
+       contains that ingredient: `aubergine, bacon, beef, cabbage, carrot,
+       chicken, chickpeas, cucumber, dumplings, eggs, lamb, mushroom,
+       noodles, pasta, pork, potato, prawns, rice, salmon, seafood, spinach,
+       vegetarian`.
+     - **Dish type** — at least one, listed after the ingredient tags:
+       `curry, stew, soup, roast, bake, fried, glazed, stir-fry, salad,
+       omelette, pancakes, sandwich`. A pasta, noodle or rice dish can skip
+       this when the carb tag already says what it is.
+     Adding a new tag is fine if none fit, but map it to a group in
+     `TAG_CATEGORIES` in `src/index.html` (or it lands under "Other") and
      mention that to the user rather than silently adding an orphaned tag.
    - `ingredients` — list of `{ name, amount, prep? }`. **Read the "Ingredient
      naming" section below before writing any of these** — it's the part

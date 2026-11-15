@@ -9,6 +9,7 @@ cookedIn: Hob
 description: A fragrant, from-scratch green curry paste with coconut milk and chicken breast. Fresh and aromatic without needing a specialist shop.
 tags:
   - chicken
+  - curry
 ingredients:
   - name: Chicken breasts
     amount: 600g
