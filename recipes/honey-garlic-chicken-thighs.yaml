@@ -40,7 +40,10 @@ ingredients:
   - name: Vegetable oil
     amount: 2 tbsp
     prep: for frying
-  - name: Parsley and sesame seeds
+  - name: Parsley
+    amount: to taste
+    prep: to serve
+  - name: Sesame seeds
     amount: to taste
     prep: to serve
 steps:

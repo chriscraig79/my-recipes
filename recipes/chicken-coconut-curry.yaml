@@ -12,21 +12,23 @@ tags:
 ingredients:
   - name: Basmati rice
     amount: 1 handful
-    prep: uncooked, a handful (for the curry powder)
+    prep: uncooked (for the curry powder)
   - name: Coriander seeds
     amount: 115g
-  - name: Cinnamon pieces
+  - name: Cinnamon sticks
     amount: 30–40g
+    prep: broken into pieces
   - name: Black peppercorns
     amount: 30g
-  - name: Dried chilli
+  - name: Dried red chillies
     amount: 30–55g
   - name: Cumin seeds
     amount: 30g
   - name: Fennel seeds
     amount: 85g
-  - name: Coconut or vegetable oil
+  - name: Coconut oil
     amount: 2 tbsp
+    prep: or vegetable oil
   - name: Fresh curry leaves
     amount: 1 handful
   - name: Onions
@@ -41,8 +43,9 @@ ingredients:
   - name: Chicken thighs
     amount: '8'
     prep: boneless and skinless, cut into bite-sized pieces
-  - name: Roasted curry powder (from above)
+  - name: Roasted curry powder
     amount: 2 tbsp
+    prep: from above
   - name: Coconut milk
     amount: 200ml
   - name: Salt

@@ -20,7 +20,9 @@ ingredients:
     prep: optional, for extra crunch
   - name: Olive oil
     amount: 1 tbsp
-  - name: Salt and black pepper
+  - name: Salt
+    amount: to taste
+  - name: Black pepper
     amount: to taste
   - name: Greek yoghurt
     amount: 300g

@@ -13,7 +13,9 @@ ingredients:
   - name: Chicken breasts
     amount: 3–4
     prep: boneless and skinless
-  - name: Salt and pepper
+  - name: Salt
+    amount: to taste
+  - name: Black pepper
     amount: to taste
   - name: Honey
     amount: ½ cup
@@ -29,10 +31,13 @@ ingredients:
   - name: Garlic cloves
     amount: '4'
     prep: minced
-  - name: Cornstarch
+  - name: Cornflour
     amount: 3 tsp
     prep: dissolved in ¼ cup water
-  - name: Sesame seeds and green onion
+  - name: Sesame seeds
+    amount: to taste
+    prep: to serve
+  - name: Spring onions
     amount: to taste
     prep: to serve
   - name: Rice

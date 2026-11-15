@@ -12,27 +12,30 @@ tags:
   - bacon
   - eggs
 ingredients:
-  - name: Thick slices sourdough bread
-    amount: '6'
+  - name: Sourdough bread
+    amount: 6 thick slices
   - name: Chicken breasts
     amount: 200g
     prep: cooked and sliced
   - name: Streaky bacon rashers
     amount: '6'
-  - name: Hard boiled eggs
+  - name: Eggs
     amount: '2'
-    prep: sliced
-  - name: Ripe tomato
+    prep: hard boiled, sliced
+  - name: Tomatoes
     amount: '1'
-    prep: sliced
-  - name: Little gem or iceberg lettuce leaves
-    amount: '4'
+    prep: ripe, sliced
+  - name: Lettuce
+    amount: 4 leaves
+    prep: little gem or iceberg
   - name: Mayonnaise
     amount: 3 tbsp
   - name: Dijon mustard
     amount: 1 tsp
-  - name: Salt and black pepper
-    amount: 1 tsp
+  - name: Salt
+    amount: to taste
+  - name: Black pepper
+    amount: to taste
 steps:
   - title: Boil the eggs
     content: Lower the eggs into boiling water and cook for 9 minutes. Transfer to cold water, peel, and slice.

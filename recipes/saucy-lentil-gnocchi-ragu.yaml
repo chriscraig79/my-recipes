@@ -52,9 +52,11 @@ ingredients:
   - name: Fresh gnocchi
     amount: 800g
     prep: 2 x 400g packs
-  - name: Salt and black pepper
+  - name: Salt
     amount: to taste
-  - name: Fresh basil
+  - name: Black pepper
+    amount: to taste
+  - name: Basil
     amount: 1 handful
     prep: sliced, to garnish
   - name: Vegetarian hard cheese

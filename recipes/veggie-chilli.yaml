@@ -16,10 +16,11 @@ ingredients:
     amount: '2'
   - name: Sweet potatoes
     amount: 2 (250g each)
-  - name: Mixed-colour peppers
+  - name: Mixed peppers
     amount: '3'
-  - name: Large ripe tomatoes
-    amount: '4'
+  - name: Tomatoes
+    amount: 4 large
+    prep: ripe
   - name: Olive oil
     amount: as needed
   - name: Cumin seeds

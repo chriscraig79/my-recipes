@@ -32,19 +32,17 @@ Black peppercorns:
   section: Dry Goods & Spices
 Black rice:
   section: Dry Goods & Spices
-Boston butt (bone-in or boneless pork shoulder):
+Braising steak:
   section: Meat & Fish
-Braising or stewing steak:
-  section: Meat & Fish
-Braising steak or chuck:
-  section: Meat & Fish
+Breadcrumbs:
+  section: Dry Goods & Spices
 Brown sugar:
   section: Dry Goods & Spices
 Butter:
   section: Deli & Dairy
 Butter beans:
   section: Tinned & Jarred
-Buttermilk (or milk with 1 tbsp lemon juice):
+Buttermilk:
   section: Deli & Dairy
 Button mushrooms:
   section: Fruit & Veg
@@ -62,31 +60,23 @@ Caster sugar:
   section: Dry Goods & Spices
 Cayenne pepper:
   section: Dry Goods & Spices
-Celery stalks:
-  section: Fruit & Veg
 Celery sticks:
   section: Fruit & Veg
 Cheddar:
-  section: Deli & Dairy
-Cheddar or gruyère:
   section: Deli & Dairy
 Cherry tomatoes:
   section: Fruit & Veg
 Chicken breasts:
   section: Meat & Fish
-Chicken legs (quarters):
+Chicken legs:
   section: Meat & Fish
-Chicken pieces (thighs, drumsticks, halved breasts):
+Chicken pieces:
   section: Meat & Fish
 Chicken stock:
   section: Tinned & Jarred
 Chicken stock cube:
   section: Tinned & Jarred
 Chicken thighs:
-  section: Meat & Fish
-Chicken thighs and legs:
-  section: Meat & Fish
-Chicken thighs or drumsticks:
   section: Meat & Fish
 Chilli flakes:
   section: Dry Goods & Spices
@@ -102,27 +92,19 @@ Chopped tomatoes:
   section: Fruit & Veg
 Chopped tomatoes with garlic:
   section: Fruit & Veg
-Cider vinegar:
-  section: Dry Goods & Spices
-Cinnamon:
-  section: Dry Goods & Spices
-Cinnamon pieces:
-  section: Dry Goods & Spices
-Cinnamon stick:
+Cinnamon sticks:
   section: Dry Goods & Spices
 Cloves:
   section: Dry Goods & Spices
 Coconut milk:
   section: Tinned & Jarred
-Coconut or vegetable oil:
+Coconut oil:
   section: Dry Goods & Spices
 Cooked gammon:
   section: Meat & Fish
 Coriander seeds:
   section: Dry Goods & Spices
 Cornflour:
-  section: Dry Goods & Spices
-Cornstarch:
   section: Dry Goods & Spices
 Cream cheese:
   section: Deli & Dairy
@@ -144,39 +126,31 @@ Double cream:
   section: Deli & Dairy
 Dried chickpeas:
   section: Dry Goods & Spices
-Dried chilli:
-  section: Fruit & Veg
 Dried oregano:
   section: Dry Goods & Spices
 Dried red chillies:
   section: Fruit & Veg
 Dried thyme:
   section: Dry Goods & Spices
-Dry sherry or white wine (optional):
+Dry sherry:
   section: Other
 Egg noodles:
   section: Dry Goods & Spices
-Egg yolks:
+Eggs:
   section: Deli & Dairy
 English mustard:
   section: Tinned & Jarred
 Extra virgin olive oil:
   section: Dry Goods & Spices
-Extra-virgin olive oil:
-  section: Dry Goods & Spices
-Fat-free natural yoghurt:
-  section: Deli & Dairy
 Fennel seeds:
   section: Dry Goods & Spices
-Fine dried breadcrumbs (or matzo meal):
-  section: Bread & Bakery
+Feta:
+  section: Deli & Dairy
 Fish sauce:
   section: Dry Goods & Spices
 Flat-leaf parsley:
   section: Fruit & Veg
-Floury potatoes (Maris Piper or King Edward):
-  section: Fruit & Veg
-Fresh basil:
+Floury potatoes:
   section: Fruit & Veg
 Fresh coriander:
   section: Fruit & Veg
@@ -188,10 +162,6 @@ Fresh gnocchi:
   section: Deli & Dairy
 Fresh mint:
   section: Fruit & Veg
-Fresh or dried thyme:
-  section: Dry Goods & Spices
-Fresh parsley:
-  section: Fruit & Veg
 Frozen dumplings:
   section: Other
 Frozen seafood mix:
@@ -200,11 +170,9 @@ Garam masala:
   section: Dry Goods & Spices
 Garlic cloves:
   section: Fruit & Veg
-Garlic mayonnaise (from above):
-  section: Tinned & Jarred
+Garlic mayonnaise:
+  section: Other
 Garlic powder:
-  section: Dry Goods & Spices
-Garlic powder (for coating):
   section: Dry Goods & Spices
 Greek yoghurt:
   section: Deli & Dairy
@@ -226,10 +194,8 @@ Ground cumin:
   section: Dry Goods & Spices
 Groundnut oil:
   section: Dry Goods & Spices
-Guinness or stout:
+Guinness:
   section: Other
-Hard boiled eggs:
-  section: Deli & Dairy
 Honey:
   section: Tinned & Jarred
 Hot chilli sauce:
@@ -242,51 +208,37 @@ Jamaican jerk seasoning:
   section: Dry Goods & Spices
 Japanese cucumbers:
   section: Fruit & Veg
-Jasmine or basmati rice:
+Jasmine rice:
   section: Dry Goods & Spices
 Ketchup:
   section: Tinned & Jarred
 Lamb neck fillet:
   section: Meat & Fish
-Large eggs:
-  section: Deli & Dairy
-Large ripe tomatoes:
-  section: Fruit & Veg
-Large tomatoes:
-  section: Fruit & Veg
 Lasagne sheets:
   section: Dry Goods & Spices
 Lemon juice:
   section: Fruit & Veg
-Lemon juice or vinegar:
-  section: Dry Goods & Spices
-Lemon or lime:
-  section: Fruit & Veg
-Lemongrass stalk:
+Lemongrass stalks:
   section: Fruit & Veg
 Lemons:
   section: Fruit & Veg
-Lime:
+Lettuce:
   section: Fruit & Veg
 Lime juice:
   section: Fruit & Veg
 Lime zest:
   section: Fruit & Veg
-Little gem or iceberg lettuce leaves:
+Limes:
   section: Fruit & Veg
 Macaroni:
   section: Dry Goods & Spices
-Maris Piper potatoes:
-  section: Fruit & Veg
 Mayonnaise:
   section: Tinned & Jarred
 Milk:
   section: Deli & Dairy
-Mixed chopped herbs (parsley, thyme, sage or chives):
+Mixed fresh herbs:
   section: Fruit & Veg
 Mixed peppers:
-  section: Fruit & Veg
-Mixed-colour peppers:
   section: Fruit & Veg
 Mozzarella:
   section: Deli & Dairy
@@ -294,12 +246,10 @@ Mushrooms:
   section: Fruit & Veg
 Mustard:
   section: Tinned & Jarred
-Mustard ketchup (or regular mustard):
+Mustard ketchup:
   section: Tinned & Jarred
 Mustard powder:
   section: Dry Goods & Spices
-Natural red food colour (optional):
-  section: Other
 Natural yoghurt:
   section: Deli & Dairy
 Nutmeg:
@@ -312,42 +262,38 @@ Onions:
   section: Fruit & Veg
 Pad Thai noodles:
   section: Dry Goods & Spices
-Paella or risotto rice:
+Paella rice:
   section: Dry Goods & Spices
-Palm sugar or brown sugar:
+Palm sugar:
   section: Dry Goods & Spices
 Paprika:
   section: Dry Goods & Spices
 Parmesan:
   section: Deli & Dairy
-Parmesan or pecorino:
-  section: Deli & Dairy
 Parsley:
-  section: Fruit & Veg
-Parsley and sesame seeds:
   section: Fruit & Veg
 Parsnips:
   section: Fruit & Veg
 Peanut butter:
   section: Tinned & Jarred
-Pinch of salt:
-  section: Dry Goods & Spices
 Pine nuts:
   section: Dry Goods & Spices
-Pitta breads or flatbreads:
+Pitta breads:
   section: Bread & Bakery
 Plain flour:
   section: Dry Goods & Spices
-Purple cabbage:
-  section: Fruit & Veg
+Pork shoulder:
+  section: Meat & Fish
 Ras el hanout:
   section: Dry Goods & Spices
 Raw prawns:
   section: Meat & Fish
 Red cabbage:
   section: Fruit & Veg
-Red chilli:
+Red chillies:
   section: Fruit & Veg
+Red food colouring:
+  section: Dry Goods & Spices
 Red onions:
   section: Fruit & Veg
 Red peppers:
@@ -360,25 +306,17 @@ Rice:
   section: Dry Goods & Spices
 Rice vinegar:
   section: Dry Goods & Spices
-Ripe tomato:
-  section: Fruit & Veg
-Roasted curry powder (from above):
-  section: Dry Goods & Spices
+Roasted curry powder:
+  section: Other
 Roasted peanuts:
   section: Tinned & Jarred
 Rolled beef brisket:
   section: Meat & Fish
-Rosemary sprig:
-  section: Dry Goods & Spices
+Rosemary sprigs:
+  section: Fruit & Veg
 Salmon fillets:
   section: Meat & Fish
 Salt:
-  section: Dry Goods & Spices
-Salt (for coating):
-  section: Dry Goods & Spices
-Salt and black pepper:
-  section: Dry Goods & Spices
-Salt and pepper:
   section: Dry Goods & Spices
 Self-raising flour:
   section: Dry Goods & Spices
@@ -386,27 +324,23 @@ Sesame oil:
   section: Dry Goods & Spices
 Sesame seeds:
   section: Dry Goods & Spices
-Sesame seeds and green onion:
-  section: Dry Goods & Spices
 Shallots:
   section: Fruit & Veg
-Shrimp paste (optional but worth it):
-  section: Dry Goods & Spices
+Shrimp paste:
+  section: Tinned & Jarred
 Single cream:
   section: Deli & Dairy
 Small flour tortillas:
   section: Bread & Bakery
-Smoked feta (or plain):
-  section: Deli & Dairy
 Smoked paprika:
   section: Dry Goods & Spices
-Smoked paprika (for coating):
-  section: Dry Goods & Spices
+Sourdough bread:
+  section: Bread & Bakery
 Soured cream:
   section: Deli & Dairy
 Soy sauce:
   section: Dry Goods & Spices
-Spaghetti or rigatoni:
+Spaghetti:
   section: Dry Goods & Spices
 Spring onions:
   section: Fruit & Veg
@@ -418,8 +352,6 @@ Sugar:
   section: Dry Goods & Spices
 Sunflower oil:
   section: Dry Goods & Spices
-Sunflower or groundnut oil:
-  section: Dry Goods & Spices
 Sweet potatoes:
   section: Fruit & Veg
 Sweet smoked paprika:
@@ -428,27 +360,15 @@ Tagliatelle:
   section: Dry Goods & Spices
 Tamarind paste:
   section: Tinned & Jarred
-Thick slices sourdough bread:
-  section: Bread & Bakery
 Thyme sprigs:
   section: Dry Goods & Spices
-Toasted sesame seeds or crushed peanuts:
-  section: Tinned & Jarred
-Tomato:
-  section: Fruit & Veg
-Tomato paste:
-  section: Fruit & Veg
 Tomato purée:
   section: Tinned & Jarred
+Tomatoes:
+  section: Fruit & Veg
 Turmeric:
   section: Dry Goods & Spices
 Vegetable oil:
-  section: Dry Goods & Spices
-Vegetable oil spray or oil:
-  section: Dry Goods & Spices
-Vegetable or chicken stock:
-  section: Tinned & Jarred
-Vegetable or sunflower oil:
   section: Dry Goods & Spices
 Vegetable stock cube:
   section: Tinned & Jarred
@@ -458,9 +378,5 @@ Waxy potatoes:
   section: Fruit & Veg
 White wine:
   section: Other
-Whole milk:
-  section: Deli & Dairy
-Whole-wheat spaghetti:
-  section: Dry Goods & Spices
 Worcestershire sauce:
   section: Dry Goods & Spices

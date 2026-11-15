@@ -10,11 +10,12 @@ description: A deep, rich stew with fall-apart beef and a dark, slightly bitter 
 tags:
   - beef
 ingredients:
-  - name: Braising steak or chuck
+  - name: Braising steak
     amount: 800g
-    prep: cut into chunks
-  - name: Guinness or stout
+    prep: or chuck, cut into chunks
+  - name: Guinness
     amount: 500ml
+    prep: or stout
   - name: Beef stock
     amount: 300ml
   - name: Onions
@@ -23,7 +24,7 @@ ingredients:
   - name: Carrots
     amount: '3'
     prep: cut into chunks
-  - name: Celery stalks
+  - name: Celery sticks
     amount: '2'
     prep: sliced
   - name: Garlic cloves
@@ -39,10 +40,13 @@ ingredients:
     amount: 2 tbsp
   - name: Bay leaves
     amount: '2'
-  - name: Fresh or dried thyme
+  - name: Dried thyme
     amount: 1 tsp
-  - name: Salt and black pepper
-    amount: 1 tsp
+    prep: or fresh
+  - name: Salt
+    amount: to taste
+  - name: Black pepper
+    amount: to taste
 steps:
   - title: Preheat oven
     content: Heat your oven to 160°C (140°C fan).

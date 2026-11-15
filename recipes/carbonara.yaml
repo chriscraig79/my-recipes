@@ -12,18 +12,19 @@ tags:
   - eggs
   - pasta
 ingredients:
-  - name: Spaghetti or rigatoni
+  - name: Spaghetti
     amount: 200g
+    prep: or rigatoni
   - name: Cooked gammon
     amount: 150g
     prep: diced small
-  - name: Large eggs
-    amount: '3'
-  - name: Egg yolks
-    amount: '1'
-  - name: Parmesan or pecorino
+  - name: Eggs
+    amount: 3 large
+  - name: Eggs
+    amount: 1 yolk
+  - name: Parmesan
     amount: 50g
-    prep: grated
+    prep: or pecorino, grated
   - name: Garlic cloves
     amount: '1'
   - name: Black pepper

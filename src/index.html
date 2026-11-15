@@ -484,31 +484,62 @@
     margin-bottom: 0;
   }
 
-  .ingredients-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    list-style: none;
-  }
-
-  .ingredient {
+  /* Ingredients: a ruled list flowed into columns (2 on desktop, 1 on
+     phones), reading top-to-bottom, with amounts in their own right-aligned
+     column so quantities line up for scanning. Rules sit on top of each row;
+     the 1px clip on the list hides the rule above the first row of each
+     column. */
+  .ingredients-card {
     background: var(--card-bg);
     border-radius: var(--radius-md);
     box-shadow: 0 1px 2px rgba(28, 24, 18, 0.05), 0 1px 5px rgba(28, 24, 18, 0.05);
-    padding: 0.55rem 0.95rem;
-    font-size: 0.88rem;
-    line-height: 1.4;
+    padding: 0 1.35rem;
   }
 
-  .ingredient-name { display: block; }
+  .ingredients-grid {
+    columns: 2 17rem;
+    column-gap: 2.25rem;
+    list-style: none;
+    clip-path: inset(1px 0 0 0);
+  }
+
+  .ingredient {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    column-gap: 0.9rem;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--step-num);
+    line-height: 1.35;
+    break-inside: avoid;
+  }
 
   .ingredient-amount {
-    display: block;
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-serif);
     font-weight: 600;
     color: var(--accent);
-    white-space: nowrap;
+    font-size: 0.85rem;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .ingredient-amount.is-vague {
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .ingredient-name {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .ingredient-prep {
+    display: block;
     font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
   }
 
   .steps {
@@ -730,6 +761,8 @@
   }
 
   @media (max-width: 500px) {
+    .ingredients-card { padding: 0 1rem; }
+    .ingredient { grid-template-columns: 4.5rem 1fr; column-gap: 0.75rem; }
     .recipe-list { grid-template-columns: 1fr; }
     .recipe-stats { grid-template-columns: 1fr; }
     .recipe-stat { border-right: none; border-bottom: 1px solid var(--border); }
@@ -1090,12 +1123,21 @@ function renderList() {
 }
 
 function renderRecipe(r) {
-  const ingredientsHtml = r.ingredients.map(ing => `
+  // Amounts that aren't a measurement ("to taste", "as needed", "a squeeze")
+  // get a quieter style so the real quantities stand out down the column.
+  const ingredientsHtml = r.ingredients.map(ing => {
+    const amount = ing.amount || '';
+    const vague = amount && !/\d|[½⅓¼¾⅔]/.test(amount);
+    return `
     <li class="ingredient">
-      <span class="ingredient-name">${ing.name}${ing.prep ? `, ${ing.prep}` : ''}</span>
-      <span class="ingredient-amount">${ing.amount}</span>
+      <span class="ingredient-amount${vague ? ' is-vague' : ''}">${amount}</span>
+      <span class="ingredient-text">
+        <span class="ingredient-name">${ing.name}</span>
+        ${ing.prep ? `<span class="ingredient-prep">${ing.prep}</span>` : ''}
+      </span>
     </li>
-  `).join('');
+  `;
+  }).join('');
 
   const stepsHtml = r.steps.map((step, i) => `
     <li class="step">
@@ -1140,7 +1182,7 @@ function renderRecipe(r) {
         <h2 class="section-heading">Ingredients</h2>
         <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
       </div>
-      <ul class="ingredients-chips">${ingredientsHtml}</ul>
+      <div class="ingredients-card"><ul class="ingredients-grid">${ingredientsHtml}</ul></div>
     </section>
 
     <section class="recipe-section">

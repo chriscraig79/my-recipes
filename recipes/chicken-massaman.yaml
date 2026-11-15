@@ -31,14 +31,15 @@ ingredients:
     amount: 2 tbsp
   - name: Tamarind paste
     amount: 1 tbsp
-  - name: Palm sugar or brown sugar
+  - name: Palm sugar
     amount: 2 tsp
+    prep: or brown sugar
   - name: Vegetable oil
     amount: 1 tbsp
   - name: Dried red chillies
     amount: '3'
     prep: soaked in hot water 10 min
-  - name: Lemongrass stalk
+  - name: Lemongrass stalks
     amount: '1'
     prep: lower third only, chopped
   - name: Garlic cloves
@@ -59,8 +60,9 @@ ingredients:
     amount: ½ tsp
   - name: Ground cloves
     amount: ½ tsp
-  - name: Shrimp paste (optional but worth it)
+  - name: Shrimp paste
     amount: 1 tsp
+    prep: optional but worth it
 steps:
   - title: Make the paste
     content: Drain the chillies and blitz with the lemongrass, garlic, shallots, ginger, ground coriander, cumin, cinnamon, cardamom, cloves, and shrimp paste in a small food processor with a splash of water until you have a rough paste. It won't be completely smooth — that's fine.

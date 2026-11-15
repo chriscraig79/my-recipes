@@ -24,8 +24,9 @@ ingredients:
     amount: 1 tbsp
   - name: Salt
     amount: 1 tsp
-  - name: Chicken thighs or drumsticks
+  - name: Chicken thighs
     amount: '6'
+    prep: or drumsticks
 steps:
   - title: Mix the sauce
     content: Stir together the ketchup, brown sugar, red wine vinegar, soy sauce, sriracha and jerk seasoning with the salt in the Instant Pot.

@@ -12,9 +12,9 @@ tags:
 ingredients:
   - name: Olive oil
     amount: 3 tbsp
-  - name: Braising or stewing steak
+  - name: Braising steak
     amount: 2kg
-    prep: cut into chunks
+    prep: or stewing steak, cut into chunks
   - name: Onions
     amount: 2 large
     prep: finely chopped
@@ -35,8 +35,8 @@ ingredients:
     prep: plus extra to serve
   - name: Tomato purée
     amount: 4 tbsp
-  - name: Large tomatoes
-    amount: '4'
+  - name: Tomatoes
+    amount: 4 large
     prep: chopped
   - name: Beef stock
     amount: 400–500ml

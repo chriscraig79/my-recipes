@@ -13,7 +13,7 @@ ingredients:
   - name: Fresh coriander
     amount: 1 bunch
     prep: stalks and leaves separated
-  - name: Red chilli
+  - name: Red chillies
     amount: '1'
     prep: seeded and chopped
   - name: Coriander seeds
@@ -37,7 +37,7 @@ ingredients:
     amount: 2 tbsp
   - name: Groundnut oil
     amount: 1 tbsp
-  - name: Cinnamon stick
+  - name: Cinnamon sticks
     amount: 5cm
   - name: Cardamom pods
     amount: '5'
@@ -58,8 +58,9 @@ ingredients:
   - name: Fresh ginger
     amount: 1 thumb-sized piece
     prep: finely grated
-  - name: Fat-free natural yoghurt
+  - name: Natural yoghurt
     amount: 100g
+    prep: fat-free
 steps:
   - title: Make the paste
     content: Blend the coriander stalks, red chilli, ground spices and salt together in a mixer. Mix in the tomato purée.

@@ -11,16 +11,17 @@ tags:
   - pork
   - potato
 ingredients:
-  - name: Maris Piper potatoes
+  - name: Floury potatoes
     amount: 800g
+    prep: Maris Piper
   - name: Cooked gammon
     amount: 300g
     prep: diced or shredded
   - name: Single cream
     amount: 400ml
-  - name: Cheddar or gruyère
+  - name: Cheddar
     amount: 100g
-    prep: grated
+    prep: or gruyère, grated
   - name: Garlic cloves
     amount: '2'
     prep: minced

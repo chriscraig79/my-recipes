@@ -11,9 +11,9 @@ tags:
   - chicken
   - bacon
 ingredients:
-  - name: Chicken pieces (thighs, drumsticks, halved breasts)
+  - name: Chicken pieces
     amount: '12'
-    prep: skinless, bone-in
+    prep: thighs, drumsticks or halved breasts, skinless, bone-in
   - name: Plain flour
     amount: 3 tbsp
   - name: Sunflower oil
@@ -32,7 +32,7 @@ ingredients:
     amount: '3'
   - name: Red wine
     amount: 250ml
-  - name: Tomato paste
+  - name: Tomato purée
     amount: 3 tbsp
   - name: Chicken stock cube
     amount: '1'
@@ -41,8 +41,9 @@ ingredients:
     prep: cold, diced
   - name: Self-raising flour
     amount: 250g
-  - name: Mixed chopped herbs (parsley, thyme, sage or chives)
+  - name: Mixed fresh herbs
     amount: 2 tbsp
+    prep: chopped – parsley, thyme, sage or chives
 steps:
   - title: Preheat oven
     content: Heat the oven to 180°C (160°C fan).

@@ -20,8 +20,8 @@ ingredients:
     amount: 2 tbsp
   - name: Milk
     amount: 130ml
-  - name: Large eggs
-    amount: '1'
+  - name: Eggs
+    amount: 1 large
     prep: lightly beaten
   - name: Butter
     amount: 2 tbsp

@@ -49,8 +49,8 @@ tags: [chicken, potato]     # ingredient tags for filtering
 image: dish-name.jpg  # optional — filename only, see "Photos" below
 ingredients:
   - { name: Ingredient name, amount: 200g }
-  # `prep` is optional — shown on the recipe page as "Carrots, thinly
-  # sliced", but the shopping list only groups/merges on `name`, so
+  # `prep` is optional — shown in small italics under the name on the
+  # recipe page, but the shopping list only groups/merges on `name`, so
   # keeping prep separate lets "Carrots" from different recipes merge
   # into one line. See "Ingredient names" below.
   - { name: Carrots, amount: 300g, prep: thinly sliced }
@@ -73,6 +73,12 @@ Names are standardized to the **plural form regardless of quantity**
 (`Onions` even when the amount is `1`, `Garlic cloves` even when it's `1`)
 — a deliberate choice favoring consistent merging over grammatical
 agreement with the amount.
+
+`name` should be just the ingredient, so other recipes can reuse it: size
+or count words go in `amount` (`Eggs` / `3 large`, not `Large eggs`),
+alternatives and parenthetical notes go in `prep` (`Parmesan` / `or
+pecorino, grated`, not `Parmesan or pecorino`), and combined lines are
+split (`Salt` and `Black pepper`, not `Salt and black pepper`).
 
 If a recipe needs a genuinely new ingredient, add it to `ingredients.yaml`
 with a section. The build has a keyword-guessing fallback for anything

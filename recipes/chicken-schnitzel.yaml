@@ -18,11 +18,12 @@ ingredients:
     amount: 1 tsp
   - name: Mustard powder
     amount: 1 tsp
-  - name: Large eggs
-    amount: '2'
+  - name: Eggs
+    amount: 2 large
     prep: beaten
-  - name: Fine dried breadcrumbs (or matzo meal)
+  - name: Breadcrumbs
     amount: 100g
+    prep: fine dried (or matzo meal)
   - name: Sesame seeds
     amount: 1 tbsp
   - name: Chicken breasts
@@ -36,15 +37,16 @@ ingredients:
   - name: Garlic cloves
     amount: '2'
     prep: finely chopped
-  - name: Egg yolks
-    amount: '2'
+  - name: Eggs
+    amount: 2 yolks
   - name: Mustard
     amount: 1 tsp
-  - name: Sunflower or groundnut oil
+  - name: Sunflower oil
     amount: 250ml
-  - name: Lemon juice or vinegar
-    amount: '1'
-    prep: a squeeze/few drops
+    prep: or groundnut oil
+  - name: Lemon juice
+    amount: a squeeze
+    prep: or a few drops of vinegar
   - name: Red cabbage
     amount: 300g
     prep: shredded
@@ -61,10 +63,11 @@ ingredients:
     amount: 1 tbsp
   - name: Caraway seeds
     amount: 1 tsp
-  - name: Cider vinegar
+  - name: Apple cider vinegar
     amount: 2 tsp
-  - name: Garlic mayonnaise (from above)
+  - name: Garlic mayonnaise
     amount: 2 tbsp
+    prep: from above
   - name: Caster sugar
     amount: 1 pinch
 steps:
