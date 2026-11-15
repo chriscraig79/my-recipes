@@ -460,6 +460,59 @@
     color: var(--ink);
   }
 
+  /* ── Recipe section jump bar ──
+     Pinned to the top while scrolling a recipe; tapping a button scrolls to
+     that section, and the section currently being read stays highlighted. */
+  .recipe-jump {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    /* Bleed out over the view's side padding so the bar spans the screen. */
+    padding: 0.6rem 2rem;
+    margin: -0.6rem -2rem 1.75rem;
+    background: var(--warm-white);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .recipe-jump.is-stuck { border-bottom-color: var(--border); }
+
+  .jump-group {
+    display: inline-flex;
+    padding: 0.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+  }
+
+  .jump-btn {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.45rem 1.15rem;
+    min-width: 7.5rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .jump-btn:hover { color: var(--accent); }
+
+  .jump-btn[aria-current="true"] {
+    background: var(--accent);
+    color: var(--warm-white);
+  }
+
+  /* Leave room for the pinned bar when jumping to a section. */
+  #recipe-ingredients, #recipe-method { scroll-margin-top: 4rem; }
+
   section.recipe-section { margin-bottom: 2.5rem; }
 
   h2.section-heading {
@@ -1190,7 +1243,14 @@ function renderRecipe(r) {
       <div class="recipe-stats">${statsHtml}</div>
     </header>
 
-    <section class="recipe-section">
+    <nav class="recipe-jump" id="recipe-jump" aria-label="Recipe sections">
+      <div class="jump-group">
+        <button class="jump-btn" data-target="recipe-ingredients" aria-current="true" onclick="jumpToSection('recipe-ingredients')">Ingredients</button>
+        <button class="jump-btn" data-target="recipe-method" aria-current="false" onclick="jumpToSection('recipe-method')">Method</button>
+      </div>
+    </nav>
+
+    <section class="recipe-section" id="recipe-ingredients">
       <div class="section-heading-row">
         <h2 class="section-heading">Ingredients</h2>
         <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
@@ -1198,7 +1258,7 @@ function renderRecipe(r) {
       <div class="ingredients-card"><ul class="ingredients-grid">${ingredientsHtml}</ul></div>
     </section>
 
-    <section class="recipe-section">
+    <section class="recipe-section" id="recipe-method">
       <h2 class="section-heading">Method</h2>
       <ol class="steps">${stepsHtml}</ol>
     </section>
@@ -1215,7 +1275,58 @@ function renderRecipe(r) {
   document.title = `${r.title} – My Recipes`;
   window.scrollTo(0, 0);
   document.getElementById('recipe-title').focus();
+  updateJumpBar();
 }
+
+// ─────────────────────────────────────────────
+//  RECIPE JUMP BAR — Ingredients | Method
+// ─────────────────────────────────────────────
+
+// While a tap-triggered smooth scroll is in flight, keep the tapped button
+// highlighted rather than flickering through the sections it passes.
+let jumpLockTimer = null;
+let jumpLocked = false;
+
+function jumpToSection(id) {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setActiveJump(id);
+  jumpLocked = true;
+  document.getElementById(id).scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  releaseJumpLockSoon();
+}
+
+// Released once scrolling has been quiet briefly (works in browsers without
+// a `scrollend` event too).
+function releaseJumpLockSoon() {
+  clearTimeout(jumpLockTimer);
+  jumpLockTimer = setTimeout(() => { jumpLocked = false; updateJumpBar(); }, 150);
+}
+
+function setActiveJump(id) {
+  document.querySelectorAll('.jump-btn').forEach(btn => {
+    btn.setAttribute('aria-current', btn.dataset.target === id ? 'true' : 'false');
+  });
+}
+
+// Highlights "Method" once its section reaches the bar (or the page can't
+// scroll any further), otherwise "Ingredients".
+function updateJumpBar() {
+  const bar = document.getElementById('recipe-jump');
+  const method = document.getElementById('recipe-method');
+  if (!bar || !method || document.getElementById('recipe-view').style.display === 'none') return;
+  const barBottom = bar.getBoundingClientRect().bottom;
+  bar.classList.toggle('is-stuck', bar.getBoundingClientRect().top <= 0 && window.scrollY > 0);
+  if (jumpLocked) return;
+  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  setActiveJump(method.getBoundingClientRect().top <= barBottom + 24 || atBottom ? 'recipe-method' : 'recipe-ingredients');
+}
+
+let jumpBarFrame = null;
+window.addEventListener('scroll', () => {
+  if (jumpLocked) releaseJumpLockSoon();
+  if (jumpBarFrame) return;
+  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); });
+}, { passive: true });
 
 function renderIndexView() {
   // The index list isn't re-rendered while it's hidden, so its "+"/"✓"

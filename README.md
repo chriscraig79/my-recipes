@@ -140,7 +140,8 @@ npm test    # builds, then runs the Playwright smoke test against build/index.ht
 the built page in headless Chromium and checks the things that a YAML/HTML
 syntax check can't: filter chips are grouped and actually filter the list,
 the no-results state shows up, adding a recipe to the basket flips its
-icon and updates the badge, and opening a recipe renders its detail view.
+icon and updates the badge, opening a recipe renders its detail view, and
+the pinned Ingredients | Method bar jumps to and highlights each section.
 It's meant to catch a broken `onclick` handler or a renamed class/id before
 it ships — not to be exhaustive. This runs automatically on every pull
 request into `main` (`.github/workflows/test.yml`) and again before every

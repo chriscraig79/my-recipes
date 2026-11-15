@@ -85,6 +85,21 @@ check("opening a recipe shows its detail view", async page => {
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("recipe jump bar scrolls to and highlights Method / Ingredients", async page => {
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-jump", { state: "visible" });
+  const current = () => page.locator('.jump-btn[aria-current="true"]').textContent();
+  assert.equal((await current()).trim(), "Ingredients", "expected Ingredients highlighted on open");
+  await page.locator('.jump-btn[data-target="recipe-method"]').click();
+  await page.waitForFunction(() => document.getElementById("recipe-method").getBoundingClientRect().top < 120);
+  assert.equal((await current()).trim(), "Method", "expected Method highlighted after jumping to it");
+  await page.locator('.jump-btn[data-target="recipe-ingredients"]').click();
+  await page.waitForFunction(() => document.getElementById("recipe-ingredients").getBoundingClientRect().top < 120);
+  assert.equal((await current()).trim(), "Ingredients", "expected Ingredients highlighted after jumping back");
+  await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 async function main() {
   if (!fs.existsSync(BUILD_INDEX)) {
     console.error(`build/index.html not found — run \`npm run build\` first.`);
