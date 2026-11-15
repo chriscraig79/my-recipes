@@ -122,7 +122,10 @@ check("Copy list copies the same unchecked items as Send to WhatsApp", async pag
   const waHref = await page.getAttribute(".whatsapp-btn", "href");
   const waText = decodeURIComponent(new URL(waHref).searchParams.get("text"));
   assert.equal(copied, waText, "expected copied text to match the WhatsApp text");
-  assert.ok(!copied.includes(`- ${tickedName} (`), `ticked item "${tickedName}" should be left out`);
+  const lines = copied.split("\n");
+  assert.ok(!lines.includes(`- ${tickedName}`), `ticked item "${tickedName}" should be left out`);
+  assert.equal(lines[2], "RECIPES", "expected the recipe list under the title");
+  assert.ok(!/\(.+\)$/m.test(copied.split("\n\n").slice(2).join("\n")), "ingredient lines shouldn't name recipes");
   assert.match(await page.textContent(".copy-list-btn"), /Copied/, "expected copied confirmation");
   await page.locator(".clear-list-btn").click(); // reset
   await page.evaluate(() => { location.hash = ""; });
