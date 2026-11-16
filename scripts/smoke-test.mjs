@@ -133,6 +133,29 @@ check("opening a recipe shows its detail view", async page => {
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("ingredients are a 2-column grid with equal-height cells", async page => {
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  const layout = await page.evaluate(() => {
+    const grid = document.querySelector(".ingredients-grid");
+    const items = [...grid.querySelectorAll(".ingredient")];
+    const gridBox = grid.getBoundingClientRect();
+    return {
+      columns: getComputedStyle(grid).gridTemplateColumns.split(" ").length,
+      heights: new Set(items.map(i => Math.round(i.getBoundingClientRect().height))).size,
+      flush: items.every(i => {
+        const b = i.getBoundingClientRect();
+        return Math.round(b.left) === Math.round(gridBox.left) || Math.round(b.right) === Math.round(gridBox.right);
+      }),
+    };
+  });
+  assert.equal(layout.columns, 2, "expected 2 ingredient columns at desktop width");
+  assert.equal(layout.heights, 1, "expected every ingredient cell to be the same height");
+  assert.ok(layout.flush, "expected ingredient cells to reach the edges of the card");
+  await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 check("recipe jump bar scrolls to and highlights Method / Ingredients", async page => {
   await page.locator(".recipe-card-btn").first().click();
   await page.waitForSelector("#recipe-jump", { state: "visible" });
