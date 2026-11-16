@@ -29,6 +29,11 @@
     --font-serif: 'Playfair Display', serif;
     --font-body: 'Source Serif 4', Georgia, serif;
     --font-sans: 'Inter', system-ui, sans-serif;
+    /* Vertical rhythm for the recipe and shopping list pages: one gap
+       between major blocks (header, jump bar, each section), and a smaller
+       one between a section heading and its content. Tighter on phones. */
+    --space-section: 2.5rem;
+    --space-heading: 1.25rem;
   }
 
   body {
@@ -47,17 +52,23 @@
     padding: 1.5rem 2rem 5rem;
   }
 
+  /* A light masthead: a short accent bar as a flourish above the label,
+     and one hairline underneath to separate it from the filters. */
   .site-header {
-    border-top: 3px solid var(--ink);
-    padding: 0.85rem 0 0.65rem;
+    padding: 0.35rem 0 1rem;
     margin-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border);
   }
 
-  .site-header::after {
+  .site-header::before,
+  .recipe-header::before {
     content: '';
     display: block;
-    border-bottom: 3px solid var(--ink);
-    margin-top: 0.65rem;
+    width: 2.25rem;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    margin-bottom: 0.85rem;
   }
 
   .site-label {
@@ -86,9 +97,21 @@
   /* One joined button group: a dropdown per category (Protein, Carbs, Veg,
      Dish, Time). Segments shrink to fit, so the whole group always stays
      on one line, even on a phone. */
+  /* Pinned to the top while scrolling the index, like the recipe jump bar.
+     It bleeds out over the index's side padding so the bar spans the screen,
+     and gets a bottom rule once it's stuck. */
   .filters {
-    margin-bottom: 1.25rem;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 0.6rem 2rem;
+    margin: -0.6rem -2rem 0.65rem;
+    background: var(--warm-white);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
   }
+
+  .filters.is-stuck { border-bottom-color: var(--border); }
 
   .filter-bar {
     display: flex;
@@ -462,13 +485,13 @@
     display: none;
     max-width: 720px;
     margin: 0 auto;
-    padding: 3rem 2rem 5rem;
+    padding: 2rem 2rem 5rem;
   }
 
   .recipe-hero {
     border-radius: var(--radius-md);
     overflow: hidden;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-section);
     max-height: 420px;
   }
 
@@ -491,7 +514,7 @@
     text-transform: uppercase;
     color: var(--muted);
     padding: 0;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-section);
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -500,11 +523,10 @@
 
   .back-btn:hover { color: var(--accent); }
 
+  /* Same light masthead as the index: a short accent bar above the label,
+     no heavy rules. */
   .recipe-header {
-    border-top: 3px solid var(--ink);
-    border-bottom: 3px solid var(--ink);
-    padding: 2rem 0 1.5rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: var(--space-section);
   }
 
   .recipe-label {
@@ -584,8 +606,11 @@
     display: flex;
     justify-content: center;
     /* Bleed out over the view's side padding so the bar spans the screen. */
+    /* The negative top margin and the bottom margin offset the bar's own
+       padding (and its 1px rule), so the pill sits exactly one section gap
+       from the header above and the first section below. */
     padding: 0.6rem 2rem;
-    margin: -0.6rem -2rem 1.75rem;
+    margin: -0.6rem -2rem calc(var(--space-section) - 0.6rem - 1px);
     background: var(--warm-white);
     border-bottom: 1px solid transparent;
     transition: border-color 0.15s;
@@ -625,9 +650,9 @@
   }
 
   /* Leave room for the pinned bar when jumping to a section. */
-  #recipe-ingredients, #recipe-method { scroll-margin-top: 4rem; }
+  #recipe-ingredients, #recipe-method { scroll-margin-top: calc(3.4rem + var(--space-heading)); }
 
-  section.recipe-section { margin-bottom: 2.5rem; }
+  section.recipe-section { margin-bottom: var(--space-section); }
 
   h2.section-heading {
     font-family: var(--font-sans);
@@ -636,7 +661,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-heading);
   }
 
   .section-heading-row {
@@ -644,31 +669,44 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-heading);
   }
 
   .section-heading-row .section-heading {
     margin-bottom: 0;
   }
 
-  /* Ingredients: a ruled list flowed into columns (2 on desktop, 1 on
-     phones), reading top-to-bottom, with amounts in their own right-aligned
-     column so quantities line up for scanning. Rules sit on top of each row;
-     the 1px clip on the list hides the rule above the first row of each
-     column. */
+  /* Ingredients: a true grid (2 columns when the card is wide enough, 1 on
+     phones). In 2 columns every row is the same height, so cells line up
+     across the columns, and items still read top-to-bottom down the left
+     column first (--rows is set from the item count in renderRecipe).
+     Dividers run edge to edge: each cell has a bottom rule (the list's
+     bottom 1px is clipped so the last row has none, leaving the card's own
+     border), and left-column cells have a right rule. Amounts sit in their
+     own right-aligned column so quantities line up for scanning. */
   .ingredients-card {
     background: var(--card-bg);
     border: var(--card-border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-card);
-    padding: 0 1.35rem;
+    container-type: inline-size;
   }
 
   .ingredients-grid {
-    columns: 2 17rem;
-    column-gap: 2.25rem;
+    display: grid;
+    grid-template-columns: 1fr;
     list-style: none;
-    clip-path: inset(1px 0 0 0);
+    clip-path: inset(0 0 1px 0);
+  }
+
+  @container (min-width: 36rem) {
+    .ingredients-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(var(--rows), 1fr);
+      grid-auto-flow: column;
+    }
+
+    .ingredient.is-left-col { border-right: 1px solid var(--step-num); }
   }
 
   .ingredient {
@@ -676,10 +714,10 @@
     grid-template-columns: 5.5rem 1fr;
     column-gap: 0.9rem;
     align-items: baseline;
-    padding: 0.6rem 0;
-    border-top: 1px solid var(--step-num);
+    align-content: center;
+    padding: 0.6rem 1.35rem;
+    border-bottom: 1px solid var(--step-num);
     line-height: 1.35;
-    break-inside: avoid;
   }
 
   .ingredient-amount {
@@ -787,10 +825,10 @@
     line-height: 1.7;
   }
 
+  /* Light closing rule; the last section's own bottom gap sits above it. */
   .footer-rule {
     border: none;
-    border-top: 3px solid var(--ink);
-    margin-top: 3rem;
+    border-top: 1px solid var(--border);
   }
 
   /* ── Shopping list ── */
@@ -828,7 +866,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 0.75rem 1.25rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: var(--space-section);
   }
 
   .whatsapp-btn {
@@ -970,8 +1008,7 @@
   }
 
   @media (max-width: 500px) {
-    .ingredients-card { padding: 0 1rem; }
-    .ingredient { grid-template-columns: 4.5rem 1fr; column-gap: 0.75rem; }
+    .ingredient { grid-template-columns: 4.5rem 1fr; column-gap: 0.75rem; padding: 0.6rem 1rem; }
     .recipe-list { grid-template-columns: 1fr; }
     .recipe-stats { grid-template-columns: 1fr; }
     .recipe-stat { border-right: none; border-bottom: 1px solid var(--border); }
@@ -979,10 +1016,15 @@
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
 
     #index { padding: 1rem 1rem 3rem; }
-    .site-header { padding: 0.65rem 0 0.5rem; margin-bottom: 0.65rem; }
-    .site-header::after { margin-top: 0.5rem; }
+    .site-header { padding: 0.25rem 0 0.75rem; margin-bottom: 0.65rem; }
+    .site-header::before,
+    .recipe-header::before { margin-bottom: 0.65rem; }
+
+    :root { --space-section: 2rem; --space-heading: 1rem; }
+    #recipe-view, #shopping-list-view { padding: 1.25rem 1rem 3rem; }
+    .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
     .site-label { margin-bottom: 0.2rem; }
-    .filters { margin-bottom: 0.85rem; }
+    .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
     .filter-trigger { padding: 0.35rem 0.35rem; gap: 0.2rem; font-size: 0.7rem; }
     .filter-chevron { width: 0.6rem; height: 0.6rem; }
     .filter-clear { width: 1.5rem; }
@@ -1309,6 +1351,19 @@ function setFilter(category, value) {
   else delete activeFilters[category];
   updateFilterUI();
   renderList();
+  // If you're scrolled down the list when you change a filter, jump back to
+  // the top of the new results rather than leaving you partway down them.
+  const filters = document.querySelector('.filters');
+  if (filters.classList.contains('is-stuck')) {
+    const count = document.getElementById('results-count');
+    window.scrollTo(0, count.getBoundingClientRect().top + window.scrollY - filters.offsetHeight);
+  }
+}
+
+function updateFilterBarStuck() {
+  const filters = document.querySelector('.filters');
+  if (document.getElementById('index').style.display === 'none') return;
+  filters.classList.toggle('is-stuck', filters.getBoundingClientRect().top <= 0 && window.scrollY > 0);
 }
 
 function updateFilterUI() {
@@ -1485,11 +1540,13 @@ function renderList() {
 function renderRecipe(r) {
   // Amounts that aren't a measurement ("to taste", "as needed", "a squeeze")
   // get a quieter style so the real quantities stand out down the column.
-  const ingredientsHtml = r.ingredients.map(ing => {
+  // In the 2-column layout the left column holds the first half (rounded up).
+  const ingredientRows = Math.ceil(r.ingredients.length / 2);
+  const ingredientsHtml = r.ingredients.map((ing, i) => {
     const amount = ing.amount || '';
     const vague = amount && !/\d|[½⅓¼¾⅔]/.test(amount);
     return `
-    <li class="ingredient">
+    <li class="ingredient${i < ingredientRows ? ' is-left-col' : ''}">
       <span class="ingredient-amount${vague ? ' is-vague' : ''}">${amount}</span>
       <span class="ingredient-text">
         <span class="ingredient-name">${ing.name}</span>
@@ -1549,7 +1606,7 @@ function renderRecipe(r) {
         <h2 class="section-heading">Ingredients</h2>
         <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
       </div>
-      <div class="ingredients-card"><ul class="ingredients-grid">${ingredientsHtml}</ul></div>
+      <div class="ingredients-card"><ul class="ingredients-grid" style="--rows: ${ingredientRows}">${ingredientsHtml}</ul></div>
     </section>
 
     <section class="recipe-section" id="recipe-method">
@@ -1619,7 +1676,7 @@ let jumpBarFrame = null;
 window.addEventListener('scroll', () => {
   if (jumpLocked) releaseJumpLockSoon();
   if (jumpBarFrame) return;
-  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); });
+  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); updateFilterBarStuck(); });
 }, { passive: true });
 
 function renderIndexView() {

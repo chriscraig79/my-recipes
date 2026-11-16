@@ -86,6 +86,20 @@ check("no-results message shows when filters exclude everything", async page => 
   await clearFilter(page, "Veg");
 });
 
+check("filter bar stays pinned to the top while scrolling the list", async page => {
+  await page.evaluate(() => window.scrollTo(0, 1500));
+  await page.waitForFunction(() => document.querySelector(".filters").classList.contains("is-stuck"));
+  const top = await page.evaluate(() => Math.round(document.querySelector(".filters").getBoundingClientRect().top));
+  assert.equal(top, 0, `expected the filter bar at the top of the screen, got ${top}px`);
+  await chooseFilter(page, "Protein", "chicken");
+  const countTop = await page.evaluate(() => document.getElementById("results-count").getBoundingClientRect().top);
+  const barBottom = await page.evaluate(() => document.querySelector(".filters").getBoundingClientRect().bottom);
+  assert.ok(countTop >= barBottom - 1 && countTop < barBottom + 40, "expected new results to start just under the bar");
+  await clearFilter(page, "Protein");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForFunction(() => !document.querySelector(".filters").classList.contains("is-stuck"));
+});
+
 check("filter dropdowns work from the keyboard", async page => {
   const trigger = page.locator('.filter-seg[data-category="Carbs"] .filter-trigger');
   await trigger.focus();
@@ -129,6 +143,29 @@ check("opening a recipe shows its detail view", async page => {
   assert.ok(stepCount > 0, "expected at least one method step");
   const statLabels = await page.locator(".stat-label").allTextContents();
   assert.ok(statLabels.includes("Cooked in"), `missing "Cooked in" stat, got: ${statLabels}`);
+  await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("ingredients are a 2-column grid with equal-height cells", async page => {
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  const layout = await page.evaluate(() => {
+    const grid = document.querySelector(".ingredients-grid");
+    const items = [...grid.querySelectorAll(".ingredient")];
+    const gridBox = grid.getBoundingClientRect();
+    return {
+      columns: getComputedStyle(grid).gridTemplateColumns.split(" ").length,
+      heights: new Set(items.map(i => Math.round(i.getBoundingClientRect().height))).size,
+      flush: items.every(i => {
+        const b = i.getBoundingClientRect();
+        return Math.round(b.left) === Math.round(gridBox.left) || Math.round(b.right) === Math.round(gridBox.right);
+      }),
+    };
+  });
+  assert.equal(layout.columns, 2, "expected 2 ingredient columns at desktop width");
+  assert.equal(layout.heights, 1, "expected every ingredient cell to be the same height");
+  assert.ok(layout.flush, "expected ingredient cells to reach the edges of the card");
   await page.locator("#recipe-view .back-btn").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
