@@ -138,8 +138,8 @@ npm test    # builds, then runs the Playwright smoke test against build/index.ht
 
 `scripts/smoke-test.mjs` is a plain script (not a test framework) that opens
 the built page in headless Chromium and checks the things that a YAML/HTML
-syntax check can't: filter chips are grouped and actually filter the list,
-the no-results state shows up, adding a recipe to the basket flips its
+syntax check can't: the filter dropdowns sit on one row, actually filter
+the list and work from the keyboard, the no-results state shows up, adding a recipe to the basket flips its
 icon and updates the badge, opening a recipe renders its detail view, and
 the pinned Ingredients | Method bar jumps to and highlights each section.
 It's meant to catch a broken `onclick` handler or a renamed class/id before
