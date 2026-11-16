@@ -147,6 +147,20 @@ check("opening a recipe shows its detail view", async page => {
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("opening and leaving a recipe animates and then cleans up", async page => {
+  const supported = await page.evaluate(() => typeof document.startViewTransition === "function");
+  await page.locator(".recipe-card-btn").first().click();
+  if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "forward");
+  await page.waitForFunction(() => !document.documentElement.dataset.nav);
+  assert.ok(await page.isVisible("#recipe-view"), "expected the recipe view after the transition");
+  await page.locator("#recipe-view .back-btn").click();
+  if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "back");
+  await page.waitForFunction(() => !document.documentElement.dataset.nav);
+  assert.ok(await page.isVisible("#index"), "expected the index after going back");
+  const title = (await page.textContent("#site-title")).trim();
+  assert.match(title, /Recipe collection/i, `unexpected index title: "${title}"`);
+});
+
 check("ingredients are a 2-column grid with equal-height cells", async page => {
   await page.locator(".recipe-card-btn").first().click();
   await page.waitForSelector("#recipe-view", { state: "visible" });
