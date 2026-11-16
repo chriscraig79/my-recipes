@@ -83,59 +83,168 @@
   }
 
   /* ── Filters ── */
+  /* One joined button group: a dropdown per category (Protein, Carbs, Veg,
+     Dish, Time). Segments shrink to fit, so the whole group always stays
+     on one line, even on a phone. */
   .filters {
     margin-bottom: 1.25rem;
   }
 
-  .filter-group {
+  .filter-bar {
     display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.45rem;
-  }
-
-  .filter-label {
-    font-family: var(--font-sans);
-    font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    flex-shrink: 0;
-    min-width: 3.6rem;
-  }
-
-  .filter-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    flex: 1;
-  }
-
-  .chip {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 500;
-    padding: 0.22rem 0.7rem;
+    width: 100%;
+    max-width: 38rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
+    background: var(--card-bg);
+  }
+
+  .filter-seg {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .filter-seg + .filter-seg {
+    border-left: 1px solid var(--border);
+  }
+
+  .filter-seg:first-child,
+  .filter-seg:first-child .filter-trigger { border-radius: var(--radius-pill) 0 0 var(--radius-pill); }
+  .filter-seg:last-child,
+  .filter-seg:last-child .filter-trigger,
+  .filter-seg:last-child .filter-clear { border-radius: 0 var(--radius-pill) var(--radius-pill) 0; }
+
+  .filter-trigger {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    min-height: 2.1rem;
+    padding: 0.35rem 0.6rem;
+    border: none;
     background: none;
     color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
     letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
   }
 
-  .chip:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+  .filter-trigger:hover,
+  .filter-trigger[aria-expanded="true"] { color: var(--accent); }
+
+  .filter-trigger-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .chip.active {
-    background: var(--ink);
-    border-color: var(--ink);
+  .filter-chevron {
+    flex-shrink: 0;
+    width: 0.7rem;
+    height: 0.7rem;
+    transition: transform 0.15s;
+  }
+
+  .filter-trigger[aria-expanded="true"] .filter-chevron { transform: rotate(180deg); }
+
+  /* Active: dark fill, chosen value as the label, and an × to clear it
+     in place of the chevron. Segments size to their labels and shrink in
+     proportion when space is short, so a long choice ("Under 30 min")
+     gives way before the short category names do. */
+  .filter-seg.active { background: var(--ink); }
+  .filter-seg + .filter-seg.active { border-left-color: var(--ink); }
+  .filter-seg.active + .filter-seg.active { border-left-color: rgba(250, 247, 242, 0.3); }
+  .filter-seg.active .filter-trigger,
+  .filter-seg.active .filter-trigger:hover,
+  .filter-seg.active .filter-trigger[aria-expanded="true"] { color: var(--warm-white); padding-right: 0.15rem; }
+  .filter-seg.active .filter-chevron { display: none; }
+
+  .filter-clear {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    min-height: 2.1rem;
+    border: none;
+    background: none;
     color: var(--warm-white);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
   }
+
+  .filter-clear[hidden] { display: none; }
+  .filter-clear:hover { color: var(--accent-soft); }
+
+  .filter-trigger:focus-visible,
+  .filter-clear:focus-visible,
+  .filter-option:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .filter-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 30;
+    min-width: max(100%, 10rem);
+    max-height: min(60vh, 22rem);
+    overflow-y: auto;
+    list-style: none;
+    padding: 0.3rem;
+    background: var(--card-bg);
+    border: var(--card-border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 16px rgba(28, 24, 18, 0.12);
+  }
+
+  .filter-menu[hidden] { display: none; }
+
+  /* Menus under the right-hand segments open leftwards so they stay on screen. */
+  .filter-seg:nth-last-child(-n+2) .filter-menu { left: auto; right: 0; }
+
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 2.25rem;
+    padding: 0.4rem 0.7rem;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .filter-option:hover,
+  .filter-option:focus { background: var(--accent-soft); }
+
+  .filter-option-check {
+    flex-shrink: 0;
+    width: 0.9rem;
+    height: 0.9rem;
+    color: var(--accent);
+    visibility: hidden;
+  }
+
+  .filter-option[aria-checked="true"] { font-weight: 600; }
+  .filter-option[aria-checked="true"] .filter-option-check { visibility: visible; }
 
   .results-count {
     font-family: var(--font-sans);
@@ -874,9 +983,9 @@
     .site-header::after { margin-top: 0.5rem; }
     .site-label { margin-bottom: 0.2rem; }
     .filters { margin-bottom: 0.85rem; }
-    .filter-group { flex-direction: column; gap: 0.3rem; margin-bottom: 0.5rem; }
-    .filter-label { min-width: 0; }
-    .chip { padding: 0.2rem 0.55rem; font-size: 0.7rem; }
+    .filter-trigger { padding: 0.35rem 0.35rem; gap: 0.2rem; font-size: 0.7rem; }
+    .filter-chevron { width: 0.6rem; height: 0.6rem; }
+    .filter-clear { width: 1.5rem; }
     .results-count { margin-bottom: 0.65rem; }
   }
 </style>
@@ -892,11 +1001,7 @@
   </header>
 
   <div class="filters">
-    <div id="ingredient-filter-groups"></div>
-    <div class="filter-group">
-      <span class="filter-label" id="time-filter-label">Time</span>
-      <div class="filter-chips" id="time-chips" role="group" aria-labelledby="time-filter-label"></div>
-    </div>
+    <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter recipes"></div>
   </div>
 
   <p class="results-count" id="results-count" aria-live="polite"></p>
@@ -1113,8 +1218,7 @@ const TIME_BANDS = [
 // Groups tags by the role they play in a meal — closer to how you'd
 // actually plan one ("what's my protein, what's my carb, what veg") than a
 // strict ingredient taxonomy — plus a "Dish" group for the kind of dish it
-// is (curry, stew, bake…), so the filter chips can be organised under a
-// shared label instead of one long flat row. Unknown tags fall into "Other".
+// is (curry, stew, bake…), so each group gets its own filter dropdown. Unknown tags fall into "Other".
 const TAG_CATEGORIES = {
   bacon: "Protein", beef: "Protein", chicken: "Protein", lamb: "Protein", pork: "Protein", turkey: "Protein", gammon: "Protein",
   prawns: "Protein", seafood: "Protein", salmon: "Protein", tuna: "Protein", cod: "Protein", mussels: "Protein",
@@ -1126,8 +1230,13 @@ const TAG_CATEGORIES = {
 };
 const CATEGORY_ORDER = ["Protein", "Carbs", "Veg", "Dish", "Other"];
 
-let activeIngredients = new Set();
-let activeTime = null;
+// One active choice per category, keyed by category name, e.g.
+// { Protein: "chicken", Time: "under30" }. Choices in different categories
+// combine (AND); choosing again in the same category replaces the old choice.
+const activeFilters = {};
+
+const CHEVRON_ICON = '<svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const OPTION_CHECK_ICON = '<svg class="filter-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
 
 function getAllTags() {
   const tags = new Set();
@@ -1152,63 +1261,172 @@ function getTimeBandsPresent() {
 }
 
 function filteredRecipes() {
-  return recipes.filter(r => {
-    const ingredientMatch = activeIngredients.size === 0 || [...activeIngredients].every(t => r.tags.includes(t));
-    const timeMatch = !activeTime || TIME_BANDS.find(b => b.key === activeTime)?.test(r.timeMins);
-    return ingredientMatch && timeMatch;
-  });
+  return recipes.filter(r => Object.entries(activeFilters).every(([category, value]) =>
+    category === "Time"
+      ? TIME_BANDS.find(b => b.key === value)?.test(r.timeMins)
+      : r.tags.includes(value)
+  ));
 }
 
-function buildFilters() {
-  const groupsContainer = document.getElementById('ingredient-filter-groups');
-  const timeContainer = document.getElementById('time-chips');
+const capitalise = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-  const categories = getTagsByCategory();
-  groupsContainer.innerHTML = categories.map(({ category, tags }) => {
-    const labelId = `${category.toLowerCase()}-filter-label`;
-    const chips = tags.map(tag => `
-      <button class="chip" data-tag="${tag}" aria-pressed="false" onclick="toggleIngredient('${tag}')">${tag}</button>
+// Each dropdown's options: [{ value, label }]. Built once in buildFilters().
+let filterCategories = [];
+
+function buildFilters() {
+  filterCategories = [
+    ...getTagsByCategory().map(({ category, tags }) => ({
+      category,
+      options: tags.map(tag => ({ value: tag, label: capitalise(tag) })),
+    })),
+    { category: "Time", options: getTimeBandsPresent().map(b => ({ value: b.key, label: b.label })) },
+  ];
+
+  document.getElementById('filter-bar').innerHTML = filterCategories.map(({ category, options }) => {
+    const slug = category.toLowerCase();
+    const items = [{ value: "", label: "All" }, ...options].map(o => `
+      <li role="none"><button type="button" class="filter-option" role="menuitemradio" tabindex="-1"
+        data-value="${o.value}" aria-checked="false">${OPTION_CHECK_ICON}<span>${o.label}</span></button></li>
     `).join('');
     return `
-      <div class="filter-group">
-        <span class="filter-label" id="${labelId}">${category}</span>
-        <div class="filter-chips" role="group" aria-labelledby="${labelId}">${chips}</div>
+      <div class="filter-seg" data-category="${category}">
+        <button type="button" class="filter-trigger" id="filter-trigger-${slug}"
+          aria-haspopup="menu" aria-expanded="false" aria-controls="filter-menu-${slug}">
+          <span class="filter-trigger-text">${category}</span>${CHEVRON_ICON}
+        </button>
+        <button type="button" class="filter-clear" hidden>×</button>
+        <ul class="filter-menu" id="filter-menu-${slug}" role="menu" aria-labelledby="filter-trigger-${slug}" hidden>${items}</ul>
       </div>
     `;
   }).join('');
 
-  const bands = getTimeBandsPresent();
-  timeContainer.innerHTML = bands.map(band => `
-    <button class="chip" data-band="${band.key}" aria-pressed="false" onclick="toggleTime('${band.key}')">${band.label}</button>
-  `).join('');
+  initFilterEvents();
+  updateFilterUI();
 }
 
-function toggleIngredient(tag) {
-  if (activeIngredients.has(tag)) {
-    activeIngredients.delete(tag);
-  } else {
-    activeIngredients.add(tag);
-  }
-  updateChips();
+function setFilter(category, value) {
+  if (value) activeFilters[category] = value;
+  else delete activeFilters[category];
+  updateFilterUI();
   renderList();
 }
 
-function toggleTime(key) {
-  activeTime = activeTime === key ? null : key;
-  updateChips();
-  renderList();
-}
+function updateFilterUI() {
+  document.querySelectorAll('.filter-seg').forEach(seg => {
+    const { category } = seg.dataset;
+    const value = activeFilters[category];
+    const option = value && filterCategories.find(c => c.category === category)?.options.find(o => o.value === value);
+    const trigger = seg.querySelector('.filter-trigger');
+    const clear = seg.querySelector('.filter-clear');
 
-function updateChips() {
-  document.querySelectorAll('#ingredient-filter-groups .chip').forEach(chip => {
-    const isActive = activeIngredients.has(chip.dataset.tag);
-    chip.classList.toggle('active', isActive);
-    chip.setAttribute('aria-pressed', isActive);
+    seg.classList.toggle('active', Boolean(option));
+    trigger.querySelector('.filter-trigger-text').textContent = option ? option.label : category;
+    // The visible text is just the choice ("Chicken"); the accessible name
+    // keeps the category in front of it so it still makes sense when read out.
+    if (option) trigger.setAttribute('aria-label', `${category}: ${option.label}`);
+    else trigger.removeAttribute('aria-label');
+    clear.hidden = !option;
+    clear.setAttribute('aria-label', option ? `Clear ${category} filter (${option.label})` : `Clear ${category} filter`);
+
+    seg.querySelectorAll('.filter-option').forEach(btn => {
+      btn.setAttribute('aria-checked', String(btn.dataset.value === (value || "")));
+    });
   });
-  document.querySelectorAll('#time-chips .chip').forEach(chip => {
-    const isActive = chip.dataset.band === activeTime;
-    chip.classList.toggle('active', isActive);
-    chip.setAttribute('aria-pressed', isActive);
+}
+
+// ── Dropdown behaviour (menu button pattern) ──
+// Enter, Space or ↓ on a button opens its menu with the current choice
+// focused (↑ focuses the last option). Inside the menu: ↑/↓ move and wrap,
+// Home/End jump, typing a letter jumps to the next option starting with it,
+// Enter/Space choose, Esc closes back to the button, and Tab closes and moves on.
+
+let openSeg = null;
+
+function menuOptions(seg) {
+  return [...seg.querySelectorAll('.filter-option')];
+}
+
+function openMenu(seg, focus = 'checked') {
+  if (openSeg && openSeg !== seg) closeMenu(openSeg);
+  const trigger = seg.querySelector('.filter-trigger');
+  const menu = seg.querySelector('.filter-menu');
+  menu.hidden = false;
+  trigger.setAttribute('aria-expanded', 'true');
+  openSeg = seg;
+  const options = menuOptions(seg);
+  const target = focus === 'last'
+    ? options[options.length - 1]
+    : options.find(o => o.getAttribute('aria-checked') === 'true') || options[0];
+  target.focus();
+}
+
+function closeMenu(seg, { returnFocus = false } = {}) {
+  seg.querySelector('.filter-menu').hidden = true;
+  seg.querySelector('.filter-trigger').setAttribute('aria-expanded', 'false');
+  if (openSeg === seg) openSeg = null;
+  if (returnFocus) seg.querySelector('.filter-trigger').focus();
+}
+
+function initFilterEvents() {
+  const bar = document.getElementById('filter-bar');
+
+  bar.addEventListener('click', e => {
+    const seg = e.target.closest('.filter-seg');
+    if (!seg) return;
+    const { category } = seg.dataset;
+
+    if (e.target.closest('.filter-trigger')) {
+      if (openSeg === seg) closeMenu(seg);
+      else openMenu(seg);
+    } else if (e.target.closest('.filter-clear')) {
+      setFilter(category, null);
+      seg.querySelector('.filter-trigger').focus();
+    } else if (e.target.closest('.filter-option')) {
+      setFilter(category, e.target.closest('.filter-option').dataset.value);
+      closeMenu(seg, { returnFocus: true });
+    }
+  });
+
+  bar.addEventListener('keydown', e => {
+    const seg = e.target.closest('.filter-seg');
+    if (!seg) return;
+
+    if (e.target.classList.contains('filter-trigger')) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); openMenu(seg); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); openMenu(seg, 'last'); }
+      return;
+    }
+
+    if (!e.target.classList.contains('filter-option')) return;
+    const options = menuOptions(seg);
+    const i = options.indexOf(e.target);
+    const move = j => { e.preventDefault(); options[(j + options.length) % options.length].focus(); };
+
+    switch (e.key) {
+      case 'ArrowDown': move(i + 1); break;
+      case 'ArrowUp': move(i - 1); break;
+      case 'Home': move(0); break;
+      case 'End': move(options.length - 1); break;
+      case 'Escape': e.preventDefault(); closeMenu(seg, { returnFocus: true }); break;
+      case 'Tab': closeMenu(seg); break;
+      default:
+        if (e.key.length === 1 && /\S/.test(e.key)) {
+          const key = e.key.toLowerCase();
+          const order = [...options.slice(i + 1), ...options.slice(0, i + 1)];
+          const match = order.find(o => o.textContent.trim().toLowerCase().startsWith(key));
+          if (match) { e.preventDefault(); match.focus(); }
+        }
+    }
+  });
+
+  // Click or tap anywhere outside the open menu closes it.
+  document.addEventListener('click', e => {
+    if (openSeg && !openSeg.contains(e.target)) closeMenu(openSeg);
+  });
+
+  // Focus leaving the open dropdown by any other route also closes it.
+  bar.addEventListener('focusout', e => {
+    if (openSeg && e.relatedTarget && !openSeg.contains(e.relatedTarget)) closeMenu(openSeg);
   });
 }
 

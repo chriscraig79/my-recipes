@@ -23,41 +23,88 @@ check("page loads with recipe cards", async page => {
   assert.ok(count > 0, "expected at least one recipe card");
 });
 
-check("ingredient filter chips are grouped by category", async page => {
-  const labels = await page.locator(".filter-label").allTextContents();
+// Filters are a row of dropdowns, one per category. These helpers drive
+// them the way a person would: open the dropdown, then pick an option.
+async function chooseFilter(page, category, value) {
+  await page.click(`.filter-seg[data-category="${category}"] .filter-trigger`);
+  await page.click(`.filter-seg[data-category="${category}"] .filter-option[data-value="${value}"]`);
+}
+
+async function clearFilter(page, category) {
+  await page.click(`.filter-seg[data-category="${category}"] .filter-clear`);
+}
+
+check("filter dropdowns are grouped by category", async page => {
+  const labels = (await page.locator(".filter-trigger").allTextContents()).map(t => t.trim());
   for (const expected of ["Protein", "Carbs", "Veg", "Dish", "Time"]) {
-    assert.ok(labels.includes(expected), `missing "${expected}" filter group label`);
+    assert.ok(labels.includes(expected), `missing "${expected}" filter dropdown`);
   }
   assert.ok(!labels.includes("Other"), "every tag should belong to a named group, not Other");
+  const tops = await page.locator(".filter-seg").evaluateAll(els => els.map(el => Math.round(el.getBoundingClientRect().top)));
+  assert.equal(new Set(tops).size, 1, "expected every filter dropdown on one row");
 });
 
-check("clicking an ingredient chip filters the list", async page => {
+check("choosing an ingredient filters the list and × clears it", async page => {
   const before = await page.locator(".recipe-list-item").count();
-  const chip = page.locator('.chip[data-tag="chicken"]');
-  await chip.click();
+  await chooseFilter(page, "Protein", "chicken");
+  assert.equal(await page.locator(".filter-menu:not([hidden])").count(), 0, "menu should close after choosing");
   const after = await page.locator(".recipe-list-item").count();
   assert.ok(after > 0 && after < before, `expected a filtered count between 0 and ${before}, got ${after}`);
-  await chip.click(); // reset
-  const restored = await page.locator(".recipe-list-item").count();
-  assert.equal(restored, before, "chip did not reset the list on second click");
+  const label = await page.textContent('.filter-seg[data-category="Protein"] .filter-trigger-text');
+  assert.equal(label.trim(), "Chicken", "expected the button to show the chosen option");
+  await clearFilter(page, "Protein");
+  assert.equal(await page.locator(".recipe-list-item").count(), before, "× did not reset the list");
+  const reset = await page.textContent('.filter-seg[data-category="Protein"] .filter-trigger-text');
+  assert.equal(reset.trim(), "Protein", "expected the button label to go back to the category");
 });
 
-check("clicking a time band chip filters the list", async page => {
+check("choosing a time band filters the list", async page => {
   const before = await page.locator(".recipe-list-item").count();
-  const chip = page.locator('.chip[data-band="under30"]');
-  await chip.click();
+  await chooseFilter(page, "Time", "under30");
   const after = await page.locator(".recipe-list-item").count();
   assert.ok(after > 0 && after <= before, `expected a filtered count between 0 and ${before}, got ${after}`);
-  await chip.click(); // reset
+  await chooseFilter(page, "Time", ""); // "All" also clears
+  assert.equal(await page.locator(".recipe-list-item").count(), before, '"All" did not reset the list');
+});
+
+check("a new choice in the same dropdown replaces the old one", async page => {
+  await chooseFilter(page, "Protein", "chicken");
+  await chooseFilter(page, "Protein", "beef");
+  const checked = await page.locator('.filter-seg[data-category="Protein"] .filter-option[aria-checked="true"]').getAttribute("data-value");
+  assert.equal(checked, "beef", "expected beef to replace chicken");
+  const cards = await page.locator(".recipe-list-item").count();
+  assert.ok(cards > 0, "expected beef recipes, not an empty list from chicken AND beef");
+  await clearFilter(page, "Protein");
 });
 
 check("no-results message shows when filters exclude everything", async page => {
-  await page.click('.chip[data-tag="chicken"]');
-  await page.click('.chip[data-tag="beef"]');
+  await chooseFilter(page, "Protein", "beef");
+  await chooseFilter(page, "Veg", "vegetarian");
   const message = await page.locator(".no-results").textContent();
   assert.ok(message && message.length > 0, "expected a no-results message");
-  await page.click('.chip[data-tag="chicken"]'); // reset
-  await page.click('.chip[data-tag="beef"]');
+  await clearFilter(page, "Protein"); // reset
+  await clearFilter(page, "Veg");
+});
+
+check("filter dropdowns work from the keyboard", async page => {
+  const trigger = page.locator('.filter-seg[data-category="Carbs"] .filter-trigger');
+  await trigger.focus();
+  await page.keyboard.press("ArrowDown");
+  assert.equal(await trigger.getAttribute("aria-expanded"), "true", "ArrowDown should open the menu");
+  let focused = await page.evaluate(() => document.activeElement.dataset.value);
+  assert.equal(focused, "", 'expected "All" focused when nothing is chosen');
+  await page.keyboard.press("ArrowDown");
+  focused = await page.evaluate(() => document.activeElement.dataset.value);
+  await page.keyboard.press("Enter");
+  assert.equal(await trigger.getAttribute("aria-expanded"), "false", "Enter should choose and close");
+  const checked = await page.locator('.filter-seg[data-category="Carbs"] .filter-option[aria-checked="true"]').getAttribute("data-value");
+  assert.equal(checked, focused, "Enter should choose the focused option");
+  assert.ok(await trigger.evaluate(el => el === document.activeElement), "focus should return to the button");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Escape");
+  assert.equal(await trigger.getAttribute("aria-expanded"), "false", "Escape should close the menu");
+  assert.ok(await trigger.evaluate(el => el === document.activeElement), "Escape should return focus to the button");
+  await clearFilter(page, "Carbs");
 });
 
 check("adding a recipe to the basket updates the icon and badge", async page => {
