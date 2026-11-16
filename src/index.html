@@ -467,12 +467,21 @@
   .basket-badge:hover { background: var(--accent); }
   .basket-badge[hidden] { display: none; }
 
-  /* ── Recipe view / Shopping list view ── */
+  /* ── Recipe view / Shopping list view ──
+     These use the same page frame as the index (same max width and side
+     padding), so the back link, accent dash and title share the index's
+     left edge at every screen size — the dash only ever moves vertically
+     when switching views. The content itself stays a comfortable 720px
+     reading column, aligned to that left edge. */
   #recipe-view, #shopping-list-view {
     display: none;
-    max-width: 720px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 2rem 2rem 5rem;
+  }
+
+  #recipe-content, #shopping-list-content {
+    max-width: 720px;
   }
 
   .recipe-hero {

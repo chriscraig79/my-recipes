@@ -153,10 +153,14 @@ check("opening and leaving a recipe animates and then cleans up", async page => 
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "forward");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#recipe-view"), "expected the recipe view after the transition");
+  const dashLeft = () => page.evaluate(() => [...document.querySelectorAll(".masthead-dash")]
+    .filter(el => el.offsetParent).map(el => Math.round(el.getBoundingClientRect().left))[0]);
+  const recipeDashLeft = await dashLeft();
   await page.locator("#recipe-view .back-btn").click();
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "back");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#index"), "expected the index after going back");
+  assert.equal(await dashLeft(), recipeDashLeft, "the accent dash should keep the same left edge on both views, so it only moves vertically");
   const title = (await page.textContent("#site-title")).trim();
   assert.match(title, /Recipe collection/i, `unexpected index title: "${title}"`);
 });
