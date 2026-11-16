@@ -995,16 +995,30 @@
   }
 
   /* ── View transitions: index ⇄ recipe ──
-     Opening a recipe: the accent dash glides down to its place in the
-     recipe header, the back link drops in from the top, the list sinks
-     and fades, and the recipe slides up over it. Going back plays the
-     reverse. Names are only applied while a transition is running
-     (html[data-nav]), so they never affect normal layout. Browsers without
-     view transitions, and anyone who prefers reduced motion, get an
-     instant switch instead (see navigateWithTransition). */
+     Two beats:
+     1. the page you're leaving fades out quickly, with a small drift (and
+        the back link lifts out when going back to the list);
+     2. the page you're arriving at fades and drifts into place while the
+        accent dash glides to its new spot (and the back link drops in when
+        opening a recipe). Everything in this beat shares one start, one
+        duration and one easing curve, so the dash moves as part of the
+        arriving header and lands with it rather than ahead of it.
+     Names are only applied while a transition is running (html[data-nav]),
+     so they never affect normal layout. Browsers without view transitions,
+     and anyone who prefers reduced motion, get an instant switch instead
+     (see navigateWithTransition). */
+  :root {
+    --vt-total: 460ms;   /* whole transition */
+    --vt-out: 180ms;     /* leaving page fades out */
+    --vt-in-delay: 140ms;
+    --vt-in: calc(var(--vt-total) - var(--vt-in-delay)); /* arriving page lands with the dash */
+    --vt-ease-in: cubic-bezier(0.2, 0, 0, 1);
+    --vt-ease-out: cubic-bezier(0.4, 0, 1, 1);
+  }
+
   html[data-nav] #index { view-transition-name: index-view; }
   html[data-nav] #recipe-view { view-transition-name: recipe-view; }
-  /* The recipe slides over the list, so its snapshot needs to be opaque. */
+  /* The recipe arrives over the list, so its snapshot needs to be opaque. */
   html[data-nav] #recipe-view { background: var(--warm-white); min-height: 100vh; }
   html[data-nav] .masthead-dash { view-transition-name: masthead-dash; }
   html[data-nav] #recipe-view .back-btn { view-transition-name: back-link; }
@@ -1018,44 +1032,42 @@
   ::view-transition-group(masthead-dash),
   ::view-transition-group(back-link) { z-index: 3; }
 
+  /* The dash is identical on both pages, so skip the cross-fade and just move it. */
   ::view-transition-group(masthead-dash) {
-    animation-duration: 380ms;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-delay: var(--vt-in-delay);
+    animation-duration: var(--vt-in);
+    animation-timing-function: var(--vt-ease-in);
+    animation-fill-mode: both;
   }
+  ::view-transition-old(masthead-dash) { animation: none; opacity: 0; }
+  ::view-transition-new(masthead-dash) { animation: none; }
 
-  @keyframes vt-sink-out { to { opacity: 0; transform: translateY(1.5rem); } }
-  @keyframes vt-rise-in { from { opacity: 0; transform: translateY(1.5rem); } }
-  @keyframes vt-slide-up-in {
-    from { opacity: 0; transform: translateY(30vh); }
-    25% { opacity: 1; }
-  }
-  @keyframes vt-slide-down-out {
-    75% { opacity: 1; }
-    to { opacity: 0; transform: translateY(30vh); }
-  }
-  @keyframes vt-drop-in { from { opacity: 0; transform: translateY(-150%); } }
-  @keyframes vt-lift-out { to { opacity: 0; transform: translateY(-150%); } }
+  @keyframes vt-fade-out-down { to { opacity: 0; transform: translateY(0.75rem); } }
+  @keyframes vt-fade-in-up { from { opacity: 0; transform: translateY(1.5rem); } }
+  @keyframes vt-fade-in-down { from { opacity: 0; transform: translateY(-0.75rem); } }
+  @keyframes vt-drop-in { from { opacity: 0; transform: translateY(-100%); } }
+  @keyframes vt-lift-out { to { opacity: 0; transform: translateY(-100%); } }
 
   /* Opening a recipe */
   html[data-nav="forward"]::view-transition-old(index-view) {
-    animation: 220ms ease-in both vt-sink-out;
+    animation: var(--vt-out) var(--vt-ease-out) both vt-fade-out-down;
   }
   html[data-nav="forward"]::view-transition-new(recipe-view) {
-    animation: 420ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both vt-slide-up-in;
+    animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-fade-in-up;
   }
   html[data-nav="forward"]::view-transition-new(back-link) {
-    animation: 320ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both vt-drop-in;
+    animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-drop-in;
   }
 
   /* Going back to the list */
   html[data-nav="back"]::view-transition-old(recipe-view) {
-    animation: 300ms ease-in both vt-slide-down-out;
-  }
-  html[data-nav="back"]::view-transition-new(index-view) {
-    animation: 320ms cubic-bezier(0.2, 0.8, 0.2, 1) 100ms both vt-rise-in;
+    animation: var(--vt-out) var(--vt-ease-out) both vt-fade-out-down;
   }
   html[data-nav="back"]::view-transition-old(back-link) {
-    animation: 220ms ease-in both vt-lift-out;
+    animation: var(--vt-out) var(--vt-ease-out) both vt-lift-out;
+  }
+  html[data-nav="back"]::view-transition-new(index-view) {
+    animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-fade-in-down;
   }
 
   @media (max-width: 500px) {
