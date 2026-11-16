@@ -113,8 +113,9 @@
   .filter-bar {
     display: flex;
     gap: 0.15rem;
-    width: fit-content;
-    max-width: 100%;
+    /* Fills the same centred column as the header above it. */
+    width: 100%;
+    max-width: calc(var(--reading-width) - 4rem);
     margin: 0 auto;
     padding: 0.2rem;
     border: 1px solid var(--border);
@@ -122,12 +123,15 @@
     background: var(--card-bg);
   }
 
-  /* Only chosen segments shrink when space runs out, so the category
-     names stay readable and a long choice gets cut short instead. */
+  /* Each option gets an equal share of the bar, with its label centred in
+     that share. A category name never gets narrower than its label; a
+     chosen segment starts from its label's width and is the only kind that
+     shrinks when space runs out, so a long choice is cut short rather than
+     the category names. */
   .filter-seg {
     position: relative;
-    flex: 0 0 auto;
-    min-width: 0;
+    flex: 1 1 0;
+    min-width: max-content;
     display: flex;
     align-items: center;
     border-radius: var(--radius-pill);
@@ -178,11 +182,17 @@
      in place of the chevron. Segments size to their labels and shrink in
      proportion when space is short, so a long choice ("Under 30 min")
      gives way before the short category names do. */
-  .filter-seg.active { background: var(--accent); flex-shrink: 1; }
+  .filter-seg.active { background: var(--accent); flex-basis: auto; min-width: 0; }
   .filter-seg.active .filter-trigger,
   .filter-seg.active .filter-trigger:hover,
   .filter-seg.active .filter-trigger[aria-expanded="true"] { color: var(--warm-white); padding-right: 0.1rem; }
   .filter-seg.active .filter-chevron { display: none; }
+
+  /* Above phone size, pad the left of a chosen label by the width of the ×
+     on its right, so the label sits centred in its part like the others. */
+  @media (min-width: 501px) {
+    .filter-seg.active .filter-trigger { padding-left: calc(0.1rem + 1.6rem + 0.15rem); }
+  }
 
   .filter-clear {
     flex-shrink: 0;
@@ -1095,6 +1105,7 @@
 
     #index { padding: 1rem 1rem 3rem; }
     .site-header { padding-top: 0.25rem; margin-bottom: 0.65rem; max-width: none; }
+    .filter-bar { max-width: none; }
     .masthead-dash { margin-bottom: 0.65rem; }
 
     :root { --space-section: 2rem; --space-heading: 1rem; }
