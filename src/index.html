@@ -33,6 +33,8 @@
        between major blocks (header, jump bar, each section), and a smaller
        one between a section heading and its content. Tighter on phones. */
     --space-section: 2.5rem;
+    /* Width of the recipe/shopping list column, padding included. */
+    --reading-width: 720px;
     --space-heading: 1.25rem;
   }
 
@@ -56,9 +58,14 @@
      no rules. The same dash sits at the top of recipe and shopping list
      headers, and glides between the two when you open or leave a recipe
      (see "View transitions" below). */
+  /* The header shares the recipe pages' centred column (its content box
+     is the column minus the views' 2rem side padding), so the dash and
+     title line up with the recipe header at every width, while the filters
+     and grid below keep the index's full width. */
   .site-header {
+    max-width: calc(var(--reading-width) - 4rem);
+    margin: 0 auto 0.85rem;
     padding-top: 0.35rem;
-    margin-bottom: 0.85rem;
   }
 
   .masthead-dash {
@@ -468,20 +475,14 @@
   .basket-badge[hidden] { display: none; }
 
   /* ── Recipe view / Shopping list view ──
-     These use the same page frame as the index (same max width and side
-     padding), so the back link, accent dash and title share the index's
-     left edge at every screen size — the dash only ever moves vertically
-     when switching views. The content itself stays a comfortable 720px
-     reading column, aligned to that left edge. */
+     A centred fixed-width reading column. The index header uses the same
+     column (see .site-header), so the accent dash sits in the same place
+     on every page and only moves vertically between them. */
   #recipe-view, #shopping-list-view {
     display: none;
-    max-width: 1120px;
+    max-width: var(--reading-width);
     margin: 0 auto;
     padding: 2rem 2rem 5rem;
-  }
-
-  #recipe-content, #shopping-list-content {
-    max-width: 720px;
   }
 
   .recipe-hero {
@@ -1088,7 +1089,7 @@
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
 
     #index { padding: 1rem 1rem 3rem; }
-    .site-header { padding-top: 0.25rem; margin-bottom: 0.65rem; }
+    .site-header { padding-top: 0.25rem; margin-bottom: 0.65rem; max-width: none; }
     .masthead-dash { margin-bottom: 0.65rem; }
 
     :root { --space-section: 2rem; --space-heading: 1rem; }
