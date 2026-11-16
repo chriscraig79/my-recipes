@@ -1,0 +1,63 @@
+id: pot-roast-beef-silverside
+title: Pot-Roast Beef Silverside with Red Wine Gravy
+titleHtml: Pot-Roast Beef <em>Silverside</em> with Red Wine Gravy
+label: Main course
+servings: '5'
+time: 3 hrs 15 min
+timeMins: 195
+cookedIn: Oven
+description: A lean silverside joint cooked slowly in a lidded pot with red wine and stock, so it stays moist and makes its own gravy.
+tags:
+  - beef
+  - carrot
+  - roast
+ingredients:
+  - name: Beef silverside
+    amount: 1.1kg
+    prep: joint
+  - name: Sunflower oil
+    amount: 1 tbsp
+  - name: Onions
+    amount: '2'
+    prep: quartered
+  - name: Carrots
+    amount: '3'
+    prep: cut into chunks
+  - name: Garlic cloves
+    amount: '3'
+    prep: bashed
+  - name: Tomato purée
+    amount: 1 tbsp
+  - name: Plain flour
+    amount: 1 tbsp
+  - name: Red wine
+    amount: 250ml
+    prep: or extra stock
+  - name: Beef stock
+    amount: 400ml
+  - name: Bay leaves
+    amount: '2'
+  - name: Salt
+    amount: 1 tsp
+  - name: Black pepper
+    amount: ½ tsp
+steps:
+  - title: Prep
+    content: Take the beef out of the fridge 30 minutes before you start. Heat the oven to 160°C (140°C fan). Pat the beef dry and season it all over with the salt and pepper.
+  - title: Sear the beef
+    content: Heat the oil in a lidded casserole dish over a high heat. Brown the beef well on every side, then lift it onto a plate.
+    timer: ⏱ 10 minutes
+  - title: Soften the veg
+    content: Turn the heat down to medium. Fry the onions and carrots for 5 minutes, then stir in the garlic, tomato purée and flour and cook for 1 more minute.
+    timer: ⏱ 6 minutes
+  - title: Add the liquid
+    content: Pour in the red wine and let it bubble for 2 minutes. Add the beef stock and bay leaves, then put the beef back on top of the veg. The liquid should come about a third of the way up the joint.
+  - title: Pot-roast
+    content: Put the lid on and cook in the oven for 2½ hours, turning the beef halfway through, until it's tender all the way through.
+    timer: ⏱ 2½ hours
+  - title: Rest and make the gravy
+    content: Lift the beef out, wrap it loosely in foil and rest it for 15 minutes. Meanwhile, take out the bay leaves and boil the liquid hard on the hob until it thickens into a gravy.
+    timer: ⏱ 15 minutes
+  - title: Slice and serve
+    content: Slice the beef thinly against the grain and serve it with the carrots, onions and gravy.
+notes: Silverside is a very lean cut and dries out easily in an open roasting tin, which is why it's cooked with the lid on here. Slicing it thinly against the grain makes a big difference to how tender it is. If you'd rather use the slow cooker, the beef pot roast recipe works with silverside too. Leftovers make great cold beef sandwiches.
