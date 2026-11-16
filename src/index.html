@@ -52,17 +52,16 @@
     padding: 1.5rem 2rem 5rem;
   }
 
-  /* A light masthead: a short accent bar as a flourish above the label,
-     and one hairline underneath to separate it from the filters. */
+  /* A light masthead: a short accent dash above a small uppercase title,
+     no rules. The same dash sits at the top of recipe and shopping list
+     headers, and glides between the two when you open or leave a recipe
+     (see "View transitions" below). */
   .site-header {
-    padding: 0.35rem 0 1rem;
+    padding-top: 0.35rem;
     margin-bottom: 0.85rem;
-    border-bottom: 1px solid var(--border);
   }
 
-  .site-header::before,
-  .recipe-header::before {
-    content: '';
+  .masthead-dash {
     display: block;
     width: 2.25rem;
     height: 3px;
@@ -71,26 +70,14 @@
     margin-bottom: 0.85rem;
   }
 
-  .site-label {
+  .site-title {
     font-family: var(--font-sans);
-    font-size: 0.62rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.4;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.25rem;
-  }
-
-  .site-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 5vw, 2.6rem);
-    font-weight: 600;
-    line-height: 1.05;
-  }
-
-  .site-title em {
-    font-style: italic;
-    font-weight: 400;
-    color: var(--accent);
+    color: var(--ink);
   }
 
   /* ── Filters ── */
@@ -1007,6 +994,70 @@
     font-family: 'Playfair Display', serif;
   }
 
+  /* ── View transitions: index ⇄ recipe ──
+     Opening a recipe: the accent dash glides down to its place in the
+     recipe header, the back link drops in from the top, the list sinks
+     and fades, and the recipe slides up over it. Going back plays the
+     reverse. Names are only applied while a transition is running
+     (html[data-nav]), so they never affect normal layout. Browsers without
+     view transitions, and anyone who prefers reduced motion, get an
+     instant switch instead (see navigateWithTransition). */
+  html[data-nav] #index { view-transition-name: index-view; }
+  html[data-nav] #recipe-view { view-transition-name: recipe-view; }
+  /* The recipe slides over the list, so its snapshot needs to be opaque. */
+  html[data-nav] #recipe-view { background: var(--warm-white); min-height: 100vh; }
+  html[data-nav] .masthead-dash { view-transition-name: masthead-dash; }
+  html[data-nav] #recipe-view .back-btn { view-transition-name: back-link; }
+
+  /* Only the named parts move; the page background stays put. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+  ::view-transition-old(root) { display: none; }
+
+  ::view-transition-group(recipe-view) { z-index: 2; }
+  ::view-transition-group(masthead-dash),
+  ::view-transition-group(back-link) { z-index: 3; }
+
+  ::view-transition-group(masthead-dash) {
+    animation-duration: 380ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @keyframes vt-sink-out { to { opacity: 0; transform: translateY(1.5rem); } }
+  @keyframes vt-rise-in { from { opacity: 0; transform: translateY(1.5rem); } }
+  @keyframes vt-slide-up-in {
+    from { opacity: 0; transform: translateY(30vh); }
+    25% { opacity: 1; }
+  }
+  @keyframes vt-slide-down-out {
+    75% { opacity: 1; }
+    to { opacity: 0; transform: translateY(30vh); }
+  }
+  @keyframes vt-drop-in { from { opacity: 0; transform: translateY(-150%); } }
+  @keyframes vt-lift-out { to { opacity: 0; transform: translateY(-150%); } }
+
+  /* Opening a recipe */
+  html[data-nav="forward"]::view-transition-old(index-view) {
+    animation: 220ms ease-in both vt-sink-out;
+  }
+  html[data-nav="forward"]::view-transition-new(recipe-view) {
+    animation: 420ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms both vt-slide-up-in;
+  }
+  html[data-nav="forward"]::view-transition-new(back-link) {
+    animation: 320ms cubic-bezier(0.2, 0.8, 0.2, 1) 80ms both vt-drop-in;
+  }
+
+  /* Going back to the list */
+  html[data-nav="back"]::view-transition-old(recipe-view) {
+    animation: 300ms ease-in both vt-slide-down-out;
+  }
+  html[data-nav="back"]::view-transition-new(index-view) {
+    animation: 320ms cubic-bezier(0.2, 0.8, 0.2, 1) 100ms both vt-rise-in;
+  }
+  html[data-nav="back"]::view-transition-old(back-link) {
+    animation: 220ms ease-in both vt-lift-out;
+  }
+
   @media (max-width: 500px) {
     .ingredient { grid-template-columns: 4.5rem 1fr; column-gap: 0.75rem; padding: 0.6rem 1rem; }
     .recipe-list { grid-template-columns: 1fr; }
@@ -1016,14 +1067,12 @@
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
 
     #index { padding: 1rem 1rem 3rem; }
-    .site-header { padding: 0.25rem 0 0.75rem; margin-bottom: 0.65rem; }
-    .site-header::before,
-    .recipe-header::before { margin-bottom: 0.65rem; }
+    .site-header { padding-top: 0.25rem; margin-bottom: 0.65rem; }
+    .masthead-dash { margin-bottom: 0.65rem; }
 
     :root { --space-section: 2rem; --space-heading: 1rem; }
     #recipe-view, #shopping-list-view { padding: 1.25rem 1rem 3rem; }
     .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
-    .site-label { margin-bottom: 0.2rem; }
     .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
     .filter-trigger { padding: 0.35rem 0.35rem; gap: 0.2rem; font-size: 0.7rem; }
     .filter-chevron { width: 0.6rem; height: 0.6rem; }
@@ -1038,8 +1087,8 @@
 
 <div id="index">
   <header class="site-header">
-    <p class="site-label">Recipe collection &amp; shopping list generator</p>
-    <h1 class="site-title" id="site-title" tabindex="-1">My <em>Recipes</em></h1>
+    <span class="masthead-dash" aria-hidden="true"></span>
+    <h1 class="site-title" id="site-title" tabindex="-1">Recipe collection &amp; shopping list generator</h1>
   </header>
 
   <div class="filters">
@@ -1588,6 +1637,7 @@ function renderRecipe(r) {
   document.getElementById('recipe-content').innerHTML = `
     ${heroHtml}
     <header class="recipe-header">
+      <span class="masthead-dash" aria-hidden="true"></span>
       <p class="recipe-label">${r.label} — serves ${r.servings}</p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
       <p class="recipe-description">${r.description}</p>
@@ -1736,6 +1786,7 @@ function renderShoppingListContent() {
 
   document.getElementById('shopping-list-content').innerHTML = `
     <header class="recipe-header">
+      <span class="masthead-dash" aria-hidden="true"></span>
       <p class="recipe-label">Shopping list — ${basketRecipes.length} recipe${basketRecipes.length !== 1 ? 's' : ''}</p>
       <h1 class="recipe-title" id="shopping-list-title" tabindex="-1">Shopping <em>List</em></h1>
       ${basketRecipes.length ? `<div class="basket-chips">${chipsHtml}</div>` : ''}
@@ -1787,10 +1838,36 @@ function route() {
   }
   const recipe = recipes.find(r => r.id === id);
   if (recipe) {
-    renderRecipe(recipe);
+    navigateWithTransition('recipe', () => renderRecipe(recipe));
   } else {
-    renderIndexView();
+    navigateWithTransition('index', renderIndexView);
   }
+}
+
+function currentView() {
+  if (document.getElementById('recipe-view').style.display === 'block') return 'recipe';
+  if (document.getElementById('shopping-list-view').style.display === 'block') return 'shopping-list';
+  return 'index';
+}
+
+// Runs a view change, animated when it's the index opening a recipe
+// ("forward") or a recipe going back to the index ("back"). Anything else,
+// browsers without view transitions, and reduced-motion users get the
+// change instantly. The CSS under "View transitions" does the animating.
+function navigateWithTransition(to, update) {
+  const from = currentView();
+  const direction = from === 'index' && to === 'recipe' ? 'forward'
+    : from === 'recipe' && to === 'index' ? 'back'
+    : null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!direction || reduceMotion || !document.startViewTransition) {
+    update();
+    return;
+  }
+  const root = document.documentElement;
+  root.dataset.nav = direction;
+  const transition = document.startViewTransition(update);
+  transition.finished.finally(() => { delete root.dataset.nav; });
 }
 
 // Re-renders whichever view is currently on screen, without the
@@ -1822,7 +1899,7 @@ function showIndex() {
   if (location.hash) {
     history.pushState('', document.title, location.pathname + location.search);
   }
-  renderIndexView();
+  navigateWithTransition('index', renderIndexView);
 }
 
 window.addEventListener('hashchange', route);
