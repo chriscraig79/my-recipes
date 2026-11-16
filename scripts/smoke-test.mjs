@@ -86,6 +86,20 @@ check("no-results message shows when filters exclude everything", async page => 
   await clearFilter(page, "Veg");
 });
 
+check("filter bar stays pinned to the top while scrolling the list", async page => {
+  await page.evaluate(() => window.scrollTo(0, 1500));
+  await page.waitForFunction(() => document.querySelector(".filters").classList.contains("is-stuck"));
+  const top = await page.evaluate(() => Math.round(document.querySelector(".filters").getBoundingClientRect().top));
+  assert.equal(top, 0, `expected the filter bar at the top of the screen, got ${top}px`);
+  await chooseFilter(page, "Protein", "chicken");
+  const countTop = await page.evaluate(() => document.getElementById("results-count").getBoundingClientRect().top);
+  const barBottom = await page.evaluate(() => document.querySelector(".filters").getBoundingClientRect().bottom);
+  assert.ok(countTop >= barBottom - 1 && countTop < barBottom + 40, "expected new results to start just under the bar");
+  await clearFilter(page, "Protein");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForFunction(() => !document.querySelector(".filters").classList.contains("is-stuck"));
+});
+
 check("filter dropdowns work from the keyboard", async page => {
   const trigger = page.locator('.filter-seg[data-category="Carbs"] .filter-trigger');
   await trigger.focus();
