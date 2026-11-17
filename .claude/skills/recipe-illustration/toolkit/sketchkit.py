@@ -498,3 +498,96 @@ class ShallowBowl:
             y = self.cy + self.ry * math.sin(t) + random.uniform(8, self.depth * 0.9)
             sk.mark(x, y, random.uniform(8, 16), random.uniform(55, 80), op=random.uniform(0.12, 0.28), w=random.uniform(0.7, 1.0))
         sk.end_clip()
+
+
+class Casserole:
+    """
+    A round enamelled cast-iron casserole pot with the lid off, seen from the
+    front at about 30°: for stews and casseroles. Straight sides, two loop
+    handles, a cream enamel interior and a coloured outside.
+
+    It shares the food-surface API with Bowl (fx, fy, frx, fry, surface(),
+    surface_point(), random_surface_point()), so foods.sauce() works on it.
+    """
+
+    def __init__(self, sk, cx=800, cy=430, rx=430, ry=160, height=150, fill=0.94,
+                 enamel="#5a7178", enamel_shade="#2f3f45", inside="#efe6d4"):
+        self.sk, self.cx, self.cy, self.rx, self.ry, self.h = sk, cx, cy, rx, ry, height
+        self.enamel, self.enamel_shade, self.inside = enamel, enamel_shade, inside
+        self.fx, self.fy, self.frx, self.fry = cx, cy + ry * 0.1, rx * fill, ry * fill * 0.94
+
+    def rim_point(self, t, k=1.0, dy=0):
+        return (self.cx + self.rx * k * math.cos(t), self.cy + self.ry * k * math.sin(t) + dy)
+
+    def surface_point(self, r, t):
+        return (self.fx + self.frx * r * math.cos(t), self.fy + self.fry * r * math.sin(t))
+
+    def random_surface_point(self, rmax=0.9, tmin=0, tmax=2 * math.pi):
+        return self.surface_point(math.sqrt(random.random()) * rmax, random.uniform(tmin, tmax))
+
+    def surface(self):
+        return (f"M{self.fx - self.frx:.1f},{self.fy:.1f} A{self.frx},{self.fry} 0 1 0 {self.fx + self.frx:.1f},{self.fy:.1f} "
+                f"A{self.frx},{self.fry} 0 1 0 {self.fx - self.frx:.1f},{self.fy:.1f} Z")
+
+    def _ellipse(self, k, dy=0):
+        rx, ry, cy = self.rx * k, self.ry * k, self.cy + dy
+        return (f"M{self.cx - rx:.1f},{cy:.1f} A{rx},{ry} 0 1 0 {self.cx + rx:.1f},{cy:.1f} "
+                f"A{rx},{ry} 0 1 0 {self.cx - rx:.1f},{cy:.1f} Z")
+
+    def body(self):
+        kb = 0.97
+        l, r = self.rim_point(math.pi), self.rim_point(0)
+        bl, br = self.rim_point(math.pi, kb, self.h), self.rim_point(0, kb, self.h)
+        bottom = [self.rim_point(math.pi - i * math.pi / 40, kb, self.h) for i in range(41)]
+        front = [self.rim_point(i * math.pi / 40) for i in range(41)]
+        pts = [l, (l[0] + 2, l[1] + self.h * 0.85)] + bottom + [(r[0] - 2, r[1] + self.h * 0.85), r] + front[::-1][1:]
+        return "M" + " L".join(P(p) for p in pts) + " Z"
+
+    def handle(self, sgn):
+        """A loop handle on one side, just under the rim."""
+        x0 = self.cx + sgn * self.rx * 0.985
+        y0 = self.cy + self.h * 0.18
+        w, hgt = 95, 58
+        outer = (f"M{x0:.1f},{y0 - hgt / 2:.1f} C{x0 + sgn * w:.1f},{y0 - hgt / 2 - 6:.1f} {x0 + sgn * w:.1f},{y0 + hgt / 2 + 6:.1f} {x0:.1f},{y0 + hgt / 2:.1f} "
+                 f"L{x0:.1f},{y0 + hgt / 2 - 12:.1f} C{x0 + sgn * (w - 26):.1f},{y0 + hgt / 2 - 10:.1f} {x0 + sgn * (w - 26):.1f},{y0 - hgt / 2 + 10:.1f} {x0:.1f},{y0 - hgt / 2 + 12:.1f} Z")
+        return outer
+
+    def draw_back(self):
+        sk = self.sk
+        bottom_y = self.cy + self.h + self.ry * 0.97
+        sk.blot(self.cx + 40, bottom_y - 10, self.rx * 0.95, 60, "#8d8aa3", 0.32)
+        sk.blot(self.cx + 20, self.cy + self.h * 0.8, self.rx * 1.45, 240, "#efd9a8", 0.26)
+        for sgn in (-1, 1):
+            hd = self.handle(sgn)
+            sk.add(f'<path d="{hd}" fill="{self.enamel}" opacity="0.92"/>')
+            sk.add(f'<path d="{hd}" fill="none" stroke="#3b332c" stroke-width="1" opacity="0.35"/>')
+        body = self.body()
+        sk.add(f'<path d="{body}" fill="{self.enamel}" opacity="0.92"/>')
+        sk.wash(body, self.enamel, 0.35)
+        sk.clip(body)
+        # rounded-looking shading: dark on the right, a vertical highlight on the left
+        sk.blot(self.cx + self.rx * 0.65, self.cy + self.h * 0.7, self.rx * 0.45, self.h * 0.9, self.enamel_shade, 0.6)
+        sk.blot(self.cx - self.rx * 0.95, self.cy + self.h * 0.7, self.rx * 0.2, self.h * 0.9, self.enamel_shade, 0.35)
+        sk.blot(self.cx - self.rx * 0.55, self.cy + self.h * 0.55, self.rx * 0.08, self.h * 0.55, "#ffffff", 0.35)
+        sk.end_clip()
+        # rim: a thin band of cream enamel, then the inside wall at the back
+        sk.wash(self._ellipse(1.0), self.inside, 0.97)
+        sk.clip(self._ellipse(1.0))
+        sk.blot(self.cx - self.rx * 0.1, self.cy - self.ry * 0.6, self.rx * 0.8, self.ry * 0.35, "#b9ad95", 0.5)
+        sk.end_clip()
+
+    def draw_rim(self):
+        sk = self.sk
+        sk.broken([self.rim_point(t * 2 * math.pi / 140) for t in range(141)], w=1.5, op=0.6, passes=1)
+        sk.broken([self.rim_point(math.pi + t * math.pi / 60, 0.975, 2) for t in range(61)], w=0.9, op=0.35, passes=1)
+        kb = 0.97
+        for t in (0, math.pi):
+            sk.pencil([self.rim_point(t), self.rim_point(t, kb, self.h * 0.5), self.rim_point(t, kb, self.h)], w=1.2, op=0.5, passes=1)
+        sk.broken([self.rim_point(i * math.pi / 50, kb, self.h) for i in range(51)], w=1.3, op=0.5, passes=1)
+        sk.clip(self.body())
+        for _ in range(110):
+            t = random.betavariate(1.2, 2.4) * math.pi * 0.55
+            x = self.cx + self.rx * math.cos(t) - random.uniform(0, 70)
+            y = self.cy + self.ry * math.sin(t) + random.uniform(10, self.h)
+            sk.mark(x, y, random.uniform(10, 26), random.uniform(62, 86), op=random.uniform(0.12, 0.3), w=random.uniform(0.7, 1.1))
+        sk.end_clip()

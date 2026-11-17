@@ -316,3 +316,144 @@ def tortilla(sk, x, y, size=120, rot=-12, color="#f1dcaa"):
     sk.add(f'<path d="{wedge}" fill="none" stroke="{GRAPHITE}" stroke-width="1.1" opacity="0.5" {tr}/>')
     sk.add(f'<path d="M{x + s * 0.72:.1f},{y + s * 0.31:.1f} A{s},{s * 0.42} 0 0 0 {x + s * 0.99:.1f},{y - s * 0.24:.1f}" '
            f'fill="none" stroke="{GRAPHITE}" stroke-width="0.9" opacity="0.4" {tr}/>')
+
+
+# ── stew and casserole pieces ──
+
+def herb_dumpling(sk, x, y, size=58):
+    """A suet herb dumpling baked on top of a casserole: a golden dome flecked with herbs."""
+    s = size
+    body = (f"M{x - s:.1f},{y + s * 0.18:.1f} C{x - s:.1f},{y - s * 0.55:.1f} {x - s * 0.45:.1f},{y - s * 0.78:.1f} {x:.1f},{y - s * 0.78:.1f} "
+            f"C{x + s * 0.45:.1f},{y - s * 0.78:.1f} {x + s:.1f},{y - s * 0.55:.1f} {x + s:.1f},{y + s * 0.18:.1f} "
+            f"Q{x:.1f},{y + s * 0.45:.1f} {x - s:.1f},{y + s * 0.18:.1f} Z")
+    sk.blot(x + 6, y + s * 0.3, s * 1.05, s * 0.22, "#3a160c", 0.3)
+    sk.add(f'<path d="{body}" fill="#e9c98c" opacity="0.98"/>')
+    sk.clip(body)
+    sk.blot(x - s * 0.1, y - s * 0.55, s * 0.6, s * 0.3, "#c98a3e", 0.55)
+    sk.blot(x + s * 0.5, y + s * 0.05, s * 0.5, s * 0.35, "#9c6a2e", 0.35)
+    sk.blot(x - s * 0.45, y - s * 0.2, s * 0.25, s * 0.15, "#fff4dc", 0.5)
+    for _ in range(14):
+        hx, hy = x + random.uniform(-s, s) * 0.75, y + random.uniform(-0.65, 0.15) * s
+        sk.add(f'<ellipse cx="{hx:.1f}" cy="{hy:.1f}" rx="{random.uniform(1.5, 3):.1f}" ry="1.2" fill="#4f7a34" opacity="0.8"/>')
+    for _ in range(4):
+        sk.mark(x + random.uniform(-s, s) * 0.6, y + random.uniform(-0.6, 0.1) * s, random.uniform(5, 10), random.uniform(-30, 30), op=0.3, w=0.8)
+    sk.end_clip()
+    sk.pencil([(x - s, y + s * 0.18), (x - s * 0.85, y - s * 0.5), (x, y - s * 0.78), (x + s * 0.85, y - s * 0.5), (x + s, y + s * 0.18)], w=1.0, op=0.45, passes=1, j=0.8)
+
+
+def sausage(sk, x, y, length=110, width=26, rot=0, color="#9a5426"):
+    """A browned chipolata: rounded ends, darker browning along the top, a glossy streak."""
+    tr = f'transform="rotate({rot:.0f} {x:.1f} {y:.1f})"'
+    L, w = length, width
+    body = f"M{x - L / 2 + w / 2:.1f},{y - w / 2:.1f} L{x + L / 2 - w / 2:.1f},{y - w / 2:.1f} A{w / 2},{w / 2} 0 0 1 {x + L / 2 - w / 2:.1f},{y + w / 2:.1f} L{x - L / 2 + w / 2:.1f},{y + w / 2:.1f} A{w / 2},{w / 2} 0 0 1 {x - L / 2 + w / 2:.1f},{y - w / 2:.1f} Z"
+    sk.add(f'<g {tr}>')
+    sk.blot(x + 4, y + w * 0.55, L * 0.5, w * 0.3, "#3a1e0c", 0.3)
+    sk.add(f'<path d="{body}" fill="{color}" opacity="0.97"/>')
+    sk.clip(body)
+    sk.blot(x, y - w * 0.25, L * 0.45, w * 0.3, "#5e2a0e", 0.5)
+    sk.blot(x - L * 0.15, y - w * 0.05, L * 0.25, w * 0.1, "#f2c79a", 0.55)
+    for _ in range(3):
+        sk.blot(x + random.uniform(-L, L) * 0.35, y + random.uniform(-w, w) * 0.2, w * 0.4, w * 0.2, "#4a1f0a", 0.4)
+    sk.end_clip()
+    sk.add('</g>')
+    sk.add(f'<path d="{body}" fill="none" stroke="{GRAPHITE}" stroke-width="1" opacity="0.45" {tr}/>')
+
+
+def gnocchi(sk, x, y, size=22, color="#f2e2b8"):
+    """A plump gnocco: a pale pillow with ridges across it."""
+    rot = random.uniform(-40, 40)
+    tr = f'transform="rotate({rot:.0f} {x:.1f} {y:.1f})"'
+    s = size
+    sk.add(f'<ellipse cx="{x + 3:.1f}" cy="{y + s * 0.4:.1f}" rx="{s:.1f}" ry="{s * 0.25:.1f}" fill="#3a160c" opacity="0.25" filter="url(#softwash)" {tr}/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{s:.1f}" ry="{s * 0.62:.1f}" fill="{color}" opacity="0.98" {tr}/>')
+    sk.add(f'<ellipse cx="{x + s * 0.3:.1f}" cy="{y + s * 0.2:.1f}" rx="{s * 0.6:.1f}" ry="{s * 0.35:.1f}" fill="#c9a86a" opacity="0.35" {tr}/>')
+    for i in range(4):
+        u = -0.5 + i * 0.33
+        sk.add(f'<path d="M{x + s * u:.1f},{y - s * 0.5:.1f} q{s * 0.12:.1f},{s * 0.5:.1f} 0,{s:.1f}" fill="none" stroke="{GRAPHITE}" stroke-width="0.8" opacity="0.4" {tr}/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{s:.1f}" ry="{s * 0.62:.1f}" fill="none" stroke="{GRAPHITE}" stroke-width="0.9" opacity="0.4" {tr}/>')
+
+
+def aubergine_round(sk, x, y, size=34):
+    """A soft, cooked aubergine round: dark purple skin edge, pale creamy flesh, seeds."""
+    rot = random.uniform(-20, 20)
+    tr = f'transform="rotate({rot:.0f} {x:.1f} {y:.1f})"'
+    s = size
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{s:.1f}" ry="{s * 0.55:.1f}" fill="#4a2a4a" opacity="0.95" {tr}/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y - 1:.1f}" rx="{s * 0.86:.1f}" ry="{s * 0.45:.1f}" fill="#d9b17a" opacity="0.95" {tr}/>')
+    sk.add(f'<ellipse cx="{x + s * 0.2:.1f}" cy="{y:.1f}" rx="{s * 0.6:.1f}" ry="{s * 0.3:.1f}" fill="#b5672e" opacity="0.4" filter="url(#softwash)" {tr}/>')
+    for _ in range(9):
+        a, r = random.uniform(0, 2 * math.pi), random.uniform(0.2, 0.6)
+        sk.add(f'<ellipse cx="{x + s * r * math.cos(a):.1f}" cy="{y + s * 0.4 * r * math.sin(a):.1f}" rx="1.6" ry="1" fill="#6a4a2a" opacity="0.6"/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{s:.1f}" ry="{s * 0.55:.1f}" fill="none" stroke="{GRAPHITE}" stroke-width="0.9" opacity="0.45" {tr}/>')
+
+
+def round_bit(sk, x, y, size=9, color="#e8cf98", shade="#b48f50", line=True):
+    """A small round ingredient: chickpea, butter bean, pine nut, pea, lardon-ish."""
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{size:.1f}" ry="{size * 0.8:.1f}" fill="{color}" opacity="0.96"/>')
+    sk.add(f'<ellipse cx="{x + size * 0.3:.1f}" cy="{y + size * 0.25:.1f}" rx="{size * 0.6:.1f}" ry="{size * 0.45:.1f}" fill="{shade}" opacity="0.45"/>')
+    sk.add(f'<ellipse cx="{x - size * 0.3:.1f}" cy="{y - size * 0.3:.1f}" rx="{size * 0.3:.1f}" ry="{size * 0.2:.1f}" fill="#ffffff" opacity="0.45"/>')
+    if line:
+        sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{size:.1f}" ry="{size * 0.8:.1f}" fill="none" stroke="{GRAPHITE}" stroke-width="0.8" opacity="0.4"/>')
+
+
+def carrot_disc(sk, x, y, size=16):
+    rot = random.uniform(-30, 30)
+    tr = f'transform="rotate({rot:.0f} {x:.1f} {y:.1f})"'
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y + 3:.1f}" rx="{size:.1f}" ry="{size * 0.55:.1f}" fill="#b8541a" opacity="0.95" {tr}/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{size:.1f}" ry="{size * 0.55:.1f}" fill="#e7832f" opacity="0.97" {tr}/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{size * 0.45:.1f}" ry="{size * 0.25:.1f}" fill="#f2a453" opacity="0.8" {tr}/>')
+    sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{size:.1f}" ry="{size * 0.55:.1f}" fill="none" stroke="{GRAPHITE}" stroke-width="0.8" opacity="0.4" {tr}/>')
+
+
+def celery_slice(sk, x, y, size=14):
+    """A thick, U-shaped slice of celery seen from above."""
+    rot = random.uniform(-40, 40)
+    tr = f'transform="rotate({rot:.0f} {x:.1f} {y:.1f})"'
+    s = size
+    d = (f"M{x - s:.1f},{y - s * 0.2:.1f} C{x - s:.1f},{y + s * 0.6:.1f} {x + s:.1f},{y + s * 0.6:.1f} {x + s:.1f},{y - s * 0.2:.1f} "
+         f"L{x + s * 0.4:.1f},{y - s * 0.2:.1f} C{x + s * 0.4:.1f},{y + s * 0.05:.1f} {x - s * 0.4:.1f},{y + s * 0.05:.1f} {x - s * 0.4:.1f},{y - s * 0.2:.1f} Z")
+    sk.add(f'<path d="{d}" fill="#b5cc85" opacity="0.95" stroke="{GRAPHITE}" stroke-width="0.7" stroke-opacity="0.45" {tr}/>')
+    sk.add(f'<path d="M{x - s * 0.8:.1f},{y:.1f} C{x - s * 0.7:.1f},{y + s * 0.4:.1f} {x + s * 0.7:.1f},{y + s * 0.4:.1f} {x + s * 0.8:.1f},{y:.1f}" fill="none" stroke="#7f9a50" stroke-width="1" opacity="0.6" {tr}/>')
+
+
+def sprig(sk, x, y, length=60, color="#4f6b34", kind="thyme", rot=None):
+    """A herb sprig: a thin stem with small leaves (thyme) or needles (rosemary)."""
+    rot = random.uniform(-40, 40) if rot is None else rot
+    tr = f'transform="rotate({rot:.0f} {x:.1f} {y:.1f})"'
+    sk.add(f'<g {tr}>')
+    sk.add(f'<path d="M{x - length / 2:.1f},{y:.1f} q{length / 2:.1f},{-6:.1f} {length:.1f},0" fill="none" stroke="#6a5a3a" stroke-width="1.6" opacity="0.8"/>')
+    n = 7 if kind == "thyme" else 14
+    for i in range(n):
+        u = -0.45 + 0.9 * i / (n - 1)
+        px, py = x + length * u, y - 3 * (1 - (2 * u) ** 2)
+        for sgn in (-1, 1):
+            if kind == "thyme":
+                if random.random() < 0.8:
+                    sk.add(f'<ellipse cx="{px + 2:.1f}" cy="{py + sgn * 3.5:.1f}" rx="3" ry="1.7" fill="{color}" opacity="0.85" transform="rotate({sgn * 30} {px:.1f} {py:.1f})"/>')
+            else:
+                sk.add(f'<path d="M{px:.1f},{py:.1f} l{6:.1f},{sgn * 9:.1f}" stroke="{color}" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>')
+    sk.add('</g>')
+
+
+def dust(sk, region_point, count=60, color="#a8361e", size=(1.0, 2.2), opacity=(0.4, 0.8)):
+    """A dusting of spice or grated cheese: tiny flecks at points from region_point()."""
+    for _ in range(count):
+        x, y = region_point()
+        r = random.uniform(*size)
+        sk.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{r:.1f}" ry="{r * 0.7:.1f}" fill="{color}" opacity="{random.uniform(*opacity):.2f}"/>')
+
+
+
+def scatter(region, n, min_dist=40, rmax=0.82, tries=4000):
+    """
+    Up to n well-spread points on a food surface (anything with
+    random_surface_point), at least min_dist apart, sorted back to front.
+    """
+    pts = []
+    for _ in range(tries):
+        if len(pts) >= n:
+            break
+        x, y = region.random_surface_point(rmax)
+        if all((x - a) ** 2 + ((y - b) * 1.8) ** 2 >= min_dist ** 2 for a, b in pts):
+            pts.append((x, y))
+    return sorted(pts, key=lambda p: p[1])
