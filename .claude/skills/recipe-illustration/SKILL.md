@@ -106,10 +106,36 @@ Python standard library only.
   `bands()` (paths to clip to), and `top_point(r, t)`, `random_top_point()`,
   `face_point(t, f, depth)` and `E(t, dy, k)` (points).
 
-For a dish that isn't round and cut (a curry in a bowl, a stew, pasta on a
-plate, a sandwich), write the shape in the dish script with the same pencil
-and wash helpers. Once it works, add it to the toolkit as a class alongside
-`RoundDish`, and add the dish to the examples below.
+- `ShallowBowl(sk, …)`: a wide, shallow pasta-style bowl with a broad flat rim
+  and a foot ring, for food served on a bed: curries and chilli on rice (and
+  later, pasta and noodles). Place food in its well with `well_point(r, t)` or
+  `random_well_point()`, and garnish the rim with `rim_point(t)`.
+- `Bowl(sk, …)`: a deeper bowl for food that really is liquid, like soups and
+  broths. It has a pale glaze and a soft blue-grey band, and a crescent of the
+  inside wall shows at the back. Call `draw_back()` before the
+  food and `draw_rim()` after it. Clip sauces to `surface()`, and place food
+  with `surface_point(r, t)` or `random_surface_point()`. `rim_point(t)` puts
+  garnish such as a lime wedge on the rim.
+
+### Food pieces (`toolkit/foods.py`)
+
+Reusable ingredients in the same style. Each takes the Sketch, then a position.
+`curry_on_rice(sk, shallow_bowl, color, deep, light, rice=…)` draws the standard
+curry plate: a bed of rice with a thick pool of curry in the middle. It returns
+the pool, so `piled_points()` can heap chunks on it and `pool_point()` can
+place garnish. `sauce(sk, bowl, color, deep, light)` fills a deep bowl with
+soup or broth, `chunk()` draws pieces of
+meat, potato or sweet potato sitting in sauce, and `rice_mound()` draws white
+or (`dark=True`) black rice. For garnish there's `leaf()` (coriander, curry
+leaf or mint), `chilli_ring()`, `swirl()` (cream or yoghurt), `peanut()`,
+`sliver()` (flaked almonds), `lime_wedge()`, `dumpling()`, `oil_drizzle()`,
+`bean()` and `strip()` (pepper or onion).
+
+For a dish that fits neither shape (pasta on a plate, a roast joint, a stack
+of pancakes, a sandwich), write the shape in the dish script with the same
+pencil and wash helpers. Once it works, add it to the toolkit as a class
+alongside `RoundDish` and `Bowl`, add any new ingredients to `foods.py`, and
+add the dish to the examples below.
 
 ## Examples
 
@@ -118,6 +144,20 @@ and wash helpers. Once it works, add it to the toolkit as a class alongside
 - `dishes/spaghetti-frittata.py`: a thinner round dish. Spaghetti strands swirl
   across the top in perspective and poke from the edge, the cut faces show
   tangled pasta, and the top is garnished with tomato, herbs and Parmesan.
+- `dishes/chicken-coconut-curry.py` and the other curries: a `ShallowBowl`
+  with a bed of rice and the curry ladled into the middle, its chunks heaped
+  and garnish on top. Curries should never look like soup: thick sauce on
+  rice, not a full bowl of liquid. `veggie-chilli.py` uses black rice and a
+  yoghurt dollop.
+- `dishes/coconut-curry-dumpling-soup.py`: the one real soup, so it uses the
+  deep `Bowl`, full of broth with floating dumplings and chilli oil.
+
+## Doing many recipes
+
+Work in batches of one dish type at a time, so a shape and its ingredients
+are built once and checked together. Put each batch on its own branch and PR,
+and send the user a contact sheet of the batch (every image side by side,
+labelled with the recipe id) plus a screenshot of the cards, before merging.
 
 ## Requirements
 
