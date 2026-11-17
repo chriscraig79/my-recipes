@@ -830,7 +830,11 @@
     transition: background 0.15s;
   }
 
-  .step-number:hover { background: var(--accent-soft); }
+  /* The whole card is tappable (see the click handler by route()); the
+     number stays the real link for keyboards and screen readers. */
+  .step { cursor: pointer; }
+  .step-number:hover,
+  .step:hover .step-number { background: var(--accent-soft); }
   .step-number:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .step-title {
@@ -1933,6 +1937,15 @@ function showStep(n) {
   step.focus({ preventScroll: true });
   step.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
 }
+
+// Tapping anywhere on a step card follows its number link, except when the
+// tap was on another link/button or ended a text selection.
+document.getElementById('recipe-content').addEventListener('click', e => {
+  const step = e.target.closest('.step');
+  if (!step || e.target.closest('a, button')) return;
+  if (window.getSelection().toString()) return;
+  location.hash = step.querySelector('.step-number').getAttribute('href');
+});
 
 function route() {
   const { id, step } = parseHash();

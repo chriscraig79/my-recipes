@@ -213,6 +213,10 @@ check("step numbers link to #recipe/step-N and the link scrolls to and rings tha
   await page.waitForFunction(() => document.querySelector("#step-2.is-target") && document.activeElement?.id === "step-2");
   await page.waitForFunction(() => Math.abs(document.getElementById("step-2").getBoundingClientRect().top - 100) < 60);
   assert.equal(await page.locator(".step.is-target").count(), 1, "expected only the linked step to be ringed");
+  // Tapping the body of a card (not the number) follows the same link.
+  await page.locator("#step-3 .step-content").click();
+  await page.waitForFunction(id => location.hash === `#${id}/step-3` && document.querySelector("#step-3.is-target"), recipeId);
+  assert.equal(await page.locator(".step.is-target").count(), 1, "expected the ring to move to the tapped step");
   // Opening a step URL directly (a shared link) renders the recipe at that step.
   await page.evaluate(() => { location.hash = ""; });
   await page.waitForSelector("#index", { state: "visible" });
