@@ -94,6 +94,12 @@ the default for every recipe today. To add a photo, save the file to
 YAML; `npm run build` (and `npm run watch`) copy `recipes/images/` into
 `build/images/` automatically, so no other wiring is needed.
 
+Recipe images are pencil-and-watercolour illustrations drawn in code, so they
+share one style. The `recipe-illustration` skill in
+`.claude/skills/recipe-illustration/` covers the style rules, the drawing
+toolkit and the render step, and keeps one script per illustrated dish in
+`dishes/`.
+
 ### Time bands
 
 | Band | Range |

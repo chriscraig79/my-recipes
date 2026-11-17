@@ -1,2 +1,5 @@
 node_modules/
 build/
+
+# Python bytecode from the recipe-illustration toolkit
+__pycache__/
