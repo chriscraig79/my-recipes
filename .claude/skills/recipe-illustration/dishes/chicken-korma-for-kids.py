@@ -1,26 +1,21 @@
-"""Chicken korma: a pale, creamy sauce with chicken, a swirl of cream,
-flaked almonds and a little coriander. No rice in the recipe, so none here."""
+"""Mild chicken korma: a pale, creamy korma on rice, with chicken, a swirl of
+cream, flaked almonds and a little coriander."""
 import math, random, sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "toolkit"))
-from sketchkit import Sketch, Bowl
+from sketchkit import Sketch, ShallowBowl
 import foods
 
 sk = Sketch(seed=41)
-bowl = Bowl(sk)
+bowl = ShallowBowl(sk)
 bowl.draw_back()
-sk.clip(bowl.surface())
-foods.sauce(sk, bowl, "#e7c58a", deep="#c39150", light="#f7e4b8")
-foods.swirl(sk, bowl.fx - 20, bowl.fy + 5, 210, 70, color="#fffaf0", width=9, turns=1.7, opacity=0.85)
-sk.end_clip()
-spots = [(0.3, 0.3), (0.62, 0.1), (0.72, 0.8), (0.45, 1.3), (0.72, 1.7), (0.85, -0.3), (0.55, -0.7), (0.2, 2.6), (0.6, 2.9), (0.75, 2.3), (0.4, -1.6), (0.7, -2.2)]
-for r, t in spots:
-    x, y = bowl.surface_point(r, t)
-    foods.chunk(sk, x + random.uniform(-10, 10), y, random.uniform(38, 50), "#e6bd80", top="#f7e0b5", shade="#a3713a", sauce="#dfb877")
-for _ in range(22):
-    x, y = bowl.random_surface_point(0.8)
-    foods.sliver(sk, x, y, size=random.uniform(9, 13), color="#f4e3c0")
-for _ in range(7):
-    x, y = bowl.random_surface_point(0.75)
-    foods.leaf(sk, x, y, size=random.uniform(12, 15), color=random.choice(["#7aa34c", "#6a9442"]), kind="coriander")
+pool = foods.curry_on_rice(sk, bowl, "#dfb878", deep="#b5843f", light="#f3dcaa")
+px, py, prx, pry = pool
+for x, y in foods.piled_points(px, py, prx, pry, 13):
+    foods.chunk(sk, x, y, random.uniform(42, 54), "#f0d3a2", top="#fcecce", shade="#a77a40", sauce="#d8b06c")
+foods.swirl(sk, px + 10, py - 18, 120, 40, color="#fffaf0", width=8, turns=1.5, opacity=0.85)
+for _ in range(20):
+    foods.sliver(sk, *foods.pool_point(pool, lift=24), size=random.uniform(10, 13), color="#f6e7c6")
+for _ in range(6):
+    foods.leaf(sk, *foods.pool_point(pool, 0.75, lift=22), size=random.uniform(12, 15), color=random.choice(["#7aa34c", "#6a9442"]), kind="coriander")
 bowl.draw_rim()
 sk.save(sys.argv[1] if len(sys.argv) > 1 else "chicken-korma-for-kids.svg")

@@ -405,3 +405,96 @@ class Bowl:
                 continue
             sk.mark(x, y, random.uniform(8, 22), random.uniform(55, 80), op=random.uniform(0.12, 0.3), w=random.uniform(0.7, 1.1))
         sk.end_clip()
+
+
+class ShallowBowl:
+    """
+    A wide, shallow pasta-style bowl with a broad flat rim, seen from the front
+    at about 30°: for food served on a bed (curry on rice), pasta and noodles.
+    The well is the flat-ish inner area: well() is its outline, and
+    well_point(r, t) places things in it (r = 0 centre to 1 edge).
+    """
+
+    def __init__(self, sk, cx=800, cy=470, rx=560, ry=205, well=0.7, depth=95,
+                 glaze="#f1ece2", glaze_shade="#c9c2b4", band="#8fa3b0"):
+        self.sk, self.cx, self.cy, self.rx, self.ry, self.depth = sk, cx, cy, rx, ry, depth
+        self.glaze, self.glaze_shade, self.band = glaze, glaze_shade, band
+        self.wrx, self.wry, self.wcy = rx * well, ry * well, cy + ry * 0.06
+
+    def rim_point(self, t, k=1.0, dy=0):
+        return (self.cx + self.rx * k * math.cos(t), self.cy + self.ry * k * math.sin(t) + dy)
+
+    def well_point(self, r, t):
+        return (self.cx + self.wrx * r * math.cos(t), self.wcy + self.wry * r * math.sin(t))
+
+    def random_well_point(self, rmax=0.9, tmin=0, tmax=2 * math.pi):
+        return self.well_point(math.sqrt(random.random()) * rmax, random.uniform(tmin, tmax))
+
+    def well(self, k=1.0):
+        rx, ry = self.wrx * k, self.wry * k
+        return (f"M{self.cx - rx:.1f},{self.wcy:.1f} A{rx},{ry} 0 1 0 {self.cx + rx:.1f},{self.wcy:.1f} "
+                f"A{rx},{ry} 0 1 0 {self.cx - rx:.1f},{self.wcy:.1f} Z")
+
+    def _ellipse(self, rx, ry, cy):
+        return (f"M{self.cx - rx:.1f},{cy:.1f} A{rx},{ry} 0 1 0 {self.cx + rx:.1f},{cy:.1f} "
+                f"A{rx},{ry} 0 1 0 {self.cx - rx:.1f},{cy:.1f} Z")
+
+    FOOT = 0.7   # foot ellipse as a fraction of the rim
+
+    def _foot(self, t):
+        return (self.cx + self.rx * self.FOOT * math.cos(t), self.cy + self.ry * self.FOOT * math.sin(t) + self.depth)
+
+    def _side(self, sgn, n=12):
+        """Points down one side, from the rim's outer edge to the foot."""
+        p0 = self.rim_point(0 if sgn > 0 else math.pi)
+        f = self._foot(0 if sgn > 0 else math.pi)
+        c1 = (p0[0], p0[1] + self.depth * 0.55)
+        c2 = (f[0] + sgn * self.rx * 0.12, f[1])
+        return [((1-u)**3*p0[0] + 3*(1-u)**2*u*c1[0] + 3*(1-u)*u**2*c2[0] + u**3*f[0],
+                 (1-u)**3*p0[1] + 3*(1-u)**2*u*c1[1] + 3*(1-u)*u**2*c2[1] + u**3*f[1]) for u in [i / n for i in range(n + 1)]]
+
+    def body(self):
+        """Outside wall: from the rim's sides down to a foot ring, a shallow sweep."""
+        left = self._side(-1)
+        foot = [self._foot(math.pi - i * math.pi / 40) for i in range(41)]
+        right = list(reversed(self._side(1)))
+        front_rim = [self.rim_point(i * math.pi / 40) for i in range(41)]
+        pts = left + foot + right + front_rim
+        return "M" + " L".join(P(p) for p in pts) + " Z"
+
+    def draw_back(self):
+        sk = self.sk
+        fy = self.cy + self.ry * self.FOOT + self.depth
+        sk.blot(self.cx + 35, fy - 10, self.rx * 0.8, 55, "#8d8aa3", 0.3)
+        sk.blot(self.cx + 20, self.cy + self.ry * 0.9, self.rx * 1.3, 220, "#efd9a8", 0.26)
+        body = self.body()
+        sk.wash(body, self.glaze, 0.95)
+        sk.clip(body)
+        sk.blot(self.cx + self.rx * 0.55, fy - self.depth * 0.6, self.rx * 0.45, self.depth * 0.8, self.glaze_shade, 0.55)
+        sk.end_clip()
+        # the broad rim: a glazed ring, shaded at the back right, with a painted band near its outer edge
+        rim = self._ellipse(self.rx, self.ry, self.cy)
+        sk.wash(rim, self.glaze, 0.95)
+        sk.clip(rim)
+        sk.blot(self.cx + self.rx * 0.45, self.cy - self.ry * 0.55, self.rx * 0.5, self.ry * 0.35, self.glaze_shade, 0.4)
+        sk.blot(self.cx - self.rx * 0.5, self.cy + self.ry * 0.5, self.rx * 0.3, self.ry * 0.25, "#ffffff", 0.45)
+        sk.soft_stroke(self._ellipse(self.rx * 0.94, self.ry * 0.94, self.cy), self.band, 5, 0.3)
+        sk.end_clip()
+        # the well: a slightly darker, shallow dip
+        sk.wash(self.well(1.04), self.glaze_shade, 0.35)
+
+    def draw_rim(self):
+        sk = self.sk
+        sk.broken([self.rim_point(t * 2 * math.pi / 140) for t in range(141)], w=1.5, op=0.6, passes=1)
+        sk.broken([(self.cx + self.wrx * 1.04 * math.cos(a), self.wcy + self.wry * 1.04 * math.sin(a))
+                   for a in [math.pi + i * math.pi / 50 for i in range(51)]], w=1.0, op=0.4, passes=1)
+        for sgn in (-1, 1):
+            sk.pencil(self._side(sgn), w=1.2, op=0.5, passes=1)
+        sk.broken([self._foot(i * math.pi / 40) for i in range(41)], w=1.1, op=0.45, passes=1)
+        sk.clip(self.body())
+        for _ in range(60):
+            t = random.betavariate(1.3, 2.4) * math.pi * 0.5
+            x = self.cx + self.rx * 0.97 * math.cos(t) - random.uniform(0, 50)
+            y = self.cy + self.ry * math.sin(t) + random.uniform(8, self.depth * 0.9)
+            sk.mark(x, y, random.uniform(8, 16), random.uniform(55, 80), op=random.uniform(0.12, 0.28), w=random.uniform(0.7, 1.0))
+        sk.end_clip()

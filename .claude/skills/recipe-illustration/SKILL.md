@@ -106,17 +106,25 @@ Python standard library only.
   `bands()` (paths to clip to), and `top_point(r, t)`, `random_top_point()`,
   `face_point(t, f, depth)` and `E(t, dy, k)` (points).
 
-- `Bowl(sk, …)`: a wide, shallow ceramic bowl for sauce-based dishes (curries,
-  soups, stews, chilli). It has a pale glaze and a soft blue-grey band, and a
-  crescent of the inside wall shows at the back. Call `draw_back()` before the
+- `ShallowBowl(sk, …)`: a wide, shallow pasta-style bowl with a broad flat rim
+  and a foot ring, for food served on a bed: curries and chilli on rice (and
+  later, pasta and noodles). Place food in its well with `well_point(r, t)` or
+  `random_well_point()`, and garnish the rim with `rim_point(t)`.
+- `Bowl(sk, …)`: a deeper bowl for food that really is liquid, like soups and
+  broths. It has a pale glaze and a soft blue-grey band, and a crescent of the
+  inside wall shows at the back. Call `draw_back()` before the
   food and `draw_rim()` after it. Clip sauces to `surface()`, and place food
   with `surface_point(r, t)` or `random_surface_point()`. `rim_point(t)` puts
   garnish such as a lime wedge on the rim.
 
 ### Food pieces (`toolkit/foods.py`)
 
-Reusable ingredients in the same style. Each takes the Sketch, then a position:
-`sauce(sk, bowl, color, deep, light)` fills a bowl, `chunk()` draws pieces of
+Reusable ingredients in the same style. Each takes the Sketch, then a position.
+`curry_on_rice(sk, shallow_bowl, color, deep, light, rice=…)` draws the standard
+curry plate: a bed of rice with a thick pool of curry in the middle. It returns
+the pool, so `piled_points()` can heap chunks on it and `pool_point()` can
+place garnish. `sauce(sk, bowl, color, deep, light)` fills a deep bowl with
+soup or broth, `chunk()` draws pieces of
 meat, potato or sweet potato sitting in sauce, and `rice_mound()` draws white
 or (`dark=True`) black rice. For garnish there's `leaf()` (coriander, curry
 leaf or mint), `chilli_ring()`, `swirl()` (cream or yoghurt), `peanut()`,
@@ -136,11 +144,13 @@ add the dish to the examples below.
 - `dishes/spaghetti-frittata.py`: a thinner round dish. Spaghetti strands swirl
   across the top in perspective and poke from the edge, the cut faces show
   tangled pasta, and the top is garnished with tomato, herbs and Parmesan.
-- `dishes/chicken-coconut-curry.py` and the other curries: a `Bowl` with
-  sauce, chunks, a rice mound at the back left (only when the recipe serves it
-  with rice), and garnish. `veggie-chilli.py` uses black rice and a yoghurt
-  dollop, and `coconut-curry-dumpling-soup.py` uses floating dumplings and
-  chilli oil.
+- `dishes/chicken-coconut-curry.py` and the other curries: a `ShallowBowl`
+  with a bed of rice and the curry ladled into the middle, its chunks heaped
+  and garnish on top. Curries should never look like soup: thick sauce on
+  rice, not a full bowl of liquid. `veggie-chilli.py` uses black rice and a
+  yoghurt dollop.
+- `dishes/coconut-curry-dumpling-soup.py`: the one real soup, so it uses the
+  deep `Bowl`, full of broth with floating dumplings and chilli oil.
 
 ## Doing many recipes
 

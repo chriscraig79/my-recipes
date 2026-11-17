@@ -213,3 +213,75 @@ def sauce(sk, bowl, color, deep=None, light=None, sheen=True):
     sk.add(f'<ellipse cx="{bowl.fx}" cy="{bowl.fy}" rx="{bowl.frx - 4}" ry="{bowl.fry - 3}" fill="none" stroke="{deep or color}" '
            f'stroke-width="16" opacity="0.4" filter="url(#softwash)"/>')
     sk.end_clip()
+
+
+def rice_bed(sk, bowl, grain="#fbf5e6", shade="#cfc4ad", dark=False, count=1300, k=1.0):
+    """Rice spread across a ShallowBowl's well: a pale, gently domed bed of grains."""
+    d = bowl.well(k)
+    sk.add(f'<path d="{d}" fill="{grain}" opacity="0.97"/>')
+    sk.clip(d)
+    sk.blot(bowl.cx + bowl.wrx * 0.55, bowl.wcy + bowl.wry * 0.2, bowl.wrx * 0.5, bowl.wry * 0.7, shade, 0.5 if not dark else 0.35)
+    sk.blot(bowl.cx - bowl.wrx * 0.3, bowl.wcy - bowl.wry * 0.4, bowl.wrx * 0.4, bowl.wry * 0.3, "#ffffff", 0.3 if not dark else 0.1)
+    fill = grain if not dark else "#4b3646"
+    for _ in range(count):
+        gx, gy = bowl.random_well_point(1.0 * k)
+        rot = random.uniform(0, 180)
+        op = random.uniform(0.25, 0.5) + (0.12 if gx > bowl.cx + bowl.wrx * 0.2 else 0)
+        sk.add(f'<ellipse cx="{gx:.1f}" cy="{gy:.1f}" rx="{random.uniform(3.6, 5.0):.1f}" ry="{random.uniform(1.5, 2.1):.1f}" fill="{fill}" '
+               f'stroke="{GRAPHITE}" stroke-width="0.6" stroke-opacity="{op:.2f}" transform="rotate({rot:.0f} {gx:.1f} {gy:.1f})"/>')
+    sk.end_clip()
+
+
+def curry_pool(sk, x, y, rx, ry, color, deep, light=None, edge=None):
+    """
+    A thick curry ladled onto rice: an irregular pool, darker and thicker at its
+    edge where it meets the rice, with a glossy highlight. Returns the outline
+    path so chunks and garnish can be kept inside it.
+    """
+    pts = _blob_pts(x, y, rx, ry, n=14, jitter=0.07, rot=random.uniform(0, 1))
+    d = smooth_path(pts) + " Z"
+    sk.add(f'<path d="{d}" fill="{color}" opacity="0.6"/>')
+    sk.wash(d, color, 0.92)
+    sk.clip(d)
+    sk.blot(x + rx * 0.35, y - ry * 0.35, rx * 0.7, ry * 0.5, deep, 0.4)
+    if light:
+        for _ in range(4):
+            sk.blot(x + random.uniform(-rx, rx) * 0.5, y + random.uniform(-ry, ry) * 0.5, rx * 0.25, ry * 0.2, light, 0.35)
+    sk.blot(x - rx * 0.3, y - ry * 0.2, rx * 0.3, ry * 0.15, "#ffffff", 0.3)
+    sk.add(f'<path d="{d}" fill="none" stroke="{edge or deep}" stroke-width="14" opacity="0.45" filter="url(#softwash)"/>')
+    sk.end_clip()
+    sk.broken(pts, w=0.9, op=0.35, passes=1)
+    return d
+
+
+def piled_points(x, y, rx, ry, n, rmax=0.78, lift=42):
+    """
+    n positions inside an ellipse, lifted toward the middle so pieces look
+    heaped, sorted back to front so nearer pieces are drawn on top.
+    """
+    pts = []
+    for _ in range(n):
+        r = math.sqrt(random.random()) * rmax
+        t = random.uniform(0, 2 * math.pi)
+        pts.append((x + rx * r * math.cos(t), y + ry * r * math.sin(t) - lift * (1 - r)))
+    return sorted(pts, key=lambda p: p[1])
+
+
+def curry_on_rice(sk, bowl, color, deep, light=None, rice=None, pool=(0.6, 0.74)):
+    """
+    The standard curry plate: a ShallowBowl with a bed of rice and a thick pool
+    of curry ladled into the middle. rice: kwargs for rice_bed (e.g. black
+    rice). Returns (x, y, rx, ry) of the pool for placing chunks and garnish.
+    """
+    rice_bed(sk, bowl, **(rice or {}))
+    px, py = bowl.well_point(0.12, 0.6)
+    prx, pry = bowl.wrx * pool[0], bowl.wry * pool[1]
+    curry_pool(sk, px, py, prx, pry, color, deep=deep, light=light)
+    return px, py, prx, pry
+
+
+def pool_point(pool, rmax=0.85, lift=18):
+    """A random point on top of a curry pool (for garnish), lifted a little toward the middle."""
+    px, py, prx, pry = pool
+    r, t = math.sqrt(random.random()) * rmax, random.uniform(0, 2 * math.pi)
+    return px + prx * r * math.cos(t), py + pry * r * math.sin(t) - lift * (1 - r)
