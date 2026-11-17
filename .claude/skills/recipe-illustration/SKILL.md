@@ -110,6 +110,10 @@ Python standard library only.
   and a foot ring, for food served on a bed: curries and chilli on rice (and
   later, pasta and noodles). Place food in its well with `well_point(r, t)` or
   `random_well_point()`, and garnish the rim with `rim_point(t)`.
+- `Casserole(sk, …)`: a round enamelled cast-iron pot with the lid off and two
+  loop handles, for stews and casseroles. It shares the food-surface API with
+  `Bowl`, so `sauce()`, `surface_point()` and `random_surface_point()` work on
+  it. The enamel is painted flat and plain so the food carries the detail.
 - `Bowl(sk, …)`: a deeper bowl for food that really is liquid, like soups and
   broths. It has a pale glaze and a soft blue-grey band, and a crescent of the
   inside wall shows at the back. Call `draw_back()` before the
@@ -129,7 +133,13 @@ meat, potato or sweet potato sitting in sauce, and `rice_mound()` draws white
 or (`dark=True`) black rice. For garnish there's `leaf()` (coriander, curry
 leaf or mint), `chilli_ring()`, `swirl()` (cream or yoghurt), `peanut()`,
 `sliver()` (flaked almonds), `lime_wedge()`, `dumpling()`, `oil_drizzle()`,
-`bean()` and `strip()` (pepper or onion).
+`bean()`, `strip()` (pepper or onion) and `tortilla()`.
+
+For stews there's `scatter(pot, n, min_dist)`, which spreads pieces evenly
+(back to front) so they don't clump. There's also `herb_dumpling()`,
+`sausage()`, `gnocchi()`, `aubergine_round()`, `round_bit()` (chickpeas, butter
+beans, pine nuts, lardons), `carrot_disc()`, `celery_slice()`, `sprig()`
+(thyme or rosemary) and `dust()` (paprika, grated cheese, lentil texture).
 
 For a dish that fits neither shape (pasta on a plate, a roast joint, a stack
 of pancakes, a sandwich), write the shape in the dish script with the same
@@ -149,6 +159,10 @@ add the dish to the examples below.
   and garnish on top. Curries should never look like soup: thick sauce on
   rice, not a full bowl of liquid. `veggie-chilli.py` uses black rice and a
   yoghurt dollop.
+- `dishes/beef-guinness-stew.py` and the other stews: a `Casserole` full of
+  stew, with the pieces scattered so it reads as chunky, not brothy. The
+  chicken casserole has dumplings baked on top, and the gnocchi ragù uses
+  `dust()` for its lentil texture.
 - `dishes/coconut-curry-dumpling-soup.py`: the one real soup, so it uses the
   deep `Bowl`, full of broth with floating dumplings and chilli oil.
 
