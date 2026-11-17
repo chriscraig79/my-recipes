@@ -203,6 +203,25 @@ check("recipe jump bar scrolls to and highlights Method / Ingredients", async pa
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("step numbers link to #recipe/step-N and the link scrolls to and rings that step", async page => {
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-jump", { state: "visible" });
+  const recipeId = decodeURIComponent((await page.evaluate(() => location.hash)).slice(1));
+  const link = page.locator("#step-2 .step-number");
+  assert.equal(await link.getAttribute("href"), `#${recipeId}/step-2`, "expected step 2's number to link to its anchor");
+  await link.click();
+  await page.waitForFunction(() => document.querySelector("#step-2.is-target") && document.activeElement?.id === "step-2");
+  await page.waitForFunction(() => Math.abs(document.getElementById("step-2").getBoundingClientRect().top - 100) < 60);
+  assert.equal(await page.locator(".step.is-target").count(), 1, "expected only the linked step to be ringed");
+  // Opening a step URL directly (a shared link) renders the recipe at that step.
+  await page.evaluate(() => { location.hash = ""; });
+  await page.waitForSelector("#index", { state: "visible" });
+  await page.evaluate(id => { location.hash = `${id}/step-3`; }, recipeId);
+  await page.waitForFunction(() => document.querySelector("#step-3.is-target"));
+  await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 check("Copy list copies the same unchecked items as Send to WhatsApp", async page => {
   // Capture clipboard writes instead of relying on real clipboard
   // permissions in headless Chromium.
