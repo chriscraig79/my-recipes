@@ -42,12 +42,16 @@ new dish needs something the helpers don't cover yet.
 
 ## Canvas and crops
 
-Draw on a 1600 × 1000 canvas. The site shows the same image in two crops
-(both `object-fit: cover`, centred), so keep the food roughly inside
-x 300–1300, y 250–850:
+Draw on a 1600 × 1000 canvas. The site shows the same image two ways, so
+keep the food roughly inside x 300–1300, y 250–850:
 
-- the index card, 4:3, keeps about x 133–1467 of the full width;
-- the recipe hero, 16:9, keeps about y 50–950 of the full height.
+- **Index card:** cropped to 4:3 (`object-fit: cover`, centred), which keeps
+  about x 133–1467 of the full width.
+- **Recipe page:** the whole image, unframed, under the description and above
+  the stats. Its paper tone is multiplied into the page and its edges fade out
+  with a radial mask (`.recipe-hero img`), fully visible only inside about
+  x 210–1390, y 160–920. That fade is why the background should stay pale and
+  loose: whatever sits near the edges melts away.
 
 ## Workflow
 
@@ -64,13 +68,13 @@ x 300–1300, y 250–850:
    node .claude/skills/recipe-illustration/toolkit/render.mjs /tmp/<id>.svg recipes/images/<id>.webp /tmp/<id>-review.png
    ```
    This writes the WebP (aim for well under 100KB; WebP at quality 0.82 is
-   usually 30–45KB) and a review sheet: the full image, the 4:3 card crop and
-   the 16:9 hero crop.
+   usually 30–45KB) and a review sheet: the full image, the 4:3 card crop, and
+   the recipe page version with its faded edges.
 4. **Look at the review sheet** (open it with Read) and check:
    - the food has clearly more detail than the plate and background;
    - no outline looks black or continuous, and no hatching looks ruled;
    - the dish reads as that dish at card size (the defining ingredient shows);
-   - nothing important is cut off in either crop;
+   - nothing important is cut off on the card or faded away on the recipe page;
    - no hard-edged rectangles from a filter region clipping a soft wash (if you
      see one, enlarge that filter's `x/y/width/height`).
    Revise the script and re-render until it passes. Send the user the review

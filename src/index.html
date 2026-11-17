@@ -509,20 +509,25 @@
     padding: 2rem 2rem 5rem;
   }
 
+  /* The recipe illustration sits in the header, under the description and
+     above the stats, with no frame: its paper tone is multiplied into the
+     page and its edges fade out, so the sketch looks drawn on the page.
+     Keeping it inside the header leaves the even space around the accent
+     dash untouched. */
   .recipe-hero {
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    margin-bottom: var(--space-section);
-    max-height: 420px;
+    max-width: 30rem;
+    margin: 0.5rem auto 0;
   }
 
   .recipe-hero img {
-    width: 100%;
-    height: 100%;
-    max-height: 420px;
-    object-fit: cover;
     display: block;
-    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 60% 62% at 50% 54%, #000 62%, transparent 100%);
+    mask-image: radial-gradient(ellipse 60% 62% at 50% 54%, #000 62%, transparent 100%);
   }
 
   .back-btn {
@@ -1694,12 +1699,12 @@ function renderRecipe(r) {
   `).join('');
 
   document.getElementById('recipe-content').innerHTML = `
-    ${heroHtml}
     <header class="recipe-header">
       <span class="masthead-dash" aria-hidden="true"></span>
       <p class="recipe-label">${r.label} — serves ${r.servings}</p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
       <p class="recipe-description">${r.description}</p>
+      ${heroHtml}
       <div class="recipe-stats">${statsHtml}</div>
     </header>
 

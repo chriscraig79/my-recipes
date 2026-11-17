@@ -1,6 +1,6 @@
 // Renders an illustration SVG to the WebP the site uses, plus a review sheet
-// showing the full image and the two crops the site applies (4:3 index card,
-// 16:9 recipe hero).
+// showing the full image, the 4:3 crop on the index card, and the recipe page
+// version (whole image, edges faded into the page).
 //
 //   node render.mjs <in.svg> <out.webp> [review.png]
 //
@@ -33,7 +33,9 @@ const { webp, review } = await page.evaluate(async (dataUrl) => {
   full.getContext("2d").drawImage(img, 0, 0);
   const webp = full.toDataURL("image/webp", 0.82);
 
-  // Review sheet: full image, 4:3 card crop, 16:9 hero crop (object-fit: cover, centred).
+  // Review sheet: full image, 4:3 card crop (object-fit: cover, centred), and the
+  // recipe page version: the whole image with the same radial edge fade as
+  // .recipe-hero img, on the page background.
   const sheet = document.createElement("canvas");
   sheet.width = 1600 + 40; sheet.height = 1000 + 600 + 60;
   const g = sheet.getContext("2d");
@@ -44,8 +46,27 @@ const { webp, review } = await page.evaluate(async (dataUrl) => {
     g.drawImage(img, (1600 - sw) / 2, (1000 - sh) / 2, sw, sh, x, y, w, h);
     g.strokeStyle = "#d9cfc0"; g.lineWidth = 2; g.strokeRect(x, y, w, h);
   };
-  cover(20, 1040, 800, 600);   // 4:3
-  cover(840, 1040, 780, 439);  // 16:9
+  cover(20, 1040, 800, 600);   // 4:3 index card
+  const pageW = 780, pageH = 488, px = 840, py = 1040;
+  const hero = document.createElement("canvas");
+  hero.width = pageW; hero.height = pageH;
+  const hg = hero.getContext("2d");
+  hg.drawImage(img, 0, 0, pageW, pageH);
+  // Same fade as the CSS mask: ellipse 60% × 62% at 50% 54%, opaque to 62%.
+  hg.globalCompositeOperation = "destination-in";
+  hg.save();
+  hg.translate(pageW * 0.5, pageH * 0.54);
+  hg.scale(pageW * 0.6, pageH * 0.62);
+  const fade = hg.createRadialGradient(0, 0, 0, 0, 0, 1);
+  fade.addColorStop(0.62, "rgba(0,0,0,1)");
+  fade.addColorStop(1, "rgba(0,0,0,0)");
+  hg.fillStyle = fade;
+  hg.fillRect(-2, -2, 4, 4);
+  hg.restore();
+  g.fillStyle = "#faf7f2"; g.fillRect(px, py, pageW, pageH);
+  g.globalCompositeOperation = "multiply";
+  g.drawImage(hero, px, py);
+  g.globalCompositeOperation = "source-over";
   return { webp, review: sheet.toDataURL("image/png") };
 }, "data:image/png;base64," + png.toString("base64"));
 await browser.close();
