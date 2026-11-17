@@ -36,6 +36,13 @@
     /* Width of the recipe/shopping list column, padding included. */
     --reading-width: 720px;
     --space-heading: 1.25rem;
+    /* Equal space above and below the accent dash: from the top of the
+       page (index) or the back link (recipe, shopping list) down to the
+       dash, and from the dash to the text beneath it. The eyebrow's line
+       box sits a few px above its letters, so the gap under the dash is
+       trimmed by that much to look the same as the gap above. */
+    --dash-gap: 1.25rem;
+    --eyebrow-lead: 0.05rem;
   }
 
   body {
@@ -51,7 +58,7 @@
   #index {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 1.5rem 2rem 5rem;
+    padding: var(--dash-gap) 2rem 5rem;
   }
 
   /* A light masthead: a short accent dash above a small uppercase title,
@@ -66,7 +73,6 @@
   .site-header {
     max-width: calc(var(--reading-width) - 4rem);
     margin: 0 auto 0.85rem;
-    padding-top: 0.35rem;
     text-align: center;
   }
 
@@ -76,7 +82,7 @@
     height: 3px;
     border-radius: 2px;
     background: var(--accent);
-    margin: 0 auto 0.85rem;
+    margin: 0 auto calc(var(--dash-gap) - var(--eyebrow-lead));
   }
 
   .site-title {
@@ -533,7 +539,7 @@
        the dash glides down beneath it on the same axis. */
     display: flex;
     width: fit-content;
-    margin: 0 auto var(--space-section);
+    margin: 0 auto var(--dash-gap);
     align-items: center;
     gap: 0.4rem;
     transition: color 0.15s;
@@ -554,6 +560,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
+    line-height: 1.4; /* same as .site-title, so the gap under the dash matches on every page */
     margin-bottom: 0.75rem;
   }
 
@@ -1113,12 +1120,11 @@
     .recipe-stat:last-child { border-bottom: none; }
     .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
 
-    #index { padding: 1rem 1rem 3rem; }
-    .site-header { padding-top: 0.25rem; margin-bottom: 0.65rem; max-width: none; }
+    #index { padding: var(--dash-gap) 1rem 3rem; }
+    .site-header { margin-bottom: 0.65rem; max-width: none; }
     .filter-bar { max-width: none; }
-    .masthead-dash { margin-bottom: 0.65rem; }
 
-    :root { --space-section: 2rem; --space-heading: 1rem; }
+    :root { --space-section: 2rem; --space-heading: 1rem; --dash-gap: 1rem; }
     #recipe-view, #shopping-list-view { padding: 1.25rem 1rem 3rem; }
     .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
     .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
