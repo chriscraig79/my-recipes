@@ -1,6 +1,6 @@
 """Veggie chilli: a deep red chilli of chargrilled sweet potato, peppers and
 cannellini beans on black rice, with a dollop of yoghurt rippled with chilli
-sauce and mint leaves."""
+sauce and mint leaves, and a warm tortilla folded on the rim."""
 import math, random, sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "toolkit"))
 from sketchkit import Sketch, ShallowBowl
@@ -24,4 +24,6 @@ foods.swirl(sk, dx, dy, 48, 18, color="#c23a1c", width=4, turns=1.2, opacity=0.7
 for _ in range(10):
     foods.leaf(sk, *foods.pool_point(pool, lift=22), size=random.uniform(12, 15), color=random.choice(["#5f9a52", "#6aa65a"]), kind="mint")
 bowl.draw_rim()
+tx, ty = bowl.rim_point(-0.55, 0.9, 6)
+foods.tortilla(sk, tx - 150, ty, size=250, rot=-6)
 sk.save(sys.argv[1] if len(sys.argv) > 1 else "veggie-chilli.svg")

@@ -285,3 +285,34 @@ def pool_point(pool, rmax=0.85, lift=18):
     px, py, prx, pry = pool
     r, t = math.sqrt(random.random()) * rmax, random.uniform(0, 2 * math.pi)
     return px + prx * r * math.cos(t), py + pry * r * math.sin(t) - lift * (1 - r)
+
+
+def tortilla(sk, x, y, size=120, rot=-12, color="#f1dcaa"):
+    """
+    A warm flour tortilla folded into quarters, resting on a rim or plate: a
+    pale wedge with a curved outer edge, a second layer showing at the fold,
+    and griddle char spots.
+    """
+    s = size
+    tr = f'transform="rotate({rot} {x:.1f} {y:.1f})"'
+    # the folded wedge: point at (x, y), curved edge out to the right (squashed for the 30° view)
+    wedge = (f"M{x:.1f},{y:.1f} L{x + s * 0.95:.1f},{y - s * 0.32:.1f} "
+             f"A{s},{s * 0.42} 0 0 1 {x + s * 0.7:.1f},{y + s * 0.3:.1f} Z")
+    under = (f"M{x + 6:.1f},{y + 7:.1f} L{x + s * 0.99:.1f},{y - s * 0.24:.1f} "
+             f"A{s},{s * 0.42} 0 0 1 {x + s * 0.74:.1f},{y + s * 0.37:.1f} Z")
+    sk.add(f'<g {tr}>')
+    sk.blot(x + s * 0.55, y + s * 0.2, s * 0.5, s * 0.14, "#7a5a3a", 0.25)
+    sk.add(f'<path d="{under}" fill="#e6c98d" opacity="0.95"/>')
+    sk.add(f'<path d="{wedge}" fill="{color}" opacity="0.97"/>')
+    sk.clip(wedge)
+    sk.blot(x + s * 0.75, y - s * 0.05, s * 0.35, s * 0.2, "#c99a55", 0.35)
+    for _ in range(14):
+        u, v = random.uniform(0.25, 0.95), random.uniform(-0.25, 0.25)
+        cx, cy = x + s * u, y + s * v * u
+        sk.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{random.uniform(3, 8):.1f}" ry="{random.uniform(2, 4):.1f}" '
+               f'fill="#8a5420" opacity="{random.uniform(0.25, 0.55):.2f}" filter="url(#softwash)"/>')
+    sk.end_clip()
+    sk.add('</g>')
+    sk.add(f'<path d="{wedge}" fill="none" stroke="{GRAPHITE}" stroke-width="1.1" opacity="0.5" {tr}/>')
+    sk.add(f'<path d="M{x + s * 0.72:.1f},{y + s * 0.31:.1f} A{s},{s * 0.42} 0 0 0 {x + s * 0.99:.1f},{y - s * 0.24:.1f}" '
+           f'fill="none" stroke="{GRAPHITE}" stroke-width="0.9" opacity="0.4" {tr}/>')
