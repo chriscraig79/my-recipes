@@ -306,3 +306,102 @@ class RoundDish:
             x, y = self.top_point(random.uniform(0.55, 0.95), random.uniform(-0.9, 0.25))
             sk.mark(x, y, random.uniform(6, 18), random.uniform(10, 40), op=random.uniform(0.12, 0.28), w=random.uniform(0.6, 1.1))
         sk.end_clip()
+
+
+class Bowl:
+    """
+    A wide, shallow ceramic bowl seen from the front at about 30°, holding a
+    sauce-based dish (curries, soups, stews, chilli). The food surface sits a
+    little below the rim, so a crescent of the inside wall shows at the back.
+
+    Points on the food surface: surface_point(r, t) with r = 0 (centre) to 1
+    (edge) and t the angle (0 = right, π/2 = front). Clip to surface() for
+    anything that should stay inside the food.
+    """
+
+    def __init__(self, sk, cx=800, cy=420, rx=470, ry=175, depth=250, fill=0.9,
+                 glaze="#f1ece2", glaze_shade="#c9c2b4", band="#8fa3b0"):
+        self.sk, self.cx, self.cy, self.rx, self.ry, self.depth = sk, cx, cy, rx, ry, depth
+        self.glaze, self.glaze_shade, self.band = glaze, glaze_shade, band
+        # food surface: a slightly smaller ellipse, a little lower than the rim
+        self.fx, self.fy, self.frx, self.fry = cx, cy + ry * 0.12, rx * fill, ry * fill * 0.92
+
+    def rim_point(self, t, k=1.0, dy=0):
+        return (self.cx + self.rx * k * math.cos(t), self.cy + self.ry * k * math.sin(t) + dy)
+
+    def surface_point(self, r, t):
+        return (self.fx + self.frx * r * math.cos(t), self.fy + self.fry * r * math.sin(t))
+
+    def random_surface_point(self, rmax=0.9, tmin=0, tmax=2 * math.pi):
+        t = random.uniform(tmin, tmax)
+        return self.surface_point(math.sqrt(random.random()) * rmax, t)
+
+    def surface(self):
+        return (f"M{self.fx - self.frx:.1f},{self.fy:.1f} A{self.frx},{self.fry} 0 1 0 {self.fx + self.frx:.1f},{self.fy:.1f} "
+                f"A{self.frx},{self.fry} 0 1 0 {self.fx - self.frx:.1f},{self.fy:.1f} Z")
+
+    def body(self):
+        """Outside of the bowl below the rim: curves in to a narrow foot."""
+        l, r = self.rim_point(math.pi), self.rim_point(0)
+        fy = self.cy + self.depth
+        fl, fr = (self.cx - self.rx * 0.3, fy), (self.cx + self.rx * 0.3, fy)
+        return (f"M{P(l)} C{l[0] + 6:.1f},{self.cy + self.depth * 0.5:.1f} {fl[0] - 70:.1f},{fy:.1f} {P(fl)} "
+                f"L{P(fr)} C{fr[0] + 70:.1f},{fy:.1f} {r[0] - 6:.1f},{self.cy + self.depth * 0.5:.1f} {P(r)} "
+                f"A{self.rx},{self.ry} 0 0 1 {P(l)} Z")
+
+    def draw_back(self):
+        """Shadow, outside body, rim and inside wall: everything before the food."""
+        sk = self.sk
+        sk.blot(self.cx + 35, self.cy + self.depth + 10, self.rx * 0.95, 70, "#8d8aa3", 0.3)
+        sk.blot(self.cx + 20, self.cy + self.depth * 0.7, self.rx * 1.45, 230, "#efd9a8", 0.28)
+        body = self.body()
+        sk.wash(body, self.glaze, 0.95)
+        sk.clip(body)
+        # shading: darker toward the right and the bottom, a soft highlight on the left
+        sk.blot(self.cx + self.rx * 0.55, self.cy + self.depth * 0.55, self.rx * 0.55, self.depth * 0.6, self.glaze_shade, 0.55)
+        sk.blot(self.cx - self.rx * 0.45, self.cy + self.depth * 0.35, self.rx * 0.22, self.depth * 0.25, "#ffffff", 0.5)
+        # a painted band just under the rim
+        band = smooth_path([self.rim_point(math.pi * (1 - i / 40), 0.97, 30) for i in range(41)])
+        sk.soft_stroke(band, self.band, 7, 0.35)
+        sk.end_clip()
+        # inside wall (seen at the back, above the food)
+        inner = (f"M{self.cx - self.rx * 0.97:.1f},{self.cy:.1f} A{self.rx * 0.97},{self.ry * 0.95} 0 1 1 {self.cx + self.rx * 0.97:.1f},{self.cy:.1f} "
+                 f"A{self.rx * 0.97},{self.ry * 0.95} 0 1 1 {self.cx - self.rx * 0.97:.1f},{self.cy:.1f} Z")
+        sk.wash(inner, self.glaze, 0.9)
+        sk.clip(inner)
+        sk.blot(self.cx - self.rx * 0.2, self.cy - self.ry * 0.55, self.rx * 0.7, self.ry * 0.35, self.glaze_shade, 0.45)
+        sk.end_clip()
+
+    def draw_rim(self):
+        """Pencil for the rim and body, drawn after the food so it sits on top."""
+        sk = self.sk
+        sk.broken([self.rim_point(t * 2 * math.pi / 120) for t in range(121)], w=1.5, op=0.65, passes=1)
+        sk.broken([self.rim_point(math.pi + t * math.pi / 60, 0.965, 2) for t in range(61)], w=1.0, op=0.4, passes=1)
+        l, r = self.rim_point(math.pi), self.rim_point(0)
+        fy = self.cy + self.depth
+        def side(p0, sgn):
+            # sample the same cubic as body() so the pencil follows the silhouette
+            c1 = (p0[0] - sgn * 6, self.cy + self.depth * 0.5)
+            f = (self.cx + sgn * self.rx * 0.3, fy)
+            c2 = (f[0] + sgn * 70, fy)
+            out = []
+            for i in range(13):
+                u = i / 12
+                out.append(((1-u)**3*p0[0] + 3*(1-u)**2*u*c1[0] + 3*(1-u)*u**2*c2[0] + u**3*f[0],
+                            (1-u)**3*p0[1] + 3*(1-u)**2*u*c1[1] + 3*(1-u)*u**2*c2[1] + u**3*f[1]))
+            return out
+        left, right = side(l, -1), side(r, 1)
+        sk.pencil(left, w=1.3, op=0.5, passes=1)
+        sk.pencil(right, w=1.3, op=0.55, passes=1)
+        sk.broken(line_pts((self.cx - self.rx * 0.3, fy), (self.cx + self.rx * 0.3, fy), 10), w=1.2, op=0.45, passes=1)
+        # a little irregular hatching in the bowl's shadow side
+        sk.clip(self.body())
+        for _ in range(70):
+            u = random.betavariate(1.3, 2.2)
+            t = u * math.pi * 0.5
+            x = self.cx + self.rx * 0.95 * math.cos(t) - random.uniform(0, 60)
+            y = self.cy + self.ry * math.sin(t) + random.uniform(20, self.depth * 0.75)
+            if y > fy - 10:
+                continue
+            sk.mark(x, y, random.uniform(8, 22), random.uniform(55, 80), op=random.uniform(0.12, 0.3), w=random.uniform(0.7, 1.1))
+        sk.end_clip()
