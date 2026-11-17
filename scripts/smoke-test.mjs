@@ -153,14 +153,25 @@ check("opening and leaving a recipe animates and then cleans up", async page => 
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "forward");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#recipe-view"), "expected the recipe view after the transition");
-  const dashLeft = () => page.evaluate(() => [...document.querySelectorAll(".masthead-dash")]
-    .filter(el => el.offsetParent).map(el => Math.round(el.getBoundingClientRect().left))[0]);
-  const recipeDashLeft = await dashLeft();
+  // The dash changes width with the eyebrow text beneath it, but stays
+  // centred on the same axis, so it only moves vertically.
+  const dashCentre = () => page.evaluate(() => [...document.querySelectorAll(".masthead-dash")]
+    .filter(el => el.offsetParent).map(el => { const r = el.getBoundingClientRect(); return Math.round(r.left + r.width / 2); })[0]);
+  const recipeDashCentre = await dashCentre();
+  const dashMatchesEyebrow = () => page.evaluate(() => {
+    const dash = [...document.querySelectorAll(".masthead-dash")].find(el => el.offsetParent);
+    const range = document.createRange();
+    range.selectNodeContents(dash.nextElementSibling);
+    const widest = Math.max(...[...range.getClientRects()].map(r => r.width));
+    return Math.abs(dash.getBoundingClientRect().width - widest) < 6;
+  });
+  assert.ok(await dashMatchesEyebrow(), "expected the recipe's dash to match its eyebrow text width");
   await page.locator("#recipe-view .back-btn").click();
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "back");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#index"), "expected the index after going back");
-  assert.equal(await dashLeft(), recipeDashLeft, "the accent dash should keep the same left edge on both views, so it only moves vertically");
+  assert.ok(Math.abs(await dashCentre() - recipeDashCentre) <= 1, "the accent dash should stay centred on the same axis on both views, so it only moves vertically");
+  assert.ok(await dashMatchesEyebrow(), "expected the index dash to match its eyebrow text width");
   const title = (await page.textContent("#site-title")).trim();
   assert.match(title, /Recipe collection/i, `unexpected index title: "${title}"`);
 });

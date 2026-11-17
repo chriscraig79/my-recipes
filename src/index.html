@@ -54,11 +54,13 @@
     padding: 1.5rem 2rem 5rem;
   }
 
-  /* A light masthead: a short accent dash above a small uppercase title,
-     no rules, all centred. Recipe and shopping list headers are centred
-     on the same axis, so the dash only ever moves straight up or down. The same dash sits at the top of recipe and shopping list
-     headers, and glides between the two when you open or leave a recipe
-     (see "View transitions" below). */
+  /* A light masthead: an accent dash above a small uppercase title, no
+     rules, all centred. The dash is as wide as the widest line of that
+     uppercase text (set by sizeMastheadDashes), and the same dash sits at
+     the top of recipe and shopping list headers above their eyebrow line.
+     Every header is centred on the same axis, so when you open or leave a
+     recipe the dash glides straight up or down and stretches or shrinks
+     to its new width (see "View transitions" below). */
   /* The header shares the recipe pages' centred column (its content box
      is the column minus the views' 2rem side padding), so the dash and
      title line up with the recipe header at every width, while the filters
@@ -87,6 +89,9 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink);
+    /* Cancels the letter-spacing after the last letter, so the visible
+       text (not text + trailing space) is centred under the dash. */
+    margin-right: -0.2em;
   }
 
   /* ── Filters ── */
@@ -555,6 +560,7 @@
     text-transform: uppercase;
     color: var(--muted);
     margin-bottom: 0.75rem;
+    margin-right: -0.2em; /* see .site-title */
   }
 
   .recipe-title {
@@ -1075,7 +1081,9 @@
     animation-fill-mode: both;
   }
   ::view-transition-old(masthead-dash) { animation: none; opacity: 0; }
-  ::view-transition-new(masthead-dash) { animation: none; }
+  /* The dash changes width as it moves; stretch the snapshot to the
+     group's box so it stays 3px tall instead of scaling up with the width. */
+  ::view-transition-new(masthead-dash) { animation: none; height: 100%; object-fit: fill; }
 
   @keyframes vt-fade-out-down { to { opacity: 0; transform: translateY(0.75rem); } }
   @keyframes vt-fade-in-up { from { opacity: 0; transform: translateY(1.5rem); } }
@@ -1859,6 +1867,7 @@ function renderShoppingListContent() {
     <hr class="footer-rule">
   `;
 
+  sizeMastheadDashes();
   window.scrollTo(0, scrollY);
 }
 
@@ -1877,7 +1886,35 @@ function showView(name) {
   document.getElementById('index').style.display = name === 'index' ? 'block' : 'none';
   document.getElementById('recipe-view').style.display = name === 'recipe' ? 'block' : 'none';
   document.getElementById('shopping-list-view').style.display = name === 'shopping-list' ? 'block' : 'none';
+  sizeMastheadDashes();
 }
+
+// Each accent dash is as wide as the eyebrow line beneath it ("Recipe
+// collection & shopping list generator" on the index, "Pasta — serves 2"
+// on a recipe), so during a transition it stretches or shrinks as it moves.
+// The widest rendered line is measured rather than the element, because a
+// wrapped line's element is as wide as the column, not the text; the
+// trailing letter-spacing after the last letter is left off.
+function sizeMastheadDashes() {
+  document.querySelectorAll('.masthead-dash').forEach(dash => {
+    const eyebrow = dash.nextElementSibling;
+    if (!eyebrow || !eyebrow.offsetParent) return;
+    const range = document.createRange();
+    range.selectNodeContents(eyebrow);
+    const widest = Math.max(0, ...[...range.getClientRects()].map(r => r.width));
+    if (!widest) return;
+    const tracking = parseFloat(getComputedStyle(eyebrow).letterSpacing) || 0;
+    dash.style.width = `${Math.round(widest - tracking)}px`;
+  });
+}
+
+let dashResizeFrame = null;
+window.addEventListener('resize', () => {
+  if (dashResizeFrame) return;
+  dashResizeFrame = requestAnimationFrame(() => { dashResizeFrame = null; sizeMastheadDashes(); });
+});
+// Web fonts change the eyebrow's width once they load.
+document.fonts?.ready.then(sizeMastheadDashes);
 
 // ─────────────────────────────────────────────
 //  ROUTING — each recipe gets a shareable #slug URL
