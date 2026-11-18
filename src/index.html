@@ -115,6 +115,54 @@
 
   .filters.is-stuck { border-bottom-color: var(--border); }
 
+  /* Search sits above the dropdowns in the same pinned bar, the same width
+     and pill shape, so the two read as one control. */
+  .search-field {
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--reading-width) - 4rem);
+    margin: 0 auto 0.45rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.95rem;
+    top: 50%;
+    width: 0.95rem;
+    height: 0.95rem;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    min-height: 2.45rem;
+    padding: 0.45rem 1rem 0.45rem 2.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    /* 16px so iOS Safari doesn't zoom the page when the field is focused. */
+    font-size: 1rem;
+  }
+
+  .search-input::placeholder { color: var(--muted); opacity: 1; }
+  .search-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   /* Styled to match the recipe page's Ingredients | Method switcher: a
      centred pill holding pill-shaped buttons, with no dividers, and the
      active choice filled in orange, inset from the edge. */
@@ -420,7 +468,27 @@
     font-style: italic;
     font-family: 'Playfair Display', serif;
     border-top: 1px solid var(--border);
+    list-style: none;
+    grid-column: 1 / -1;
   }
+
+  .no-results-action {
+    display: block;
+    margin-top: 0.75rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .no-results-action:hover { border-color: var(--accent); }
+  .no-results-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ── Basket toggle (index card) ── */
   .basket-toggle {
@@ -1169,6 +1237,11 @@
   </header>
 
   <div class="filters">
+    <div class="search-field" role="search">
+      <label class="visually-hidden" for="recipe-search">Search recipes</label>
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="recipe-search" class="search-input" placeholder="Search, e.g. lentil, salmon, korma" autocomplete="off" spellcheck="false">
+    </div>
     <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter recipes"></div>
   </div>
 
@@ -1456,12 +1529,60 @@ function getTimeBandsPresent() {
   return TIME_BANDS.filter(band => recipes.some(r => band.test(r.timeMins)));
 }
 
+// ── Text search ──
+// Matches title, description, tags and ingredient names, ignoring case and
+// accents. Every word typed has to appear somewhere ("chicken curry" finds
+// recipes with both). Combines with the dropdown filters.
+let searchQuery = '';
+
+const normalise = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+const searchText = new Map(recipes.map(r => [r.id, normalise([
+  r.title, r.description, ...r.tags, ...r.ingredients.map(i => i.name),
+].join(' '))]));
+
+function matchesSearch(r) {
+  const words = normalise(searchQuery).split(/\s+/).filter(Boolean);
+  const text = searchText.get(r.id) ?? '';
+  return words.every(w => text.includes(w));
+}
+
 function filteredRecipes() {
-  return recipes.filter(r => Object.entries(activeFilters).every(([category, value]) =>
+  return recipes.filter(r => matchesSearch(r) && Object.entries(activeFilters).every(([category, value]) =>
     category === "Time"
       ? TIME_BANDS.find(b => b.key === value)?.test(r.timeMins)
       : r.tags.includes(value)
   ));
+}
+
+function initSearch() {
+  const input = document.getElementById('recipe-search');
+  let timer = null;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      searchQuery = input.value.trim();
+      renderList();
+      scrollToResultsIfStuck();
+    }, 150);
+  });
+  // "/" jumps to search from anywhere on the index, unless you're already
+  // typing somewhere. Tab and Shift+Tab still leave the field as normal.
+  document.addEventListener('keydown', e => {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey || currentView() !== 'index') return;
+    const el = document.activeElement;
+    if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
+    e.preventDefault();
+    input.focus();
+  });
+}
+
+function clearSearch() {
+  const input = document.getElementById('recipe-search');
+  input.value = '';
+  searchQuery = '';
+  renderList();
+  input.focus();
 }
 
 const capitalise = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -1505,8 +1626,12 @@ function setFilter(category, value) {
   else delete activeFilters[category];
   updateFilterUI();
   renderList();
-  // If you're scrolled down the list when you change a filter, jump back to
-  // the top of the new results rather than leaving you partway down them.
+  scrollToResultsIfStuck();
+}
+
+// If you're scrolled down the list when you change a filter or search, jump
+// back to the top of the new results rather than leaving you partway down.
+function scrollToResultsIfStuck() {
   const filters = document.querySelector('.filters');
   if (filters.classList.contains('is-stuck')) {
     const count = document.getElementById('results-count');
@@ -1664,7 +1789,10 @@ function renderList() {
   count.textContent = `${results.length} recipe${results.length !== 1 ? 's' : ''}`;
 
   if (results.length === 0) {
-    list.innerHTML = '<p class="no-results">No recipes match those filters.</p>';
+    list.innerHTML = searchQuery
+      ? `<li class="no-results">No recipes match “${esc(searchQuery)}”${Object.keys(activeFilters).length ? ' with those filters' : ''}.
+          <button type="button" class="no-results-action" onclick="clearSearch()">Clear search</button></li>`
+      : '<li class="no-results">No recipes match those filters.</li>';
     return;
   }
 
@@ -2031,6 +2159,7 @@ function showIndex() {
 window.addEventListener('hashchange', route);
 
 buildFilters();
+initSearch();
 renderList();
 renderBasketBadge();
 

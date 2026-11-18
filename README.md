@@ -130,6 +130,14 @@ literal text rather than being run. The rules live in
 | 30–60 min | `timeMins >= 30 && timeMins <= 60` |
 | Over 1 hr | `timeMins > 60` |
 
+## Search
+
+A search box above the filter dropdowns finds recipes by title,
+description, tag or ingredient name as you type. It ignores case and
+accents, needs every word typed to match (`chicken curry` finds recipes
+with both), and combines with whatever filters are chosen. Press `/` to
+jump to it from anywhere on the index.
+
 ## Shopping list
 
 Any recipe can be added to a shopping basket — via the "+" button on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
