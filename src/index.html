@@ -115,6 +115,54 @@
 
   .filters.is-stuck { border-bottom-color: var(--border); }
 
+  /* Search sits above the dropdowns in the same pinned bar, the same width
+     and pill shape, so the two read as one control. */
+  .search-field {
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--reading-width) - 4rem);
+    margin: 0 auto 0.45rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.95rem;
+    top: 50%;
+    width: 0.95rem;
+    height: 0.95rem;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    min-height: 2.45rem;
+    padding: 0.45rem 1rem 0.45rem 2.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    /* 16px so iOS Safari doesn't zoom the page when the field is focused. */
+    font-size: 1rem;
+  }
+
+  .search-input::placeholder { color: var(--muted); opacity: 1; }
+  .search-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   /* Styled to match the recipe page's Ingredients | Method switcher: a
      centred pill holding pill-shaped buttons, with no dividers, and the
      active choice filled in orange, inset from the edge. */
@@ -420,7 +468,27 @@
     font-style: italic;
     font-family: 'Playfair Display', serif;
     border-top: 1px solid var(--border);
+    list-style: none;
+    grid-column: 1 / -1;
   }
+
+  .no-results-action {
+    display: block;
+    margin-top: 0.75rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .no-results-action:hover { border-color: var(--accent); }
+  .no-results-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ── Basket toggle (index card) ── */
   .basket-toggle {
@@ -1169,6 +1237,11 @@
   </header>
 
   <div class="filters">
+    <div class="search-field" role="search">
+      <label class="visually-hidden" for="recipe-search">Search recipes</label>
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="recipe-search" class="search-input" placeholder="Search, e.g. lentil, salmon, korma" autocomplete="off" spellcheck="false">
+    </div>
     <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter recipes"></div>
   </div>
 
@@ -1213,6 +1286,13 @@ const recipes = []; // placeholder — real data injected by `npm run build` int
 //  ingredients.yaml (see scripts/build.mjs) — no runtime guessing.
 // ─────────────────────────────────────────────
 
+// Recipe text is inserted with innerHTML, so every value from the recipe
+// data goes through esc() first and renders as plain text. The one
+// exception is `titleHtml`, which the build has already checked contains
+// nothing but <em>/<strong> (see scripts/validate.mjs).
+const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ESCAPES[ch]);
+
 const SECTION_ORDER = ["Fruit & Veg", "Meat & Fish", "Deli & Dairy", "Dry Goods & Spices", "Tinned & Jarred", "Bread & Bakery", "Other"];
 
 function loadBasket() {
@@ -1253,12 +1333,32 @@ function toggleChecked(name) {
   renderShoppingListContent();
 }
 
+// Updates the toggle buttons for this recipe in place (index card and
+// recipe page) rather than re-rendering the view, so scroll position,
+// keyboard focus and any step highlight stay exactly where they were.
+// The new state is conveyed by aria-pressed on the focused button.
 function toggleBasket(id) {
   basket.has(id) ? basket.delete(id) : basket.add(id);
   saveBasket();
   renderBasketBadge();
-  refreshCurrentView();
+  updateBasketToggles(id);
 }
+
+function updateBasketToggles(id) {
+  const inBasket = basket.has(id);
+  document.querySelectorAll(`[data-basket-id="${CSS.escape(id)}"]`).forEach(btn => {
+    btn.classList.toggle('active', inBasket);
+    btn.setAttribute('aria-pressed', String(inBasket));
+    if (btn.classList.contains('basket-toggle-large')) {
+      btn.textContent = basketLargeLabel(inBasket);
+    } else {
+      btn.setAttribute('aria-label', inBasket ? 'Remove from shopping list' : 'Add to shopping list');
+      btn.innerHTML = inBasket ? CHECK_ICON : PLUS_ICON;
+    }
+  });
+}
+
+const basketLargeLabel = inBasket => inBasket ? '✓ In shopping list' : '+ Add to shopping list';
 
 function removeFromBasket(id) {
   basket.delete(id);
@@ -1429,12 +1529,63 @@ function getTimeBandsPresent() {
   return TIME_BANDS.filter(band => recipes.some(r => band.test(r.timeMins)));
 }
 
+// ── Text search ──
+// Matches title, description, tags and ingredient names, ignoring case and
+// accents. Every word typed has to appear somewhere ("chicken curry" finds
+// recipes with both). Combines with the dropdown filters.
+let searchQuery = '';
+
+const normalise = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+const searchText = new Map(recipes.map(r => [r.id, normalise([
+  r.title, r.description, ...r.tags, ...r.ingredients.map(i => i.name),
+].join(' '))]));
+
+function matchesSearch(r) {
+  const words = normalise(searchQuery).split(/\s+/).filter(Boolean);
+  const text = searchText.get(r.id) ?? '';
+  return words.every(w => text.includes(w));
+}
+
 function filteredRecipes() {
-  return recipes.filter(r => Object.entries(activeFilters).every(([category, value]) =>
+  return recipes.filter(r => matchesSearch(r) && Object.entries(activeFilters).every(([category, value]) =>
     category === "Time"
       ? TIME_BANDS.find(b => b.key === value)?.test(r.timeMins)
       : r.tags.includes(value)
   ));
+}
+
+function initSearch() {
+  const input = document.getElementById('recipe-search');
+  let timer = null;
+  input.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      // Nothing to do if the words haven't changed (e.g. a trailing space),
+      // so the list doesn't re-render or move under you.
+      if (input.value.trim() === searchQuery) return;
+      searchQuery = input.value.trim();
+      renderList();
+      scrollToResultsIfStuck();
+    }, 150);
+  });
+  // "/" jumps to search from anywhere on the index, unless you're already
+  // typing somewhere. Tab and Shift+Tab still leave the field as normal.
+  document.addEventListener('keydown', e => {
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey || currentView() !== 'index') return;
+    const el = document.activeElement;
+    if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
+    e.preventDefault();
+    input.focus();
+  });
+}
+
+function clearSearch() {
+  const input = document.getElementById('recipe-search');
+  input.value = '';
+  searchQuery = '';
+  renderList();
+  input.focus();
 }
 
 const capitalise = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -1455,7 +1606,7 @@ function buildFilters() {
     const slug = category.toLowerCase();
     const items = [{ value: "", label: "All" }, ...options].map(o => `
       <li role="none"><button type="button" class="filter-option" role="menuitemradio" tabindex="-1"
-        data-value="${o.value}" aria-checked="false">${OPTION_CHECK_ICON}<span>${o.label}</span></button></li>
+        data-value="${esc(o.value)}" aria-checked="false">${OPTION_CHECK_ICON}<span>${esc(o.label)}</span></button></li>
     `).join('');
     return `
       <div class="filter-seg" data-category="${category}">
@@ -1478,9 +1629,16 @@ function setFilter(category, value) {
   else delete activeFilters[category];
   updateFilterUI();
   renderList();
-  // If you're scrolled down the list when you change a filter, jump back to
-  // the top of the new results rather than leaving you partway down them.
+  scrollToResultsIfStuck();
+}
+
+// If you're scrolled down the list when you change a filter or search, jump
+// back to the top of the new results rather than leaving you partway down.
+function scrollToResultsIfStuck() {
   const filters = document.querySelector('.filters');
+  // The is-stuck class only refreshes on the next animation frame after a
+  // scroll, so recheck it now rather than trusting a stale value.
+  updateFilterBarStuck();
   if (filters.classList.contains('is-stuck')) {
     const count = document.getElementById('results-count');
     window.scrollTo(0, count.getBoundingClientRect().top + window.scrollY - filters.offsetHeight);
@@ -1637,29 +1795,32 @@ function renderList() {
   count.textContent = `${results.length} recipe${results.length !== 1 ? 's' : ''}`;
 
   if (results.length === 0) {
-    list.innerHTML = '<p class="no-results">No recipes match those filters.</p>';
+    list.innerHTML = searchQuery
+      ? `<li class="no-results">No recipes match “${esc(searchQuery)}”${Object.keys(activeFilters).length ? ' with those filters' : ''}.
+          <button type="button" class="no-results-action" onclick="clearSearch()">Clear search</button></li>`
+      : '<li class="no-results">No recipes match those filters.</li>';
     return;
   }
 
   list.innerHTML = results.map(r => {
-    const tagChips = r.tags.map(t => `<span class="recipe-chip">${t}</span>`).join('');
+    const tagChips = r.tags.map(t => `<span class="recipe-chip">${esc(t)}</span>`).join('');
     const timeBand = TIME_BANDS.find(b => b.test(r.timeMins));
-    const timeChip = timeBand ? `<span class="recipe-chip time">${r.time}</span>` : '';
+    const timeChip = timeBand ? `<span class="recipe-chip time">${esc(r.time)}</span>` : '';
     const inBasket = basket.has(r.id);
     const panel = r.image
-      ? `<img class="recipe-card-photo" src="images/${r.image}" alt="" loading="lazy">`
-      : `<span class="recipe-card-monogram">${r.title.charAt(0)}</span>`;
+      ? `<img class="recipe-card-photo" src="images/${esc(r.image)}" alt="" loading="lazy">`
+      : `<span class="recipe-card-monogram">${esc(r.title.charAt(0))}</span>`;
     return `
       <li class="recipe-list-item">
         <button class="recipe-card-btn" onclick="showRecipe('${r.id}')">
           <div class="recipe-card-panel ${tagPanelClass(r.tags)}">${panel}</div>
           <div class="recipe-card-text">
-            <span class="recipe-card-title">${r.title}</span>
+            <span class="recipe-card-title">${esc(r.title)}</span>
             <div class="recipe-card-chips">${tagChips}${timeChip}</div>
-            <span class="recipe-card-desc">${r.description}</span>
+            <span class="recipe-card-desc">${esc(r.description)}</span>
           </div>
         </button>
-        <button class="basket-toggle${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" aria-label="${inBasket ? 'Remove from shopping list' : 'Add to shopping list'}" onclick="toggleBasket('${r.id}')">${inBasket ? CHECK_ICON : PLUS_ICON}</button>
+        <button class="basket-toggle${inBasket ? ' active' : ''}" data-basket-id="${esc(r.id)}" aria-pressed="${inBasket}" aria-label="${inBasket ? 'Remove from shopping list' : 'Add to shopping list'}" onclick="toggleBasket('${r.id}')">${inBasket ? CHECK_ICON : PLUS_ICON}</button>
       </li>
     `;
   }).join('');
@@ -1675,10 +1836,10 @@ function renderRecipe(r) {
     const vague = amount && !/\d|[½⅓¼¾⅔]/.test(amount);
     return `
     <li class="ingredient${i < ingredientRows ? ' is-left-col' : ''}">
-      <span class="ingredient-amount${vague ? ' is-vague' : ''}">${amount}</span>
+      <span class="ingredient-amount${vague ? ' is-vague' : ''}">${esc(amount)}</span>
       <span class="ingredient-text">
-        <span class="ingredient-name">${ing.name}</span>
-        ${ing.prep ? `<span class="ingredient-prep">${ing.prep}</span>` : ''}
+        <span class="ingredient-name">${esc(ing.name)}</span>
+        ${ing.prep ? `<span class="ingredient-prep">${esc(ing.prep)}</span>` : ''}
       </span>
     </li>
   `;
@@ -1690,17 +1851,17 @@ function renderRecipe(r) {
     <li class="step" id="step-${i + 1}" tabindex="-1">
       <div class="step-head">
         <a class="step-number" href="#${r.id}/step-${i + 1}" aria-label="Link to step ${i + 1}">${i + 1}</a>
-        <div class="step-title">${step.title}</div>
+        <div class="step-title">${esc(step.title)}</div>
       </div>
-      <div class="step-content">${step.content}</div>
-      ${step.timer ? `<span class="step-timer">${step.timer}</span>` : ''}
+      <div class="step-content">${esc(step.content)}</div>
+      ${step.timer ? `<span class="step-timer">${esc(step.timer)}</span>` : ''}
     </li>
   `).join('');
 
   const inBasket = basket.has(r.id);
 
   const heroHtml = r.image
-    ? `<div class="recipe-hero"><img src="images/${r.image}" alt="${r.title}"></div>`
+    ? `<div class="recipe-hero"><img src="images/${esc(r.image)}" alt="${esc(r.title)}"></div>`
     : '';
 
   const stats = [
@@ -1710,17 +1871,17 @@ function renderRecipe(r) {
   ];
   const statsHtml = stats.map(s => `
     <div class="recipe-stat">
-      <span class="stat-label">${s.label}</span>
-      <span class="stat-value">${s.value}</span>
+      <span class="stat-label">${esc(s.label)}</span>
+      <span class="stat-value">${esc(s.value)}</span>
     </div>
   `).join('');
 
   document.getElementById('recipe-content').innerHTML = `
     <header class="recipe-header">
       <span class="masthead-dash" aria-hidden="true"></span>
-      <p class="recipe-label">${r.label} — serves ${r.servings}</p>
+      <p class="recipe-label">${esc(r.label)} — serves ${esc(r.servings)}</p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
-      <p class="recipe-description">${r.description}</p>
+      <p class="recipe-description">${esc(r.description)}</p>
       ${heroHtml}
       <div class="recipe-stats">${statsHtml}</div>
     </header>
@@ -1735,7 +1896,7 @@ function renderRecipe(r) {
     <section class="recipe-section" id="recipe-ingredients">
       <div class="section-heading-row">
         <h2 class="section-heading">Ingredients</h2>
-        <button class="basket-toggle-large${inBasket ? ' active' : ''}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${inBasket ? '✓ In shopping list' : '+ Add to shopping list'}</button>
+        <button class="basket-toggle-large${inBasket ? ' active' : ''}" data-basket-id="${esc(r.id)}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${basketLargeLabel(inBasket)}</button>
       </div>
       <div class="ingredients-card"><ul class="ingredients-grid" style="--rows: ${ingredientRows}">${ingredientsHtml}</ul></div>
     </section>
@@ -1747,7 +1908,7 @@ function renderRecipe(r) {
 
     <section class="recipe-section">
       <h2 class="section-heading">Notes</h2>
-      <div class="notes-box">${r.notes}</div>
+      <div class="notes-box">${esc(r.notes)}</div>
     </section>
 
     <hr class="footer-rule">
@@ -1839,22 +2000,22 @@ function renderShoppingListContent() {
   const groups = buildShoppingList();
 
   const chipsHtml = basketRecipes.map(r => `
-    <span class="basket-chip">${r.title} <button onclick="removeFromBasket('${r.id}')" aria-label="Remove ${r.title} from shopping list">×</button></span>
+    <span class="basket-chip">${esc(r.title)} <button onclick="removeFromBasket('${r.id}')" aria-label="Remove ${esc(r.title)} from shopping list">×</button></span>
   `).join('');
 
   const sectionsHtml = groups.map(({ section, items }) => `
     <section class="recipe-section">
-      <h2 class="section-heading">${section}</h2>
+      <h2 class="section-heading">${esc(section)}</h2>
       <ul class="shopping-items">
         ${items.map(item => {
           const checked = checkedItems.has(item.name);
           return `
           <li class="shopping-item${checked ? ' checked' : ''}">
             <label class="shopping-item-label">
-              <input type="checkbox" class="shopping-item-checkbox" data-name="${item.name}" ${checked ? 'checked' : ''} onchange="toggleChecked(this.dataset.name)">
+              <input type="checkbox" class="shopping-item-checkbox" data-name="${esc(item.name)}" ${checked ? 'checked' : ''} onchange="toggleChecked(this.dataset.name)">
               <div class="shopping-item-main">
-                <span class="shopping-item-name">${item.name}</span>
-                <span class="shopping-item-recipe">${item.recipeTitles.join(', ')}</span>
+                <span class="shopping-item-name">${esc(item.name)}</span>
+                <span class="shopping-item-recipe">${esc(item.recipeTitles.join(', '))}</span>
               </div>
             </label>
           </li>
@@ -1986,23 +2147,6 @@ function navigateWithTransition(to, update) {
   transition.finished.finally(() => { delete root.dataset.nav; });
 }
 
-// Re-renders whichever view is currently on screen, without the
-// scroll/focus/display side effects `route()` triggers — used after
-// a basket change so the visible toggle buttons stay in sync.
-function refreshCurrentView() {
-  const { id } = parseHash();
-  if (id === 'shopping-list') {
-    renderShoppingListView();
-    return;
-  }
-  const recipe = recipes.find(r => r.id === id);
-  if (recipe) {
-    renderRecipe(recipe);
-  } else {
-    renderList();
-  }
-}
-
 function showRecipe(id) {
   location.hash = id;
 }
@@ -2021,6 +2165,7 @@ function showIndex() {
 window.addEventListener('hashchange', route);
 
 buildFilters();
+initSearch();
 renderList();
 renderBasketBadge();
 
