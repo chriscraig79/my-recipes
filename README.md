@@ -81,9 +81,8 @@ pecorino, grated`, not `Parmesan or pecorino`), and combined lines are
 split (`Salt` and `Black pepper`, not `Salt and black pepper`).
 
 If a recipe needs a genuinely new ingredient, add it to `ingredients.yaml`
-with a section. The build has a keyword-guessing fallback for anything
-missing from the registry (and prints a warning when it kicks in), but
-that's a safety net, not a substitute for a real entry.
+with a section. The build fails on any ingredient name that isn't in the
+registry (see "Validation" below).
 
 ### Photos
 
@@ -100,6 +99,29 @@ share one style. The `recipe-illustration` skill in
 toolkit and the render step, and keeps one script per illustrated dish in
 `dishes/`.
 
+### Validation
+
+`npm run build` checks every recipe before building and exits with an
+error listing each problem (file and field) if any of these fail:
+
+- A required field is missing: `id`, `title`, `titleHtml`, `label`,
+  `servings`, `time`, `timeMins`, `cookedIn`, `description`, `tags`,
+  `ingredients`, `steps`, `notes` (`image`, `prep` and `timer` are optional)
+- `id` doesn't match the filename, or the recipe isn't in
+  `recipes/_order.yaml` (or `_order.yaml` lists an id with no file, or
+  lists one twice)
+- `cookedIn` isn't one of the allowed values
+- `timeMins` isn't a positive number
+- An ingredient `name` isn't in `ingredients.yaml`
+- `image` is set but the file isn't in `recipes/images/`
+- `titleHtml` contains markup other than plain `<em>` / `<strong>`
+
+All other recipe text is escaped when the page renders it, so it always
+shows exactly as written — HTML in a description or step appears as
+literal text rather than being run. The rules live in
+`scripts/validate.mjs`, with a test fixture for each in
+`scripts/validate-test.mjs` (run by `npm test`).
+
 ### Time bands
 
 | Band | Range |
@@ -107,6 +129,14 @@ toolkit and the render step, and keeps one script per illustrated dish in
 | Under 30 min | `timeMins < 30` |
 | 30–60 min | `timeMins >= 30 && timeMins <= 60` |
 | Over 1 hr | `timeMins > 60` |
+
+## Search
+
+A search box above the filter dropdowns finds recipes by title,
+description, tag or ingredient name as you type. It ignores case and
+accents, needs every word typed to match (`chicken curry` finds recipes
+with both), and combines with whatever filters are chosen. Press `/` to
+jump to it from anywhere on the index.
 
 ## Shopping list
 
@@ -154,6 +184,27 @@ request into `main` (`.github/workflows/test.yml`) and again before every
 deploy (`.github/workflows/deploy.yml`), so a regression blocks the merge
 or the publish rather than going live silently.
 
+### Accessibility checks
+
+`npm test` also runs `scripts/a11y-test.mjs`, which uses
+[axe-core](https://github.com/dequelabs/axe-core) to check every view and
+state at phone and desktop widths: the index (plain, filtered, no results,
+filter dropdown open), a recipe page, a recipe opened at a step link, and
+the shopping list (empty and populated). It checks against WCAG 2.2 A/AA
+and fails on serious or critical violations; moderate and minor ones are
+printed as notes. `@axe-core/playwright` is a dev dependency only —
+nothing extra ships to the page.
+
+Automated checks catch only part of the picture, so for bigger UI changes
+(a new view, navigation, dialogs) also do a quick manual pass:
+
+- **Keyboard only:** every control reachable with Tab, in a sensible
+  order, with a visible focus ring; Esc closes menus; nothing traps focus
+- **Screen reader:** VoiceOver (iOS/macOS) or TalkBack (Android) — controls
+  have clear names, state changes are announced, headings make sense
+- **200% zoom / 320px wide:** nothing cut off, no sideways scrolling
+- **Reduced motion:** with "reduce motion" on, no animated transitions
+
 ## Editing in Claude Code
 
 Once you've cloned the repo, you can continue building the recipe collection with Claude Code. Here are some useful prompts to get started:
@@ -198,14 +249,16 @@ my-recipes/
 │   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
 │   ├── watch.mjs             # Rebuilds automatically on changes (npm run watch)
 │   ├── smoke-test.mjs        # Playwright checks against build/index.html (npm test)
-│   └── section-lookup.mjs    # Keyword-guess fallback used by build.mjs
+│   ├── a11y-test.mjs         # axe accessibility checks on every view (npm test)
+│   ├── validate.mjs          # Recipe data checks run by build.mjs
+│   └── validate-test.mjs     # One fixture per validation rule (npm test)
 ├── .github/workflows/
 │   ├── deploy.yml            # Tests, builds, and deploys to GitHub Pages on push to main
 │   └── test.yml              # Runs the smoke test on every pull request into main
 ├── .claude/
 │   ├── launch.json           # Editor run config — npm run watch & npx serve build
 │   └── skills/add-recipe/    # Claude Code skill for adding recipes
-├── package.json             # js-yaml, esbuild, and playwright dependencies
+├── package.json             # js-yaml, esbuild, playwright and @axe-core/playwright dependencies
 ├── package-lock.json
 ├── .gitignore
 ├── README.md

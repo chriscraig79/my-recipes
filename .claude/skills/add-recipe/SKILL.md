@@ -79,6 +79,17 @@ template and render code never need to change.
    pushing to `main` triggers GitHub Actions to build and deploy fresh on
    its own.
 
+   The build validates every recipe and stops with one line per problem
+   (file + field) if anything is wrong — fix each one and rebuild. It
+   rejects: a missing required field (every field above except `image`
+   and per-step `timer`/ingredient `prep`); an `id` that doesn't match the
+   filename; a recipe missing from `recipes/_order.yaml` (or an order entry
+   with no file); a `cookedIn` outside the fixed list; a `timeMins` that
+   isn't a positive number; an ingredient name not in `ingredients.yaml`;
+   an `image` whose file isn't in `recipes/images/`; and any markup in
+   `titleHtml` other than plain `<em>`/`<strong>`. All other text is shown
+   exactly as written (it's escaped), so don't put HTML in it.
+
 5. **Spot-check.** Serve locally (`npx serve build`) and look at the new
    recipe. If it shares an ingredient with another recipe, add both to the
    shopping basket and confirm they merge into one line on the shopping
@@ -114,12 +125,9 @@ grammatical agreement with the amount), not an oversight — don't
 
 If the recipe genuinely needs an ingredient that isn't in the registry yet,
 add it: open `ingredients.yaml` and add a new top-level entry with a
-sensible `section`. Don't skip this step and hope the build's keyword-guess
-fallback handles it — that fallback exists only so an unregistered
-ingredient doesn't break the build, and it prints a warning when it kicks
-in; it's not a substitute for a correct registry entry, and a bad guess
-means that ingredient lands in the wrong supermarket section on every
-shopping list until someone notices and fixes it.
+sensible `section`. The build **fails** on any ingredient name that isn't
+in the registry (there's no guessing fallback), so a misspelt or new name
+has to be fixed before the site will build.
 
 **`prep` is separate from `name` on purpose.** `prep` holds how the
 ingredient is prepared or a short variant note — `thinly sliced`, `melted`,

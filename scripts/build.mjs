@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import yaml from "js-yaml";
 import * as esbuild from "esbuild";
-import { guessSection } from "./section-lookup.mjs";
+import { validateRecipes } from "./validate.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -18,35 +18,40 @@ function loadIngredientRegistry() {
   return new Map(Object.entries(raw).map(([name, entry]) => [name, entry.section]));
 }
 
-function loadRecipes() {
-  const order = yaml.load(fs.readFileSync(path.join(ROOT, "recipes", "_order.yaml"), "utf8"));
-  return order.map(id => {
-    const file = path.join(ROOT, "recipes", `${id}.yaml`);
-    if (!fs.existsSync(file)) {
-      throw new Error(`recipes/_order.yaml lists "${id}" but recipes/${id}.yaml doesn't exist`);
-    }
-    return yaml.load(fs.readFileSync(file, "utf8"));
-  });
-}
-
-function resolveSections(recipes, registry) {
-  const missing = new Set();
-  for (const recipe of recipes) {
-    for (const ing of recipe.ingredients) {
-      if (registry.has(ing.name)) {
-        ing.section = registry.get(ing.name);
-      } else {
-        ing.section = guessSection(ing.name);
-        missing.add(ing.name);
-      }
+function loadRecipeFiles() {
+  const dir = path.join(ROOT, "recipes");
+  const order = yaml.load(fs.readFileSync(path.join(dir, "_order.yaml"), "utf8"));
+  const files = new Map();
+  for (const name of fs.readdirSync(dir).filter(f => f.endsWith(".yaml") && !f.startsWith("_")).sort()) {
+    try {
+      files.set(name.slice(0, -".yaml".length), yaml.load(fs.readFileSync(path.join(dir, name), "utf8")));
+    } catch (err) {
+      console.error(`\nrecipes/${name} isn't valid YAML:\n${err.message}\n`);
+      process.exit(1);
     }
   }
-  if (missing.size) {
-    console.warn(
-      `\nWarning: ${missing.size} ingredient(s) not found in ingredients.yaml ` +
-      `(section guessed as a fallback — add them to the registry):\n` +
-      [...missing].map(n => `  - ${n}`).join("\n") + "\n"
-    );
+  return { order, files };
+}
+
+function listImages() {
+  const dir = path.join(ROOT, "recipes", "images");
+  return new Set(fs.existsSync(dir) ? fs.readdirSync(dir).filter(f => !f.startsWith(".")) : []);
+}
+
+// Every check lives in scripts/validate.mjs. Any failure stops the build
+// with one line per problem, naming the file and field.
+function validateOrExit({ order, files, registry }) {
+  const errors = validateRecipes({ order, files, registry, images: listImages() });
+  if (errors.length) {
+    console.error(`\nRecipe data has ${errors.length} problem(s):\n` + errors.map(e => `  - ${e}`).join("\n") + "\n");
+    process.exit(1);
+  }
+}
+
+// Validation guarantees every ingredient is in the registry.
+function resolveSections(recipes, registry) {
+  for (const recipe of recipes) {
+    for (const ing of recipe.ingredients) ing.section = registry.get(ing.name);
   }
 }
 
@@ -89,7 +94,9 @@ function copyImages() {
 
 function main() {
   const registry = loadIngredientRegistry();
-  const recipes = loadRecipes();
+  const { order, files } = loadRecipeFiles();
+  validateOrExit({ order, files, registry });
+  const recipes = order.map(id => files.get(id));
   resolveSections(recipes, registry);
 
   const html = fs.readFileSync(SRC_INDEX, "utf8");

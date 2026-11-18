@@ -86,6 +86,56 @@ check("no-results message shows when filters exclude everything", async page => 
   await clearFilter(page, "Veg");
 });
 
+// Search is debounced, so wait until the page has applied the query.
+async function search(page, text) {
+  await page.fill("#recipe-search", text);
+  await page.waitForFunction(q => searchQuery === q, text.trim());
+}
+
+check("search finds recipes by title, tag or ingredient and combines with filters", async page => {
+  const total = await page.locator(".recipe-list-item").count();
+  await search(page, "lentil");
+  const titles = await page.locator(".recipe-card-title").allTextContents();
+  assert.ok(titles.length > 0 && titles.length < total, `expected a few lentil recipes, got ${titles.length}`);
+  assert.ok(titles.some(t => /lentil/i.test(t)), "expected the lentil gnocchi ragu among the results");
+  assert.equal((await page.textContent("#results-count")).trim(), `${titles.length} recipe${titles.length === 1 ? "" : "s"}`);
+  // Case- and accent-insensitive.
+  await search(page, "LENTÍL");
+  assert.equal(await page.locator(".recipe-list-item").count(), titles.length, "case and accents should be ignored");
+  // Ingredient-only match: a word that's only in an ingredient name.
+  const ingredientOnly = await page.evaluate(() => {
+    const r = recipes.find(r => r.ingredients.some(i => !r.title.toLowerCase().includes(i.name.toLowerCase())));
+    return r.ingredients.find(i => !r.title.toLowerCase().includes(i.name.toLowerCase())).name;
+  });
+  await search(page, ingredientOnly);
+  assert.ok(await page.locator(".recipe-list-item").count() > 0, `expected "${ingredientOnly}" to match by ingredient`);
+  // Combined with a dropdown filter.
+  await search(page, "curry");
+  const curries = await page.locator(".recipe-list-item").count();
+  await chooseFilter(page, "Protein", "chicken");
+  const chickenCurries = await page.locator(".recipe-list-item").count();
+  assert.ok(chickenCurries > 0 && chickenCurries <= curries, "search and filter should combine");
+  await clearFilter(page, "Protein");
+  // No results offers a Clear search action that resets the list.
+  await search(page, "zzznothing");
+  assert.match(await page.textContent(".no-results"), /zzznothing/);
+  await page.click(".no-results-action");
+  assert.equal(await page.locator(".recipe-list-item").count(), total, "Clear search did not reset the list");
+  assert.equal(await page.inputValue("#recipe-search"), "");
+  assert.ok(await page.evaluate(() => document.activeElement.id === "recipe-search"), "focus should go back to the search field");
+  await page.evaluate(() => document.activeElement.blur());
+});
+
+check("pressing / focuses search; it doesn't fire while typing elsewhere", async page => {
+  await page.evaluate(() => document.body.focus());
+  await page.keyboard.press("/");
+  assert.ok(await page.evaluate(() => document.activeElement.id === "recipe-search"), "/ should focus search");
+  await page.keyboard.type("a/b");
+  assert.equal(await page.inputValue("#recipe-search"), "a/b", "/ should type normally inside the field");
+  await search(page, "");
+  await page.evaluate(() => document.activeElement.blur());
+});
+
 check("filter bar stays pinned to the top while scrolling the list", async page => {
   await page.evaluate(() => window.scrollTo(0, 1500));
   await page.waitForFunction(() => document.querySelector(".filters").classList.contains("is-stuck"));
@@ -223,6 +273,50 @@ check("step numbers link to #recipe/step-N and the link scrolls to and rings tha
   await page.evaluate(id => { location.hash = `${id}/step-3`; }, recipeId);
   await page.waitForFunction(() => document.querySelector("#step-3.is-target"));
   await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("adding to the shopping list from a recipe page keeps scroll, focus and the step ring (#47)", async page => {
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-jump", { state: "visible" });
+  await page.locator("#step-2 .step-number").click();
+  await page.waitForFunction(() => document.querySelector("#step-2.is-target"));
+  const toggle = page.locator(".basket-toggle-large");
+  await toggle.scrollIntoViewIfNeeded();
+  await toggle.focus();
+  const before = await page.evaluate(() => window.scrollY);
+  await page.keyboard.press("Enter");
+  assert.equal(await toggle.getAttribute("aria-pressed"), "true", "expected aria-pressed to flip to true");
+  assert.match(await toggle.textContent(), /In shopping list/);
+  assert.equal(await page.evaluate(() => window.scrollY), before, "scroll position changed");
+  assert.ok(await toggle.evaluate(el => el === document.activeElement), "focus moved away from the toggle");
+  assert.equal(await page.locator("#step-2.is-target").count(), 1, "step highlight was cleared");
+  assert.match(await page.textContent("#basket-badge"), /\(1\)/, "badge didn't update");
+  await page.keyboard.press("Enter"); // reset
+  assert.equal(await toggle.getAttribute("aria-pressed"), "false");
+  assert.ok(await toggle.evaluate(el => el === document.activeElement), "focus moved away after the second toggle");
+  await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+  assert.equal(await page.locator(".basket-toggle.active").count(), 0, "index toggles out of sync with the basket");
+});
+
+check("recipe text is rendered as text, never as HTML", async page => {
+  await page.evaluate(() => {
+    window.__xss = false;
+    const evil = '<img src=x onerror="window.__xss=true">';
+    recipes.push({
+      id: "smoke-escape", title: `Escape ${evil}`, titleHtml: "Escape <em>test</em>", label: evil,
+      servings: "1", time: "5 min", timeMins: 5, cookedIn: "Hob", description: evil, tags: [],
+      ingredients: [{ name: evil, amount: evil, prep: evil, section: "Other" }],
+      steps: [{ title: evil, content: evil, timer: evil }], notes: evil,
+    });
+    location.hash = "smoke-escape";
+  });
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  assert.equal(await page.locator("#recipe-content img").count(), 0, "markup from recipe text became an element");
+  assert.match(await page.textContent(".notes-box"), /<img src=x/, "expected the markup shown as literal text");
+  assert.equal(await page.evaluate(() => window.__xss), false, "an onerror handler ran");
+  await page.evaluate(() => { recipes.pop(); location.hash = ""; });
   await page.waitForSelector("#index", { state: "visible" });
 });
 
