@@ -35,7 +35,7 @@ async function clearFilter(page, category) {
 }
 
 check("filter dropdowns are grouped by category", async page => {
-  const labels = (await page.locator(".filter-trigger").allTextContents()).map(t => t.trim());
+  const labels = (await page.locator(".filter-trigger-text").allTextContents()).map(t => t.trim());
   for (const expected of ["Protein", "Carbs", "Veg", "Dish", "Time"]) {
     assert.ok(labels.includes(expected), `missing "${expected}" filter dropdown`);
   }
@@ -86,13 +86,50 @@ check("no-results message shows when filters exclude everything", async page => 
   await clearFilter(page, "Veg");
 });
 
-// Search is debounced, so wait until the page has applied the query.
+// Search opens in place of the filters. It's debounced, so wait until the
+// page has applied the query.
 async function search(page, text) {
+  if (await page.getAttribute("#search-toggle", "aria-expanded") !== "true") await page.click("#search-toggle");
   await page.fill("#recipe-search", text);
   await page.waitForFunction(q => searchQuery === q, text.trim());
 }
 
-check("search finds recipes by title, tag or ingredient and combines with filters", async page => {
+const isFocused = (page, id) => page.evaluate(id => document.activeElement?.id === id, id);
+const filtersHidden = page => page.evaluate(() => {
+  const bar = document.getElementById("filter-bar");
+  return bar.inert && getComputedStyle(bar).visibility === "hidden";
+});
+
+check("search opens in place of the filters, and × / Escape close it", async page => {
+  const toggle = page.locator("#search-toggle");
+  const iconBox = async () => { const b = await toggle.boundingBox(); return `${Math.round(b.x)},${Math.round(b.y)}`; };
+  const iconBefore = await iconBox();
+  assert.equal(await toggle.getAttribute("aria-expanded"), "false");
+  assert.ok(!(await page.isVisible("#recipe-search")), "search field should be hidden until opened");
+  await toggle.click();
+  assert.equal(await toggle.getAttribute("aria-expanded"), "true");
+  assert.ok(await isFocused(page, "recipe-search"), "opening search should focus the field");
+  await page.waitForFunction(() => getComputedStyle(document.getElementById("filter-bar")).visibility === "hidden");
+  assert.ok(await filtersHidden(page), "filters should be hidden and inert while searching");
+  assert.equal(await iconBox(), iconBefore, "the search button shouldn't move when search opens");
+  // × closes, clears and returns focus to the search button.
+  await search(page, "lentil");
+  await page.click("#search-close");
+  assert.equal(await toggle.getAttribute("aria-expanded"), "false");
+  assert.ok(await isFocused(page, "search-toggle"), "closing should return focus to the search button");
+  assert.equal(await page.evaluate(() => searchQuery), "", "closing should clear the query");
+  await page.waitForFunction(() => getComputedStyle(document.getElementById("search-panel")).visibility === "hidden");
+  assert.ok(await page.evaluate(() => document.getElementById("search-panel").inert), "closed search should be inert");
+  assert.equal(await iconBox(), iconBefore, "the search button shouldn't move when search closes");
+  // Escape does the same.
+  await search(page, "curry");
+  await page.keyboard.press("Escape");
+  assert.equal(await toggle.getAttribute("aria-expanded"), "false", "Escape should close search");
+  assert.ok(await isFocused(page, "search-toggle"), "Escape should return focus to the search button");
+  assert.equal(await page.locator(".recipe-list-item").count(), await page.evaluate(() => recipes.length), "closing should restore the full list");
+});
+
+check("search finds recipes by title, tag or ingredient", async page => {
   const total = await page.locator(".recipe-list-item").count();
   await search(page, "lentil");
   const titles = await page.locator(".recipe-card-title").allTextContents();
@@ -109,31 +146,64 @@ check("search finds recipes by title, tag or ingredient and combines with filter
   });
   await search(page, ingredientOnly);
   assert.ok(await page.locator(".recipe-list-item").count() > 0, `expected "${ingredientOnly}" to match by ingredient`);
-  // Combined with a dropdown filter.
-  await search(page, "curry");
-  const curries = await page.locator(".recipe-list-item").count();
-  await chooseFilter(page, "Protein", "chicken");
-  const chickenCurries = await page.locator(".recipe-list-item").count();
-  assert.ok(chickenCurries > 0 && chickenCurries <= curries, "search and filter should combine");
-  await clearFilter(page, "Protein");
-  // No results offers a Clear search action that resets the list.
+  // No results offers a Clear search action that closes search.
   await search(page, "zzznothing");
   assert.match(await page.textContent(".no-results"), /zzznothing/);
   await page.click(".no-results-action");
   assert.equal(await page.locator(".recipe-list-item").count(), total, "Clear search did not reset the list");
-  assert.equal(await page.inputValue("#recipe-search"), "");
-  assert.ok(await page.evaluate(() => document.activeElement.id === "recipe-search"), "focus should go back to the search field");
+  assert.equal(await page.getAttribute("#search-toggle", "aria-expanded"), "false", "Clear search should close search");
+  assert.ok(await isFocused(page, "search-toggle"), "focus should go to the search button");
+});
+
+check("search and filters are either/or: filters pause while searching and come back after", async page => {
+  await chooseFilter(page, "Protein", "chicken");
+  const chicken = await page.locator(".recipe-list-item").count();
+  await search(page, "beef");
+  const beef = await page.locator(".recipe-list-item").count();
+  assert.ok(beef > 0, "searching should ignore the hidden Protein: Chicken filter");
+  await page.keyboard.press("Escape");
+  assert.equal(await page.locator(".recipe-list-item").count(), chicken, "closing search should bring the chicken filter back");
+  assert.equal((await page.textContent('.filter-seg[data-category="Protein"] .filter-trigger-text')).trim(), "Chicken");
+  await clearFilter(page, "Protein");
+});
+
+check("pressing / opens search; it doesn't fire while typing elsewhere", async page => {
+  await page.evaluate(() => document.body.focus());
+  await page.keyboard.press("/");
+  assert.equal(await page.getAttribute("#search-toggle", "aria-expanded"), "true", "/ should open search");
+  assert.ok(await isFocused(page, "recipe-search"), "/ should focus search");
+  await page.keyboard.type("a/b");
+  assert.equal(await page.inputValue("#recipe-search"), "a/b", "/ should type normally inside the field");
+  await page.keyboard.press("Escape");
+  await page.waitForFunction(() => searchQuery === "");
   await page.evaluate(() => document.activeElement.blur());
 });
 
-check("pressing / focuses search; it doesn't fire while typing elsewhere", async page => {
-  await page.evaluate(() => document.body.focus());
-  await page.keyboard.press("/");
-  assert.ok(await page.evaluate(() => document.activeElement.id === "recipe-search"), "/ should focus search");
-  await page.keyboard.type("a/b");
-  assert.equal(await page.inputValue("#recipe-search"), "a/b", "/ should type normally inside the field");
-  await search(page, "");
-  await page.evaluate(() => document.activeElement.blur());
+check("choosing filters doesn't move the other segments (desktop and 375px phone)", async page => {
+  const original = page.viewportSize();
+  const positions = () => page.locator(".filter-seg").evaluateAll(els => els.map(el => {
+    const r = el.getBoundingClientRect();
+    return [Math.round(r.left), Math.round(r.width)];
+  }));
+  for (const viewport of [original, { width: 375, height: 800 }]) {
+    await page.setViewportSize(viewport);
+    const before = await positions();
+    await chooseFilter(page, "Protein", "chicken");
+    await chooseFilter(page, "Time", "under30");
+    const after = await positions();
+    before.forEach(([left, width], i) => {
+      assert.ok(Math.abs(after[i][0] - left) <= 1 && Math.abs(after[i][1] - width) <= 1,
+        `segment ${i} moved at ${viewport.width}px: ${JSON.stringify(before)} -> ${JSON.stringify(after)}`);
+    });
+    const bar = await page.locator(".filter-shell").boundingBox();
+    const last = await page.locator(".filter-seg").last().boundingBox();
+    assert.ok(last.x + last.width <= bar.x + bar.width, `last segment overflows the bar at ${viewport.width}px`);
+    const title = await page.getAttribute('.filter-seg[data-category="Time"] .filter-trigger', "title");
+    assert.match(title, /Under 30 min/, "full choice should be in the title");
+    await clearFilter(page, "Protein");
+    await clearFilter(page, "Time");
+  }
+  await page.setViewportSize(original);
 });
 
 check("filter bar stays pinned to the top while scrolling the list", async page => {

@@ -132,11 +132,19 @@ literal text rather than being run. The rules live in
 
 ## Search
 
-A search box above the filter dropdowns finds recipes by title,
-description, tag or ingredient name as you type. It ignores case and
-accents, needs every word typed to match (`chicken curry` finds recipes
-with both), and combines with whatever filters are chosen. Press `/` to
-jump to it from anywhere on the index.
+The search button at the left of the filter bar opens a search field in
+place of the filter dropdowns; × or Escape closes it again, and `/` opens
+it from anywhere on the index. Search matches title, description, tag or
+ingredient name as you type, ignores case and accents, and needs every word
+typed to match (`chicken curry` finds recipes with both).
+
+Search and the filters are either/or: while search is open the (hidden)
+filters are paused and you search every recipe. Closing search clears the
+query and brings the filters back as they were.
+
+Each filter segment keeps its width when you choose something in it — a
+long choice is cut short with an ellipsis (the full value is in its tooltip
+and accessible name) rather than pushing the other segments along.
 
 ## Shopping list
 
