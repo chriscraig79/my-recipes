@@ -86,41 +86,102 @@
 
   .filters.is-stuck { border-bottom-color: var(--border); }
 
-  /* Search sits above the dropdowns in the same pinned bar, the same width
-     and pill shape, so the two read as one control. */
-  .search-field {
-    position: relative;
+  /* One pill holds the search button (left edge, never moves) and, in the
+     same space beside it, either the filter dropdowns or the search field.
+     Opening search fades the filters out and the field in; the one that's
+     hidden is also made inert and visibility:hidden once its fade ends, so
+     it can't be tabbed to or read out. */
+  .filter-shell {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.15rem;
     width: 100%;
     max-width: calc(var(--reading-width) - 4rem);
-    margin: 0 auto 0.45rem;
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 0.95rem;
-    top: 50%;
-    width: 0.95rem;
-    height: 0.95rem;
-    transform: translateY(-50%);
-    color: var(--muted);
-    pointer-events: none;
-  }
-
-  .search-input {
-    width: 100%;
-    min-height: 2.45rem;
-    padding: 0.45rem 1rem 0.45rem 2.4rem;
+    margin: 0 auto;
+    padding: 0.2rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
     background: var(--card-bg);
+  }
+
+  .search-toggle,
+  .search-close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    min-height: 1.8rem;
+    align-self: stretch;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .search-toggle svg,
+  .search-close svg { width: 0.95rem; height: 0.95rem; }
+
+  .search-toggle:hover,
+  .search-close:hover,
+  .search-toggle[aria-expanded="true"] { color: var(--accent); }
+
+  .search-toggle:focus-visible,
+  .search-close:focus-visible,
+  .search-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  /* The filters and the search field share the second grid cell. */
+  .filter-bar,
+  .search-panel {
+    grid-column: 2;
+    grid-row: 1;
+    transition: opacity 0.15s ease, visibility 0s linear 0.15s;
+  }
+
+  .search-panel {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .filters.is-searching .filter-bar { opacity: 0; visibility: hidden; }
+  .filters.is-searching .search-panel {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.15s ease 0.05s, visibility 0s;
+  }
+
+  .search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 1.8rem;
+    padding: 0.2rem 0.6rem 0.2rem 0.35rem;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: none;
     color: var(--ink);
     font-family: var(--font-sans);
     /* 16px so iOS Safari doesn't zoom the page when the field is focused. */
     font-size: 1rem;
+    line-height: 1.2;
   }
 
   .search-input::placeholder { color: var(--muted); opacity: 1; }
-  .search-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  /* The × beside the field closes search, so hide the browser's own clear button. */
+  .search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .filter-bar, .search-panel,
+    .filters.is-searching .search-panel { transition: none; }
+  }
 
   .visually-hidden {
     position: absolute;
@@ -140,21 +201,14 @@
   .filter-bar {
     display: flex;
     gap: 0.15rem;
-    /* Fills the same centred column as the header above it. */
-    width: 100%;
-    max-width: calc(var(--reading-width) - 4rem);
-    margin: 0 auto;
-    padding: 0.2rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    background: var(--card-bg);
+    min-width: 0;
   }
 
-  /* Each option gets an equal share of the bar, with its label centred in
-     that share. A category name never gets narrower than its label; a
-     chosen segment starts from its label's width and is the only kind that
-     shrinks when space runs out, so a long choice is cut short rather than
-     the category names. */
+  /* Each segment gets an equal share of the bar, with its label centred in
+     that share, and keeps that share when a choice is made: the chosen
+     value is cut short with an ellipsis rather than growing the segment and
+     pushing the others along. A category name never gets narrower than its
+     label. */
   .filter-seg {
     position: relative;
     flex: 1 1 0;
@@ -190,10 +244,31 @@
   .filter-trigger:hover,
   .filter-trigger[aria-expanded="true"] { color: var(--accent); }
 
+  /* A segment's minimum width comes from its category name (the hidden
+     sizer), never from the text showing, so choosing "Under 30 min" in Time
+     can't widen it. The shown text fills whatever room the segment has and
+     is cut short with an ellipsis if it doesn't fit; the full choice is in
+     the button's title and accessible name. */
+  .filter-label {
+    flex: 1 1 auto;
+    display: grid;
+    min-width: max-content;
+  }
+
+  .filter-sizer,
   .filter-trigger-text {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+  }
+
+  .filter-sizer { visibility: hidden; }
+
+  .filter-trigger-text {
+    width: 0;
+    min-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    text-align: center;
   }
 
   .filter-chevron {
@@ -206,10 +281,9 @@
   .filter-trigger[aria-expanded="true"] .filter-chevron { transform: rotate(180deg); }
 
   /* Active: orange fill, chosen value as the label, and an × to clear it
-     in place of the chevron. Segments size to their labels and shrink in
-     proportion when space is short, so a long choice ("Under 30 min")
-     gives way before the short category names do. */
-  .filter-seg.active { background: var(--accent); flex-basis: auto; min-width: 0; }
+     in place of the chevron. The padding is set so the × takes exactly the
+     room the chevron did, so the segment's width doesn't change. */
+  .filter-seg.active { background: var(--accent); }
   .filter-seg.active .filter-trigger,
   .filter-seg.active .filter-trigger:hover,
   .filter-seg.active .filter-trigger[aria-expanded="true"] { color: var(--warm-white); padding-right: 0.1rem; }
@@ -218,7 +292,8 @@
   /* Above phone size, pad the left of a chosen label by the width of the ×
      on its right, so the label sits centred in its part like the others. */
   @media (min-width: 501px) {
-    .filter-seg.active .filter-trigger { padding-left: calc(0.1rem + 1.6rem + 0.15rem); }
+    /* chevron side: 0.3 gap + 0.7 chevron + 0.85 padding = 0.1 + 1.6 × + 0.15 margin + 0.1 extra */
+    .filter-seg.active .filter-trigger { padding-left: 0.85rem; }
   }
 
   .filter-clear {
@@ -1343,19 +1418,39 @@
     .site-nav-list { gap: 1.25rem; }
 
     #index { padding: var(--page-top) 1rem 3rem; }
-    .filter-bar { max-width: none; }
+    .filter-shell { max-width: none; }
 
     :root { --space-section: 2rem; --space-heading: 1rem; --page-top: 1.25rem; }
     #recipe-view, #shopping-list-view { padding: var(--page-top) 1rem 3rem; }
     .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
     .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
-    .filter-bar { gap: 0.1rem; }
-    .filter-trigger { padding: 0.4rem 0.5rem; gap: 0.2rem; font-size: 0.66rem; letter-spacing: 0.05em; }
+    .filter-bar, .filter-shell { gap: 0.1rem; }
+    .search-toggle, .search-close { width: 1.75rem; }
+    .filter-trigger { padding: 0.4rem 0.4rem; gap: 0.2rem; font-size: 0.66rem; letter-spacing: 0.05em; }
     .filter-chevron { width: 0.6rem; height: 0.6rem; }
-    .filter-clear { width: 1.5rem; }
-    /* Once something is chosen, drop the chevrons to give the choices room. */
-    .filter-bar:has(.filter-seg.active) .filter-chevron { display: none; }
+    .filter-clear { width: 1.5rem; margin-right: 0; }
+    /* Same width as inactive: 0.4 + 0.2 gap + 0.6 chevron + 0.4 = 0.1 + 1.5 ×. */
+    .filter-seg.active .filter-trigger,
+    .filter-seg.active .filter-trigger:hover,
+    .filter-seg.active .filter-trigger[aria-expanded="true"] { padding-left: 0.1rem; padding-right: 0; }
+    .filter-seg.active .filter-trigger-text { letter-spacing: 0; }
+    /* Swap in the compact label (the full one stays in title / aria-label). */
+    .filter-trigger-text[data-tiny] { font-size: 0; }
+    .filter-trigger-text[data-tiny]::after { content: attr(data-tiny); font-size: 0.66rem; }
     .results-count { margin-bottom: 0.65rem; }
+  }
+
+  /* Below ~370px the category names no longer fit side by side, so let the
+     segments share the bar and truncate rather than overflow it. */
+  @media (max-width: 370px) {
+    .filter-seg, .filter-label { min-width: 0; }
+    .filter-label { grid-template-columns: minmax(0, 1fr); }
+    .filter-sizer { overflow: hidden; }
+    /* Segments share the bar equally here, so dropping the chevrons can't
+       move anything; it gives the category names room. */
+    .filter-chevron { display: none; }
+    .filter-trigger { padding-left: 0.2rem; padding-right: 0.2rem; font-size: 0.62rem; letter-spacing: 0.02em; }
+    .filter-trigger-text[data-tiny]::after { font-size: 0.62rem; }
   }
 </style>
 </head>
@@ -1379,12 +1474,19 @@
   <h1 class="visually-hidden" id="site-title" tabindex="-1">Recipes</h1>
 
   <div class="filters">
-    <div class="search-field" role="search">
-      <label class="visually-hidden" for="recipe-search">Search recipes</label>
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="search" id="recipe-search" class="search-input" placeholder="Search, e.g. lentil, salmon, korma" autocomplete="off" spellcheck="false">
+    <div class="filter-shell">
+      <button type="button" class="search-toggle" id="search-toggle" aria-label="Search recipes" aria-expanded="false" aria-controls="search-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+      <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter recipes"></div>
+      <div class="search-panel" id="search-panel" role="search" inert>
+        <label class="visually-hidden" for="recipe-search">Search recipes</label>
+        <input type="search" id="recipe-search" class="search-input" placeholder="Search, e.g. lentil, salmon" autocomplete="off" spellcheck="false" enterkeyhint="search">
+        <button type="button" class="search-close" id="search-close" aria-label="Close search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter recipes"></div>
   </div>
 
   <p class="results-count" id="results-count" aria-live="polite"></p>
@@ -1687,10 +1789,11 @@ function buildWhatsAppUrl(groups) {
 // ─────────────────────────────────────────────
 
 const TIME_BANDS = [
-  // `short` is shown on the filter button once chosen, to save room on phones.
-  { label: "Under 30 min", short: "< 30 min", key: "under30", test: m => m < 30 },
-  { label: "30–60 min",    short: "30–60 min", key: "30to60",  test: m => m >= 30 && m <= 60 },
-  { label: "Over 1 hr",    short: "1 hr +",    key: "over60",  test: m => m > 60 },
+  // `short` is shown on the filter button once chosen; `tiny` replaces it on
+  // phones, where the Time segment only has room for a few characters.
+  { label: "Under 30 min", short: "< 30 min",  tiny: "< 30",  key: "under30", test: m => m < 30 },
+  { label: "30–60 min",    short: "30–60 min", tiny: "30–60", key: "30to60",  test: m => m >= 30 && m <= 60 },
+  { label: "Over 1 hr",    short: "1 hr +",    tiny: "1 hr+", key: "over60",  test: m => m > 60 },
 ];
 
 // Groups tags by the role they play in a meal — closer to how you'd
@@ -1741,8 +1844,14 @@ function getTimeBandsPresent() {
 // ── Text search ──
 // Matches title, description, tags and ingredient names, ignoring case and
 // accents. Every word typed has to appear somewhere ("chicken curry" finds
-// recipes with both). Combines with the dropdown filters.
+// recipes with both).
+//
+// Search and the dropdown filters are either/or: search opens in place of
+// the filters, so while it's open the (hidden) filters are paused and you
+// search every recipe. Closing search clears the query and brings the
+// filters back exactly as they were.
 let searchQuery = '';
+let searchOpen = false;
 
 const normalise = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
@@ -1757,7 +1866,8 @@ function matchesSearch(r) {
 }
 
 function filteredRecipes() {
-  return recipes.filter(r => matchesSearch(r) && Object.entries(activeFilters).every(([category, value]) =>
+  if (searchOpen) return recipes.filter(matchesSearch);
+  return recipes.filter(r => Object.entries(activeFilters).every(([category, value]) =>
     category === "Time"
       ? TIME_BANDS.find(b => b.key === value)?.test(r.timeMins)
       : r.tags.includes(value)
@@ -1766,35 +1876,70 @@ function filteredRecipes() {
 
 function initSearch() {
   const input = document.getElementById('recipe-search');
+  const toggle = document.getElementById('search-toggle');
   let timer = null;
   input.addEventListener('input', () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
       // Nothing to do if the words haven't changed (e.g. a trailing space),
       // so the list doesn't re-render or move under you.
-      if (input.value.trim() === searchQuery) return;
+      if (!searchOpen || input.value.trim() === searchQuery) return;
       searchQuery = input.value.trim();
       renderList();
       scrollToResultsIfStuck();
     }, 150);
   });
-  // "/" jumps to search from anywhere on the index, unless you're already
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeSearch(); }
+  });
+  toggle.addEventListener('click', () => searchOpen ? closeSearch() : openSearch());
+  document.getElementById('search-close').addEventListener('click', () => closeSearch());
+  // "/" opens search from anywhere on the index, unless you're already
   // typing somewhere. Tab and Shift+Tab still leave the field as normal.
   document.addEventListener('keydown', e => {
     if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey || currentView() !== 'index') return;
     const el = document.activeElement;
     if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
     e.preventDefault();
-    input.focus();
+    openSearch();
   });
 }
 
-function clearSearch() {
+// Swaps the filters for the search field (or back). The CSS fades between
+// them and hides whichever is off once its fade ends; inert takes it out of
+// the tab order and accessibility tree straight away.
+function setSearchOpen(open) {
+  searchOpen = open;
+  if (openSeg) closeMenu(openSeg);
+  document.querySelector('.filters').classList.toggle('is-searching', open);
+  document.getElementById('search-toggle').setAttribute('aria-expanded', String(open));
+  document.getElementById('search-panel').inert = !open;
+  document.getElementById('filter-bar').inert = open;
+}
+
+function openSearch() {
+  if (!searchOpen) {
+    setSearchOpen(true);
+    renderList();
+  }
+  document.getElementById('recipe-search').focus();
+}
+
+// Closing clears the query, so the filters and an invisible search never
+// combine. Focus goes back to the search button.
+function closeSearch() {
   const input = document.getElementById('recipe-search');
   input.value = '';
   searchQuery = '';
+  setSearchOpen(false);
   renderList();
-  input.focus();
+  scrollToResultsIfStuck();
+  document.getElementById('search-toggle').focus();
+}
+
+// The no-results "Clear search" action.
+function clearSearch() {
+  closeSearch();
 }
 
 const capitalise = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -1808,7 +1953,7 @@ function buildFilters() {
       category,
       options: tags.map(tag => ({ value: tag, label: capitalise(tag) })),
     })),
-    { category: "Time", options: getTimeBandsPresent().map(b => ({ value: b.key, label: b.label, short: b.short })) },
+    { category: "Time", options: getTimeBandsPresent().map(b => ({ value: b.key, label: b.label, short: b.short, tiny: b.tiny })) },
   ];
 
   document.getElementById('filter-bar').innerHTML = filterCategories.map(({ category, options }) => {
@@ -1821,7 +1966,7 @@ function buildFilters() {
       <div class="filter-seg" data-category="${category}">
         <button type="button" class="filter-trigger" id="filter-trigger-${slug}"
           aria-haspopup="menu" aria-expanded="false" aria-controls="filter-menu-${slug}">
-          <span class="filter-trigger-text">${category}</span>${CHEVRON_ICON}
+          <span class="filter-label"><span class="filter-sizer" aria-hidden="true">${category}</span><span class="filter-trigger-text">${category}</span></span>${CHEVRON_ICON}
         </button>
         <button type="button" class="filter-clear" hidden>×</button>
         <ul class="filter-menu" id="filter-menu-${slug}" role="menu" aria-labelledby="filter-trigger-${slug}" hidden>${items}</ul>
@@ -1870,11 +2015,20 @@ function updateFilterUI() {
 
     seg.classList.toggle('active', Boolean(option));
     const shown = option ? (option.short || option.label) : category;
-    trigger.querySelector('.filter-trigger-text').textContent = shown;
+    const text = trigger.querySelector('.filter-trigger-text');
+    text.textContent = shown;
+    if (option?.tiny) text.dataset.tiny = option.tiny;
+    else delete text.dataset.tiny;
     // The visible text is just the choice ("Chicken"); the accessible name
     // keeps the category in front of it so it still makes sense when read out.
-    if (option) trigger.setAttribute('aria-label', `${category}: ${shown}`);
-    else trigger.removeAttribute('aria-label');
+    if (option) {
+      // Keep the visible text in the accessible name (WCAG 2.5.3).
+      trigger.setAttribute('aria-label', `${category}: ${shown}`);
+      trigger.title = `${category}: ${option.label}`;
+    } else {
+      trigger.removeAttribute('aria-label');
+      trigger.removeAttribute('title');
+    }
     clear.hidden = !option;
     clear.setAttribute('aria-label', option ? `Clear ${category} filter (${option.label})` : `Clear ${category} filter`);
 
@@ -2006,7 +2160,7 @@ function renderList() {
 
   if (results.length === 0) {
     list.innerHTML = searchQuery
-      ? `<li class="no-results">No recipes match “${esc(searchQuery)}”${Object.keys(activeFilters).length ? ' with those filters' : ''}.
+      ? `<li class="no-results">No recipes match “${esc(searchQuery)}”.
           <button type="button" class="no-results-action" onclick="clearSearch()">Clear search</button></li>`
       : '<li class="no-results">No recipes match those filters.</li>';
     return;

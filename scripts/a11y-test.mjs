@@ -47,10 +47,17 @@ const STATES = [
   } },
   { name: "index with no results", setup: async page => {
     await openIndex(page);
+    await page.click("#search-toggle");
     await page.fill("#recipe-search", "zzznothing");
     await page.waitForSelector(".no-results");
   } },
-  { name: "index with a filter dropdown open", setup: async page => {
+  { name: "index with search open", setup: async page => {
+    await openIndex(page);
+    await page.click("#search-toggle");
+    await page.fill("#recipe-search", "chicken");
+    await page.waitForFunction(() => searchQuery === "chicken");
+  } },
+    { name: "index with a filter dropdown open", setup: async page => {
     await openIndex(page);
     await page.click('.filter-seg[data-category="Protein"] .filter-trigger');
     await page.waitForSelector(".filter-menu:not([hidden])");
