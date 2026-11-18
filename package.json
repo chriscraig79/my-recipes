@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "watch": "node scripts/watch.mjs",
-    "test": "npm run build && node scripts/smoke-test.mjs"
+    "test": "node scripts/validate-test.mjs && npm run build && node scripts/smoke-test.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

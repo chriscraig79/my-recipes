@@ -226,6 +226,50 @@ check("step numbers link to #recipe/step-N and the link scrolls to and rings tha
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("adding to the shopping list from a recipe page keeps scroll, focus and the step ring (#47)", async page => {
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-jump", { state: "visible" });
+  await page.locator("#step-2 .step-number").click();
+  await page.waitForFunction(() => document.querySelector("#step-2.is-target"));
+  const toggle = page.locator(".basket-toggle-large");
+  await toggle.scrollIntoViewIfNeeded();
+  await toggle.focus();
+  const before = await page.evaluate(() => window.scrollY);
+  await page.keyboard.press("Enter");
+  assert.equal(await toggle.getAttribute("aria-pressed"), "true", "expected aria-pressed to flip to true");
+  assert.match(await toggle.textContent(), /In shopping list/);
+  assert.equal(await page.evaluate(() => window.scrollY), before, "scroll position changed");
+  assert.ok(await toggle.evaluate(el => el === document.activeElement), "focus moved away from the toggle");
+  assert.equal(await page.locator("#step-2.is-target").count(), 1, "step highlight was cleared");
+  assert.match(await page.textContent("#basket-badge"), /\(1\)/, "badge didn't update");
+  await page.keyboard.press("Enter"); // reset
+  assert.equal(await toggle.getAttribute("aria-pressed"), "false");
+  assert.ok(await toggle.evaluate(el => el === document.activeElement), "focus moved away after the second toggle");
+  await page.locator("#recipe-view .back-btn").click();
+  await page.waitForSelector("#index", { state: "visible" });
+  assert.equal(await page.locator(".basket-toggle.active").count(), 0, "index toggles out of sync with the basket");
+});
+
+check("recipe text is rendered as text, never as HTML", async page => {
+  await page.evaluate(() => {
+    window.__xss = false;
+    const evil = '<img src=x onerror="window.__xss=true">';
+    recipes.push({
+      id: "smoke-escape", title: `Escape ${evil}`, titleHtml: "Escape <em>test</em>", label: evil,
+      servings: "1", time: "5 min", timeMins: 5, cookedIn: "Hob", description: evil, tags: [],
+      ingredients: [{ name: evil, amount: evil, prep: evil, section: "Other" }],
+      steps: [{ title: evil, content: evil, timer: evil }], notes: evil,
+    });
+    location.hash = "smoke-escape";
+  });
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  assert.equal(await page.locator("#recipe-content img").count(), 0, "markup from recipe text became an element");
+  assert.match(await page.textContent(".notes-box"), /<img src=x/, "expected the markup shown as literal text");
+  assert.equal(await page.evaluate(() => window.__xss), false, "an onerror handler ran");
+  await page.evaluate(() => { recipes.pop(); location.hash = ""; });
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 check("Copy list copies the same unchecked items as Send to WhatsApp", async page => {
   // Capture clipboard writes instead of relying on real clipboard
   // permissions in headless Chromium.

@@ -81,9 +81,8 @@ pecorino, grated`, not `Parmesan or pecorino`), and combined lines are
 split (`Salt` and `Black pepper`, not `Salt and black pepper`).
 
 If a recipe needs a genuinely new ingredient, add it to `ingredients.yaml`
-with a section. The build has a keyword-guessing fallback for anything
-missing from the registry (and prints a warning when it kicks in), but
-that's a safety net, not a substitute for a real entry.
+with a section. The build fails on any ingredient name that isn't in the
+registry (see "Validation" below).
 
 ### Photos
 
@@ -99,6 +98,29 @@ share one style. The `recipe-illustration` skill in
 `.claude/skills/recipe-illustration/` covers the style rules, the drawing
 toolkit and the render step, and keeps one script per illustrated dish in
 `dishes/`.
+
+### Validation
+
+`npm run build` checks every recipe before building and exits with an
+error listing each problem (file and field) if any of these fail:
+
+- A required field is missing: `id`, `title`, `titleHtml`, `label`,
+  `servings`, `time`, `timeMins`, `cookedIn`, `description`, `tags`,
+  `ingredients`, `steps`, `notes` (`image`, `prep` and `timer` are optional)
+- `id` doesn't match the filename, or the recipe isn't in
+  `recipes/_order.yaml` (or `_order.yaml` lists an id with no file, or
+  lists one twice)
+- `cookedIn` isn't one of the allowed values
+- `timeMins` isn't a positive number
+- An ingredient `name` isn't in `ingredients.yaml`
+- `image` is set but the file isn't in `recipes/images/`
+- `titleHtml` contains markup other than plain `<em>` / `<strong>`
+
+All other recipe text is escaped when the page renders it, so it always
+shows exactly as written — HTML in a description or step appears as
+literal text rather than being run. The rules live in
+`scripts/validate.mjs`, with a test fixture for each in
+`scripts/validate-test.mjs` (run by `npm test`).
 
 ### Time bands
 
@@ -198,7 +220,8 @@ my-recipes/
 │   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
 │   ├── watch.mjs             # Rebuilds automatically on changes (npm run watch)
 │   ├── smoke-test.mjs        # Playwright checks against build/index.html (npm test)
-│   └── section-lookup.mjs    # Keyword-guess fallback used by build.mjs
+│   ├── validate.mjs          # Recipe data checks run by build.mjs
+│   └── validate-test.mjs     # One fixture per validation rule (npm test)
 ├── .github/workflows/
 │   ├── deploy.yml            # Tests, builds, and deploys to GitHub Pages on push to main
 │   └── test.yml              # Runs the smoke test on every pull request into main
