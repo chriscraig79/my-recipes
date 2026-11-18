@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Recipes</title>
+<!-- Shown when a link is shared (WhatsApp, Messages, Slack, etc.). The
+     page has no visible title, so this is where the site's name and
+     description live. -->
+<meta name="description" content="Recipe collection &amp; shopping list generator">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="My Recipes">
+<meta property="og:title" content="My Recipes">
+<meta property="og:description" content="Recipe collection &amp; shopping list generator">
+<meta property="og:url" content="https://chriscraig79.github.io/my-recipes/">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:wght@300;400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -55,27 +64,6 @@
     max-width: 1120px;
     margin: 0 auto;
     padding: var(--page-top) 2rem 5rem;
-  }
-
-  /* A light masthead: a small uppercase title, no rules, centred. */
-  /* The header shares the recipe pages' centred column (its content box
-     is the column minus the views' 2rem side padding), so the title lines up with the recipe header at every width, while the filters
-     and grid below keep the index's full width. */
-  .site-header {
-    max-width: calc(var(--reading-width) - 4rem);
-    margin: 0 auto 0.85rem;
-    text-align: center;
-  }
-
-
-  .site-title {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 500;
-    line-height: 1.4;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink);
   }
 
   /* ── Filters ── */
@@ -697,8 +685,7 @@
   .toast-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ── Recipe view / Shopping list view ──
-     A centred fixed-width reading column. The index header uses the same
-     column (see .site-header), so headers line up on every page. */
+     A centred fixed-width reading column. */
   #recipe-view, #shopping-list-view {
     display: none;
     max-width: var(--reading-width);
@@ -737,7 +724,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    line-height: 1.4; /* same as .site-title, so headers start at the same height on every page */
+    line-height: 1.4;
     margin-bottom: 0.75rem;
   }
 
@@ -1056,7 +1043,6 @@
     flex-wrap: wrap;
     gap: 0.4rem;
     justify-content: center;
-    margin-top: 1.25rem;
   }
 
   .basket-chip {
@@ -1134,25 +1120,24 @@
     color: var(--warm-white);
   }
 
+  /* Sits at the end of the recipe chips, since it does the same job for
+     all of them at once. Same size as a chip, but a plain text button so
+     it reads as secondary. */
   .clear-list-btn {
     background: none;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
     color: var(--muted);
     font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 0.78rem;
     text-decoration: underline;
+    text-underline-offset: 0.2em;
     cursor: pointer;
-    padding: 0;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.15s;
   }
-
-  /* Clear list sits on its own below the items, away from the main actions. */
-  .shopping-footer-actions {
-    display: flex;
-    justify-content: center;
-    margin: var(--space-section) 0;
-  }
+  .clear-list-btn:hover { color: var(--accent); }
+  .clear-list-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
   .shopping-items { list-style: none; }
 
@@ -1297,7 +1282,6 @@
     .site-nav-list { gap: 1.25rem; }
 
     #index { padding: var(--page-top) 1rem 3rem; }
-    .site-header { margin-bottom: 0.65rem; max-width: none; }
     .filter-bar { max-width: none; }
 
     :root { --space-section: 2rem; --space-heading: 1rem; --page-top: 1.25rem; }
@@ -1329,9 +1313,9 @@
 <main>
 
 <div id="index">
-  <header class="site-header">
-    <h1 class="site-title" id="site-title" tabindex="-1">Recipe collection &amp; shopping list generator</h1>
-  </header>
+  <!-- No visible title (the nav says where you are), but kept for screen
+       readers and as the place focus lands when you arrive on the page. -->
+  <h1 class="visually-hidden" id="site-title" tabindex="-1">Recipes</h1>
 
   <div class="filters">
     <div class="search-field" role="search">
@@ -2192,9 +2176,14 @@ function renderShoppingListContent() {
 
   document.getElementById('shopping-list-content').innerHTML = `
     <header class="recipe-header">
-      <p class="recipe-label">Shopping list — ${basketRecipes.length} recipe${basketRecipes.length !== 1 ? 's' : ''}</p>
-      <h1 class="recipe-title" id="shopping-list-title" tabindex="-1">Shopping <em>List</em></h1>
-      ${basketRecipes.length ? `<div class="basket-chips">${chipsHtml}</div>` : ''}
+      <!-- The nav already says "Shopping list" and the count, so the title
+           is for screen readers only. -->
+      <h1 class="visually-hidden" id="shopping-list-title" tabindex="-1">Shopping list</h1>
+      ${basketRecipes.length ? `
+        <div class="basket-chips">
+          ${chipsHtml}
+          <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
+        </div>` : ''}
     </header>
 
     ${basketRecipes.length ? `
@@ -2205,9 +2194,6 @@ function renderShoppingListContent() {
         ` : `<span class="all-checked-note">Everything's checked off</span>`}
       </div>
       ${sectionsHtml}
-      <div class="shopping-footer-actions">
-        <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
-      </div>
     ` : `<p class="no-results">Your shopping list is empty. Add recipes from the index or a recipe page.</p>`}
 
     <hr class="footer-rule">

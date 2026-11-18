@@ -234,8 +234,7 @@ check("opening and leaving a recipe animates and then cleans up", async page => 
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "back");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#index"), "expected the index after going back");
-  const title = (await page.textContent("#site-title")).trim();
-  assert.match(title, /Recipe collection/i, `unexpected index title: "${title}"`);
+  assert.equal((await page.textContent("#site-title")).trim(), "Recipes", "expected the index's (visually hidden) h1");
 });
 
 check("ingredients are a 2-column grid with equal-height cells", async page => {
@@ -378,18 +377,14 @@ check("Copy list copies the same unchecked items as Send to WhatsApp", async pag
   await page.waitForSelector("#index", { state: "visible" });
 });
 
-check("Clear list sits below the items, empties the list and can be undone", async page => {
+check("Clear list sits with the recipe chips, empties the list and can be undone", async page => {
   await page.locator(".basket-toggle").first().click();
   await page.locator("#shopping-list-link").click();
   await page.waitForSelector("#shopping-list-view", { state: "visible" });
-  const order = await page.evaluate(() => {
-    const clear = document.querySelector(".clear-list-btn").getBoundingClientRect().top;
-    const lastItem = [...document.querySelectorAll(".shopping-item")].pop().getBoundingClientRect().top;
-    const primary = document.querySelector(".whatsapp-btn").getBoundingClientRect().top;
-    return { clearBelowItems: clear > lastItem, primaryAboveItems: primary < lastItem };
-  });
-  assert.ok(order.primaryAboveItems, "expected Send to WhatsApp above the items");
-  assert.ok(order.clearBelowItems, "expected Clear list below the items");
+  assert.equal(await page.locator(".basket-chips .clear-list-btn").count(), 1, "expected Clear list in the row of recipe chips");
+  assert.ok(await page.locator(".basket-chip").last().evaluate(chip => chip.nextElementSibling?.matches(".clear-list-btn")), "expected Clear list right after the last chip");
+  assert.equal(await page.locator("#shopping-list-view :is(.recipe-label, .recipe-title)").count(), 0, "no visible eyebrow or title on the shopping list");
+  assert.equal(await page.locator("#shopping-list-title").textContent(), "Shopping list", "expected an h1 for screen readers");
   const itemCount = await page.locator(".shopping-item").count();
   await page.locator(".clear-list-btn").click();
   await page.waitForSelector("#toast:not([hidden])");
