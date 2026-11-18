@@ -174,27 +174,38 @@ check("filter dropdowns work from the keyboard", async page => {
 check("adding a recipe to the basket updates the icon and the nav count", async page => {
   const toggle = page.locator(".basket-toggle").first();
   await toggle.click();
-  await page.waitForSelector("#nav-count:not([hidden])");
   assert.equal((await page.textContent("#nav-count")).trim(), "1", "expected the nav count to show 1");
-  assert.equal(await page.getAttribute("#shopping-list-link", "aria-label"), "Shopping list, 1 recipe");
+  assert.equal(await page.locator("#nav-count.is-empty").count(), 0, "a non-zero count shouldn't be dulled");
+  assert.match(await page.textContent("#shopping-list-link"), /Shopping list\s*1 recipe$/);
   const isActive = await page.locator(".basket-toggle.active").count();
   assert.equal(isActive, 1, "expected exactly one active basket-toggle");
   await page.locator(".basket-toggle.active").click(); // reset
-  const hidden = await page.getAttribute("#nav-count", "hidden");
-  assert.notEqual(hidden, null, "expected the count to hide again once basket is empty");
-  assert.equal(await page.getAttribute("#shopping-list-link", "aria-label"), "Shopping list");
+  assert.equal((await page.textContent("#nav-count")).trim(), "0", "expected a 0 count once the basket is empty");
+  assert.equal(await page.locator("#nav-count.is-empty").count(), 1, "expected the 0 count to be dulled");
+  assert.match(await page.textContent("#shopping-list-link"), /Shopping list\s*0 recipes$/);
 });
 
 check("site nav is on every page and marks the current one", async page => {
-  const current = () => page.locator('.site-nav-link[aria-current="page"]').getAttribute("id");
+  const current = () => page.evaluate(() => document.querySelector('.site-nav-link[aria-current="page"]')?.id ?? null);
+  // The indicator sits under the current link (allowing for it mid-slide).
+  const indicatorUnder = id => page.waitForFunction(id => {
+    const bar = document.getElementById("nav-indicator").getBoundingClientRect();
+    const link = document.getElementById(id).getBoundingClientRect();
+    return Math.abs(bar.left - link.left) < 1 && Math.abs(bar.width - link.width) < 1;
+  }, id);
   assert.equal(await current(), "nav-recipes", "expected Recipes to be current on the index");
+  await indicatorUnder("nav-recipes");
   await page.locator(".recipe-card-btn").first().click();
   await page.waitForSelector("#recipe-view", { state: "visible" });
   assert.ok(await page.isVisible(".site-nav"), "expected the nav on a recipe page");
-  assert.equal(await current(), "nav-recipes", "expected Recipes to be current on a recipe page");
+  assert.equal(await current(), null, "nothing in the nav is current on a recipe page");
+  assert.match(await page.textContent("#nav-recipes"), /Back to recipes/, "expected Recipes to read Back to recipes");
+  await page.waitForFunction(() => getComputedStyle(document.getElementById("nav-indicator")).opacity === "0");
   await page.locator("#shopping-list-link").click();
   await page.waitForSelector("#shopping-list-view", { state: "visible" });
   assert.equal(await current(), "shopping-list-link", "expected Shopping list to be current on its page");
+  assert.equal((await page.textContent("#nav-recipes")).trim(), "Recipes");
+  await indicatorUnder("shopping-list-link");
   assert.equal(await page.locator(".back-btn").count(), 0, "the old back links should be gone");
   await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
@@ -219,14 +230,10 @@ check("opening and leaving a recipe animates and then cleans up", async page => 
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "forward");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#recipe-view"), "expected the recipe view after the transition");
-  const dashLeft = () => page.evaluate(() => [...document.querySelectorAll(".masthead-dash")]
-    .filter(el => el.offsetParent).map(el => Math.round(el.getBoundingClientRect().left))[0]);
-  const recipeDashLeft = await dashLeft();
   await page.locator("#nav-recipes").click();
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "back");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#index"), "expected the index after going back");
-  assert.equal(await dashLeft(), recipeDashLeft, "the accent dash should keep the same left edge on both views, so it only moves vertically");
   const title = (await page.textContent("#site-title")).trim();
   assert.match(title, /Recipe collection/i, `unexpected index title: "${title}"`);
 });
@@ -387,7 +394,7 @@ check("Clear list sits below the items, empties the list and can be undone", asy
   await page.locator(".clear-list-btn").click();
   await page.waitForSelector("#toast:not([hidden])");
   assert.equal(await page.locator(".shopping-item").count(), 0, "expected the list to be empty");
-  assert.ok(await page.isHidden("#nav-count"), "expected the nav count to hide");
+  assert.equal((await page.textContent("#nav-count")).trim(), "0", "expected the nav count to drop to 0");
   assert.ok(await page.locator("#toast-action").evaluate(el => el === document.activeElement), "expected focus on Undo");
   await page.waitForFunction(() => document.getElementById("live-status").textContent.includes("Shopping list cleared"));
   await page.locator("#toast-action").click();
@@ -439,10 +446,10 @@ check("Recipes in the nav returns to the same place in the list", async page => 
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
-check("back to top appears after scrolling a screen and returns to the top", async page => {
+check("back to top appears after scrolling half a screen and returns to the top", async page => {
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForSelector("#back-to-top", { state: "hidden" });
-  await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
+  await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.6));
   await page.waitForSelector("#back-to-top", { state: "visible" });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.locator("#back-to-top").click();

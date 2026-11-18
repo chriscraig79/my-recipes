@@ -36,12 +36,9 @@
     /* Width of the recipe/shopping list column, padding included. */
     --reading-width: 720px;
     --space-heading: 1.25rem;
-    /* Equal space above and below the accent dash: from the top of the
-       page, below the site nav, down to the dash (the same on every page), and from the dash to the text beneath it. The eyebrow's line
-       box sits a few px above its letters, so the gap under the dash is
-       trimmed by that much to look the same as the gap above. */
-    --dash-gap: 1.25rem;
-    --eyebrow-lead: 0.05rem;
+    /* Space between the site nav and the top of each page's header, the
+       same on every page. */
+    --page-top: 1.75rem;
   }
 
   body {
@@ -57,17 +54,12 @@
   #index {
     max-width: 1120px;
     margin: 0 auto;
-    padding: var(--dash-gap) 2rem 5rem;
+    padding: var(--page-top) 2rem 5rem;
   }
 
-  /* A light masthead: a short accent dash above a small uppercase title,
-     no rules, all centred. Recipe and shopping list headers are centred
-     on the same axis, so the dash only ever moves straight up or down. The same dash sits at the top of recipe and shopping list
-     headers, and glides between the two when you open or leave a recipe
-     (see "View transitions" below). */
+  /* A light masthead: a small uppercase title, no rules, centred. */
   /* The header shares the recipe pages' centred column (its content box
-     is the column minus the views' 2rem side padding), so the dash and
-     title line up with the recipe header at every width, while the filters
+     is the column minus the views' 2rem side padding), so the title lines up with the recipe header at every width, while the filters
      and grid below keep the index's full width. */
   .site-header {
     max-width: calc(var(--reading-width) - 4rem);
@@ -75,14 +67,6 @@
     text-align: center;
   }
 
-  .masthead-dash {
-    display: block;
-    width: 2.25rem;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--accent);
-    margin: 0 auto calc(var(--dash-gap) - var(--eyebrow-lead));
-  }
 
   .site-title {
     font-family: var(--font-sans);
@@ -553,6 +537,14 @@
     padding: 1rem 2rem 0;
   }
 
+  /* The list and the sliding indicator share this box, so the indicator
+     can be positioned under whichever link is current. */
+  .site-nav-inner {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
   .site-nav-list {
     list-style: none;
     display: flex;
@@ -572,13 +564,35 @@
     text-transform: uppercase;
     text-decoration: none;
     color: var(--muted);
-    border-bottom: 2px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
+    transition: color 0.15s;
   }
 
   .site-nav-link:hover { color: var(--accent); }
-  .site-nav-link[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+  .site-nav-link[aria-current="page"] { color: var(--ink); }
   .site-nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* One accent bar that slides under whichever link is current (set from
+     JS in placeNavIndicator). It fades out on recipe pages, where nothing
+     in the nav is the current page. */
+  .nav-indicator {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-indicator.is-ready {
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), width 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.2s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-indicator.is-ready { transition: opacity 0.2s; }
+  }
+
+  .nav-back-arrow { font-size: 0.85rem; line-height: 1; }
 
   /* Number of recipes in the basket, as a small filled pill. */
   .nav-count {
@@ -592,7 +606,8 @@
     line-height: 1.3;
     text-align: center;
   }
-  .nav-count[hidden] { display: none; }
+  /* Nothing in the list yet: a dulled-out 0, so the link keeps its shape. */
+  .nav-count.is-empty { background: var(--border); color: var(--muted); }
 
   /* ── Back to top ──
      Takes the bottom-right corner once you've scrolled about a screen. */
@@ -601,26 +616,47 @@
     bottom: 1.5rem;
     right: 1.5rem;
     z-index: 10;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.55rem 0.95rem;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
     border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
+    border-radius: 50%;
     background: var(--card-bg);
     color: var(--muted);
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(28, 24, 18, 0.12);
-    transition: color 0.15s, border-color 0.15s;
+    /* Hidden: below its spot and faded. It eases out quickly, and
+       visibility flips only once it has gone, so it can't be tabbed to. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1.5rem);
+    transition:
+      transform 0.25s cubic-bezier(0.4, 0, 1, 1),
+      opacity 0.2s cubic-bezier(0.4, 0, 1, 1),
+      visibility 0s linear 0.25s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .back-to-top svg { width: 1.1rem; height: 1.1rem; }
+  /* Shown: slides up into place, easing in to land softly. */
+  .back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0, 0, 1),
+      opacity 0.3s cubic-bezier(0.2, 0, 0, 1),
+      visibility 0s,
+      color 0.15s,
+      border-color 0.15s;
   }
   .back-to-top:hover { color: var(--accent); border-color: var(--accent); }
   .back-to-top:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .back-to-top[hidden] { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top, .back-to-top.is-visible { transform: none; }
+  }
 
   /* ── Toast (e.g. "Shopping list cleared · Undo") ── */
   .toast {
@@ -662,20 +698,17 @@
 
   /* ── Recipe view / Shopping list view ──
      A centred fixed-width reading column. The index header uses the same
-     column (see .site-header), so the accent dash sits in the same place
-     on every page and only moves vertically between them. */
+     column (see .site-header), so headers line up on every page. */
   #recipe-view, #shopping-list-view {
     display: none;
     max-width: var(--reading-width);
     margin: 0 auto;
-    padding: var(--dash-gap) 2rem 5rem;
+    padding: var(--page-top) 2rem 5rem;
   }
 
   /* The recipe illustration sits in the header, under the description and
      above the stats, with no frame: its paper tone is multiplied into the
-     page and its edges fade out, so the sketch looks drawn on the page.
-     Keeping it inside the header leaves the even space around the accent
-     dash untouched. */
+     page and its edges fade out, so the sketch looks drawn on the page. */
   .recipe-hero {
     max-width: 30rem;
     margin: 0.5rem auto 0;
@@ -692,8 +725,7 @@
     mask-image: radial-gradient(ellipse 60% 62% at 50% 54%, #000 62%, transparent 100%);
   }
 
-  /* Same light masthead as the index: a short accent bar above the label,
-     no heavy rules. */
+  /* Same light masthead as the index: a small label, no heavy rules. */
   .recipe-header {
     margin-bottom: var(--space-section);
     text-align: center;
@@ -705,7 +737,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    line-height: 1.4; /* same as .site-title, so the gap under the dash matches on every page */
+    line-height: 1.4; /* same as .site-title, so headers start at the same height on every page */
     margin-bottom: 0.75rem;
   }
 
@@ -1206,10 +1238,8 @@
   /* ── View transitions: index ⇄ recipe ──
      Two beats:
      1. the page you're leaving fades out quickly, with a small drift;
-     2. the page you're arriving at fades and drifts into place while the
-        accent dash glides to its new spot. The site nav stays put. Everything in this beat shares one start, one
-        duration and one easing curve, so the dash moves as part of the
-        arriving header and lands with it rather than ahead of it.
+     2. the page you're arriving at fades and drifts into place.
+     The site nav stays put.
      Names are only applied while a transition is running (html[data-nav]),
      so they never affect normal layout. Browsers without view transitions,
      and anyone who prefers reduced motion, get an instant switch instead
@@ -1218,7 +1248,7 @@
     --vt-total: 460ms;   /* whole transition */
     --vt-out: 180ms;     /* leaving page fades out */
     --vt-in-delay: 140ms;
-    --vt-in: calc(var(--vt-total) - var(--vt-in-delay)); /* arriving page lands with the dash */
+    --vt-in: calc(var(--vt-total) - var(--vt-in-delay)); /* arriving page */
     --vt-ease-in: cubic-bezier(0.2, 0, 0, 1);
     --vt-ease-out: cubic-bezier(0.4, 0, 1, 1);
   }
@@ -1227,7 +1257,6 @@
   html[data-nav] #recipe-view { view-transition-name: recipe-view; }
   /* The recipe arrives over the list, so its snapshot needs to be opaque. */
   html[data-nav] #recipe-view { background: var(--warm-white); min-height: 100vh; }
-  html[data-nav] .masthead-dash { view-transition-name: masthead-dash; }
 
   /* Only the named parts move; the page background stays put. */
   ::view-transition-old(root),
@@ -1235,17 +1264,6 @@
   ::view-transition-old(root) { display: none; }
 
   ::view-transition-group(recipe-view) { z-index: 2; }
-  ::view-transition-group(masthead-dash) { z-index: 3; }
-
-  /* The dash is identical on both pages, so skip the cross-fade and just move it. */
-  ::view-transition-group(masthead-dash) {
-    animation-delay: var(--vt-in-delay);
-    animation-duration: var(--vt-in);
-    animation-timing-function: var(--vt-ease-in);
-    animation-fill-mode: both;
-  }
-  ::view-transition-old(masthead-dash) { animation: none; opacity: 0; }
-  ::view-transition-new(masthead-dash) { animation: none; }
 
   @keyframes vt-fade-out-down { to { opacity: 0; transform: translateY(0.75rem); } }
   @keyframes vt-fade-in-up { from { opacity: 0; transform: translateY(1.5rem); } }
@@ -1278,12 +1296,12 @@
     .site-nav { padding: 0.75rem 1rem 0; }
     .site-nav-list { gap: 1.25rem; }
 
-    #index { padding: var(--dash-gap) 1rem 3rem; }
+    #index { padding: var(--page-top) 1rem 3rem; }
     .site-header { margin-bottom: 0.65rem; max-width: none; }
     .filter-bar { max-width: none; }
 
-    :root { --space-section: 2rem; --space-heading: 1rem; --dash-gap: 1rem; }
-    #recipe-view, #shopping-list-view { padding: var(--dash-gap) 1rem 3rem; }
+    :root { --space-section: 2rem; --space-heading: 1rem; --page-top: 1.25rem; }
+    #recipe-view, #shopping-list-view { padding: var(--page-top) 1rem 3rem; }
     .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
     .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
     .filter-bar { gap: 0.1rem; }
@@ -1299,17 +1317,19 @@
 <body>
 
 <nav class="site-nav" aria-label="Site">
-  <ul class="site-nav-list">
-    <li><a class="site-nav-link" id="nav-recipes" href="#" onclick="event.preventDefault(); showIndex()">Recipes</a></li>
-    <li><a class="site-nav-link" id="shopping-list-link" href="#shopping-list">Shopping list <span class="nav-count" id="nav-count" hidden></span></a></li>
-  </ul>
+  <div class="site-nav-inner">
+    <ul class="site-nav-list">
+      <li><a class="site-nav-link" id="nav-recipes" href="#" onclick="event.preventDefault(); showIndex()">Recipes</a></li>
+      <li><a class="site-nav-link" id="shopping-list-link" href="#shopping-list">Shopping list <span class="nav-count is-empty" id="nav-count">0</span><span class="visually-hidden" id="nav-count-unit"> recipes</span></a></li>
+    </ul>
+    <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
+  </div>
 </nav>
 
 <main>
 
 <div id="index">
   <header class="site-header">
-    <span class="masthead-dash" aria-hidden="true"></span>
     <h1 class="site-title" id="site-title" tabindex="-1">Recipe collection &amp; shopping list generator</h1>
   </header>
 
@@ -1336,7 +1356,7 @@
 
 </main>
 
-<button id="back-to-top" class="back-to-top" hidden aria-label="Back to top" onclick="backToTop()"><span aria-hidden="true">↑</span> Top</button>
+<button id="back-to-top" class="back-to-top" aria-label="Back to top" onclick="backToTop()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
 
 <!-- Always in the page so screen readers reliably announce what's put in it. -->
 <p id="live-status" class="visually-hidden" role="status"></p>
@@ -1476,10 +1496,11 @@ function clearBasket() {
 // Keeps the recipe count in the nav's Shopping list link up to date.
 function renderBasketBadge() {
   const count = document.getElementById('nav-count');
-  count.hidden = basket.size === 0;
+  count.classList.toggle('is-empty', basket.size === 0);
   count.textContent = basket.size;
-  document.getElementById('shopping-list-link').setAttribute('aria-label',
-    basket.size ? `Shopping list, ${basket.size} recipe${basket.size !== 1 ? 's' : ''}` : 'Shopping list');
+  // Read out as "Shopping list 2 recipes", keeping the visible text first.
+  document.getElementById('nav-count-unit').textContent = basket.size === 1 ? ' recipe' : ' recipes';
+  placeNavIndicator(); // the count's width can change
 }
 
 // ─────────────────────────────────────────────
@@ -2021,7 +2042,6 @@ function renderRecipe(r) {
 
   document.getElementById('recipe-content').innerHTML = `
     <header class="recipe-header">
-      <span class="masthead-dash" aria-hidden="true"></span>
       <p class="recipe-label">${esc(r.label)} — serves ${esc(r.servings)}</p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
       <p class="recipe-description">${esc(r.description)}</p>
@@ -2172,7 +2192,6 @@ function renderShoppingListContent() {
 
   document.getElementById('shopping-list-content').innerHTML = `
     <header class="recipe-header">
-      <span class="masthead-dash" aria-hidden="true"></span>
       <p class="recipe-label">Shopping list — ${basketRecipes.length} recipe${basketRecipes.length !== 1 ? 's' : ''}</p>
       <h1 class="recipe-title" id="shopping-list-title" tabindex="-1">Shopping <em>List</em></h1>
       ${basketRecipes.length ? `<div class="basket-chips">${chipsHtml}</div>` : ''}
@@ -2217,14 +2236,43 @@ function showView(name) {
 }
 
 // A recipe page counts as part of "Recipes" in the nav.
+// On a recipe page nothing in the nav is the current page, so "Recipes"
+// becomes "← Back to recipes" instead of being marked as current.
 function updateNavCurrent(view) {
-  const current = view === 'shopping-list' ? 'shopping-list-link' : 'nav-recipes';
+  const current = { index: 'nav-recipes', 'shopping-list': 'shopping-list-link' }[view] || null;
+  const recipes = document.getElementById('nav-recipes');
+  const label = view === 'recipe'
+    ? '<span class="nav-back-arrow" aria-hidden="true">←</span> Back to recipes'
+    : 'Recipes';
+  if (recipes.innerHTML !== label) recipes.innerHTML = label;
   ['nav-recipes', 'shopping-list-link'].forEach(id => {
     const link = document.getElementById(id);
     if (id === current) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
+  placeNavIndicator();
 }
+
+// Moves the accent bar under the current link. It slides between links,
+// and stays where it was (just fading out) when there's no current link.
+function placeNavIndicator() {
+  const indicator = document.getElementById('nav-indicator');
+  const current = document.querySelector('.site-nav-link[aria-current="page"]');
+  if (current) {
+    const inner = indicator.parentElement.getBoundingClientRect();
+    const box = current.getBoundingClientRect();
+    indicator.style.transform = `translateX(${box.left - inner.left}px)`;
+    indicator.style.width = `${box.width}px`;
+  }
+  indicator.style.opacity = current ? '1' : '0';
+  // Only animate after it's first been placed, so it doesn't slide in on load.
+  if (!indicator.classList.contains('is-ready')) {
+    requestAnimationFrame(() => indicator.classList.add('is-ready'));
+  }
+}
+
+window.addEventListener('resize', placeNavIndicator);
+document.fonts?.ready.then(placeNavIndicator);
 
 function currentHeading() {
   const ids = { index: 'site-title', recipe: 'recipe-title', 'shopping-list': 'shopping-list-title' };
@@ -2235,11 +2283,11 @@ function currentHeading() {
 //  BACK TO TOP
 // ─────────────────────────────────────────────
 
-// Shown once you've scrolled about a screen, and kept out of the way of
+// Shown once you've scrolled half a screen, and kept out of the way of
 // the toast, which shares the bottom of the screen.
 function updateBackToTop() {
-  document.getElementById('back-to-top').hidden =
-    window.scrollY < window.innerHeight || !document.getElementById('toast').hidden;
+  const show = window.scrollY > window.innerHeight / 2 && document.getElementById('toast').hidden;
+  document.getElementById('back-to-top').classList.toggle('is-visible', show);
 }
 
 function backToTop() {
