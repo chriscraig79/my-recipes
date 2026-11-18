@@ -37,8 +37,7 @@
     --reading-width: 720px;
     --space-heading: 1.25rem;
     /* Equal space above and below the accent dash: from the top of the
-       page (index) or the back link (recipe, shopping list) down to the
-       dash, and from the dash to the text beneath it. The eyebrow's line
+       page, below the site nav, down to the dash (the same on every page), and from the dash to the text beneath it. The eyebrow's line
        box sits a few px above its letters, so the gap under the dash is
        trimmed by that much to look the same as the gap above. */
     --dash-gap: 1.25rem;
@@ -543,28 +542,123 @@
     color: var(--warm-white);
   }
 
-  /* ── Basket badge ── */
-  .basket-badge {
+  /* ── Site nav ──
+     One row of small uppercase links at the top of every page. The page
+     you're on is marked with aria-current="page" and shown in ink with an
+     accent underline. It isn't pinned, so the sticky filter bar and the
+     recipe jump bar keep the top of the screen to themselves. */
+  .site-nav {
+    max-width: var(--reading-width);
+    margin: 0 auto;
+    padding: 1rem 2rem 0;
+  }
+
+  .site-nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1.75rem;
+  }
+
+  .site-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .site-nav-link:hover { color: var(--accent); }
+  .site-nav-link[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+  .site-nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* Number of recipes in the basket, as a small filled pill. */
+  .nav-count {
+    min-width: 1.15rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--warm-white);
+    font-size: 0.62rem;
+    letter-spacing: 0;
+    line-height: 1.3;
+    text-align: center;
+  }
+  .nav-count[hidden] { display: none; }
+
+  /* ── Back to top ──
+     Takes the bottom-right corner once you've scrolled about a screen. */
+  .back-to-top {
     position: fixed;
     bottom: 1.5rem;
     right: 1.5rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.95rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--card-bg);
+    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(28, 24, 18, 0.12);
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .back-to-top:hover { color: var(--accent); border-color: var(--accent); }
+  .back-to-top:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .back-to-top[hidden] { display: none; }
+
+  /* ── Toast (e.g. "Shopping list cleared · Undo") ── */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 20;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: calc(100vw - 2rem);
+    padding: 0.7rem 0.8rem 0.7rem 1.15rem;
+    border-radius: var(--radius-pill);
     background: var(--ink);
     color: var(--warm-white);
-    border: none;
-    border-radius: var(--radius-pill);
-    padding: 0.65rem 1.1rem;
     font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 0.8rem;
-    letter-spacing: 0.03em;
-    cursor: pointer;
+    font-size: 0.82rem;
     box-shadow: 0 4px 14px rgba(28, 24, 18, 0.25);
-    transition: background 0.15s;
-    z-index: 10;
   }
+  .toast[hidden] { display: none; }
+  #toast-message { white-space: nowrap; }
 
-  .basket-badge:hover { background: var(--accent); }
-  .basket-badge[hidden] { display: none; }
+  .toast-action {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--warm-white);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .toast-action:hover { background: var(--warm-white); color: var(--ink); }
+  .toast-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ── Recipe view / Shopping list view ──
      A centred fixed-width reading column. The index header uses the same
@@ -574,7 +668,7 @@
     display: none;
     max-width: var(--reading-width);
     margin: 0 auto;
-    padding: 2rem 2rem 5rem;
+    padding: var(--dash-gap) 2rem 5rem;
   }
 
   /* The recipe illustration sits in the header, under the description and
@@ -597,28 +691,6 @@
     -webkit-mask-image: radial-gradient(ellipse 60% 62% at 50% 54%, #000 62%, transparent 100%);
     mask-image: radial-gradient(ellipse 60% 62% at 50% 54%, #000 62%, transparent 100%);
   }
-
-  .back-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 0;
-    /* Centred above the dash, so when a recipe opens the link drops in and
-       the dash glides down beneath it on the same axis. */
-    display: flex;
-    width: fit-content;
-    margin: 0 auto var(--dash-gap);
-    align-items: center;
-    gap: 0.4rem;
-    transition: color 0.15s;
-  }
-
-  .back-btn:hover { color: var(--accent); }
 
   /* Same light masthead as the index: a short accent bar above the label,
      no heavy rules. */
@@ -1043,6 +1115,13 @@
     padding: 0;
   }
 
+  /* Clear list sits on its own below the items, away from the main actions. */
+  .shopping-footer-actions {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-section) 0;
+  }
+
   .shopping-items { list-style: none; }
 
   .shopping-item {
@@ -1126,11 +1205,9 @@
 
   /* ── View transitions: index ⇄ recipe ──
      Two beats:
-     1. the page you're leaving fades out quickly, with a small drift (and
-        the back link lifts out when going back to the list);
+     1. the page you're leaving fades out quickly, with a small drift;
      2. the page you're arriving at fades and drifts into place while the
-        accent dash glides to its new spot (and the back link drops in when
-        opening a recipe). Everything in this beat shares one start, one
+        accent dash glides to its new spot. The site nav stays put. Everything in this beat shares one start, one
         duration and one easing curve, so the dash moves as part of the
         arriving header and lands with it rather than ahead of it.
      Names are only applied while a transition is running (html[data-nav]),
@@ -1151,7 +1228,6 @@
   /* The recipe arrives over the list, so its snapshot needs to be opaque. */
   html[data-nav] #recipe-view { background: var(--warm-white); min-height: 100vh; }
   html[data-nav] .masthead-dash { view-transition-name: masthead-dash; }
-  html[data-nav] #recipe-view .back-btn { view-transition-name: back-link; }
 
   /* Only the named parts move; the page background stays put. */
   ::view-transition-old(root),
@@ -1159,8 +1235,7 @@
   ::view-transition-old(root) { display: none; }
 
   ::view-transition-group(recipe-view) { z-index: 2; }
-  ::view-transition-group(masthead-dash),
-  ::view-transition-group(back-link) { z-index: 3; }
+  ::view-transition-group(masthead-dash) { z-index: 3; }
 
   /* The dash is identical on both pages, so skip the cross-fade and just move it. */
   ::view-transition-group(masthead-dash) {
@@ -1175,8 +1250,6 @@
   @keyframes vt-fade-out-down { to { opacity: 0; transform: translateY(0.75rem); } }
   @keyframes vt-fade-in-up { from { opacity: 0; transform: translateY(1.5rem); } }
   @keyframes vt-fade-in-down { from { opacity: 0; transform: translateY(-0.75rem); } }
-  @keyframes vt-drop-in { from { opacity: 0; transform: translateY(-100%); } }
-  @keyframes vt-lift-out { to { opacity: 0; transform: translateY(-100%); } }
 
   /* Opening a recipe */
   html[data-nav="forward"]::view-transition-old(index-view) {
@@ -1185,16 +1258,10 @@
   html[data-nav="forward"]::view-transition-new(recipe-view) {
     animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-fade-in-up;
   }
-  html[data-nav="forward"]::view-transition-new(back-link) {
-    animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-drop-in;
-  }
 
   /* Going back to the list */
   html[data-nav="back"]::view-transition-old(recipe-view) {
     animation: var(--vt-out) var(--vt-ease-out) both vt-fade-out-down;
-  }
-  html[data-nav="back"]::view-transition-old(back-link) {
-    animation: var(--vt-out) var(--vt-ease-out) both vt-lift-out;
   }
   html[data-nav="back"]::view-transition-new(index-view) {
     animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-fade-in-down;
@@ -1206,14 +1273,17 @@
     .recipe-stats { grid-template-columns: 1fr; }
     .recipe-stat { border-right: none; border-bottom: 1px solid var(--border); }
     .recipe-stat:last-child { border-bottom: none; }
-    .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
+    .back-to-top { right: 1rem; bottom: 1rem; }
+    .toast { bottom: 1rem; }
+    .site-nav { padding: 0.75rem 1rem 0; }
+    .site-nav-list { gap: 1.25rem; }
 
     #index { padding: var(--dash-gap) 1rem 3rem; }
     .site-header { margin-bottom: 0.65rem; max-width: none; }
     .filter-bar { max-width: none; }
 
     :root { --space-section: 2rem; --space-heading: 1rem; --dash-gap: 1rem; }
-    #recipe-view, #shopping-list-view { padding: 1.25rem 1rem 3rem; }
+    #recipe-view, #shopping-list-view { padding: var(--dash-gap) 1rem 3rem; }
     .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
     .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
     .filter-bar { gap: 0.1rem; }
@@ -1227,6 +1297,13 @@
 </style>
 </head>
 <body>
+
+<nav class="site-nav" aria-label="Site">
+  <ul class="site-nav-list">
+    <li><a class="site-nav-link" id="nav-recipes" href="#" onclick="event.preventDefault(); showIndex()">Recipes</a></li>
+    <li><a class="site-nav-link" id="shopping-list-link" href="#shopping-list">Shopping list <span class="nav-count" id="nav-count" hidden></span></a></li>
+  </ul>
+</nav>
 
 <main>
 
@@ -1250,18 +1327,24 @@
 </div>
 
 <div id="recipe-view">
-  <button class="back-btn" onclick="showIndex()">← All recipes</button>
   <div id="recipe-content"></div>
 </div>
 
 <div id="shopping-list-view">
-  <button class="back-btn" onclick="showIndex()">← All recipes</button>
   <div id="shopping-list-content"></div>
 </div>
 
 </main>
 
-<button id="basket-badge" class="basket-badge" hidden onclick="showShoppingList()">🛒 Shopping list (0)</button>
+<button id="back-to-top" class="back-to-top" hidden aria-label="Back to top" onclick="backToTop()"><span aria-hidden="true">↑</span> Top</button>
+
+<!-- Always in the page so screen readers reliably announce what's put in it. -->
+<p id="live-status" class="visually-hidden" role="status"></p>
+
+<div id="toast" class="toast" hidden>
+  <span id="toast-message"></span>
+  <button id="toast-action" class="toast-action" type="button"></button>
+</div>
 
 <script>
 // ─────────────────────────────────────────────
@@ -1367,20 +1450,80 @@ function removeFromBasket(id) {
   renderShoppingListContent();
 }
 
+// Clears straight away, then offers Undo for a few seconds rather than
+// asking "are you sure?" first. Focus moves to Undo, since the button you
+// pressed is gone once the list is empty.
 function clearBasket() {
+  const previous = { basket: [...basket], checked: [...checkedItems] };
   basket.clear();
   checkedItems.clear();
   saveBasket();
   saveCheckedItems();
   renderBasketBadge();
   renderShoppingListContent();
+  showToast('Shopping list cleared', 'Undo', () => {
+    previous.basket.forEach(id => basket.add(id));
+    previous.checked.forEach(name => checkedItems.add(name));
+    saveBasket();
+    saveCheckedItems();
+    renderBasketBadge();
+    renderShoppingListContent();
+    announce('Shopping list restored');
+    document.getElementById('shopping-list-title')?.focus({ preventScroll: true });
+  });
 }
 
+// Keeps the recipe count in the nav's Shopping list link up to date.
 function renderBasketBadge() {
-  const badge = document.getElementById('basket-badge');
-  badge.hidden = basket.size === 0;
-  badge.textContent = `🛒 Shopping list (${basket.size})`;
+  const count = document.getElementById('nav-count');
+  count.hidden = basket.size === 0;
+  count.textContent = basket.size;
+  document.getElementById('shopping-list-link').setAttribute('aria-label',
+    basket.size ? `Shopping list, ${basket.size} recipe${basket.size !== 1 ? 's' : ''}` : 'Shopping list');
 }
+
+// ─────────────────────────────────────────────
+//  TOAST & ANNOUNCEMENTS
+// ─────────────────────────────────────────────
+
+function announce(text) {
+  const live = document.getElementById('live-status');
+  live.textContent = '';
+  // A fresh change on the next frame, so repeating the same text is still read out.
+  requestAnimationFrame(() => { live.textContent = text; });
+}
+
+const TOAST_MS = 6000;
+let toastTimer = null;
+
+function showToast(message, actionLabel, onAction) {
+  const toast = document.getElementById('toast');
+  const action = document.getElementById('toast-action');
+  document.getElementById('toast-message').textContent = message;
+  action.textContent = actionLabel;
+  action.onclick = () => { hideToast(false); onAction(); };
+  toast.hidden = false;
+  updateBackToTop();
+  announce(`${message}. ${actionLabel} button available.`);
+  action.focus();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => hideToast(true), TOAST_MS);
+}
+
+// When the toast times out while its button has focus, hand focus to the
+// page heading so it isn't lost.
+function hideToast(returnFocus) {
+  clearTimeout(toastTimer);
+  const toast = document.getElementById('toast');
+  const hadFocus = toast.contains(document.activeElement);
+  toast.hidden = true;
+  updateBackToTop();
+  if (returnFocus && hadFocus) currentHeading()?.focus({ preventScroll: true });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !document.getElementById('toast').hidden) hideToast(true);
+});
 
 // Ingredients with the same name (across recipes, or repeated within one)
 // are combined into a single line listing every recipe that needs it —
@@ -1917,8 +2060,8 @@ function renderRecipe(r) {
   renderedRecipeId = r.id;
   showView('recipe');
   document.title = `${r.title} – My Recipes`;
-  window.scrollTo(0, 0);
-  document.getElementById('recipe-title').focus();
+  window.scrollTo(0, takeRestoreScroll());
+  document.getElementById('recipe-title').focus({ preventScroll: true });
   updateJumpBar();
 }
 
@@ -1969,7 +2112,7 @@ let jumpBarFrame = null;
 window.addEventListener('scroll', () => {
   if (jumpLocked) releaseJumpLockSoon();
   if (jumpBarFrame) return;
-  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); updateFilterBarStuck(); });
+  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); updateFilterBarStuck(); updateBackToTop(); });
 }, { passive: true });
 
 function renderIndexView() {
@@ -1980,8 +2123,8 @@ function renderIndexView() {
   renderList();
   showView('index');
   document.title = 'My Recipes';
-  window.scrollTo(0, 0);
-  document.getElementById('site-title').focus();
+  window.scrollTo(0, takeRestoreScroll());
+  document.getElementById('site-title').focus({ preventScroll: true });
 }
 
 // Rebuilds the shopping list content in place — used for interactions
@@ -2041,9 +2184,11 @@ function renderShoppingListContent() {
           <a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>
           <button class="copy-list-btn" aria-live="polite" onclick="copyShoppingList(this)">Copy list</button>
         ` : `<span class="all-checked-note">Everything's checked off</span>`}
-        <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
       </div>
       ${sectionsHtml}
+      <div class="shopping-footer-actions">
+        <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
+      </div>
     ` : `<p class="no-results">Your shopping list is empty. Add recipes from the index or a recipe page.</p>`}
 
     <hr class="footer-rule">
@@ -2059,14 +2204,89 @@ function renderShoppingListView() {
   renderShoppingListContent();
   showView('shopping-list');
   document.title = 'Shopping List – My Recipes';
-  window.scrollTo(0, 0);
-  document.getElementById('shopping-list-title').focus();
+  window.scrollTo(0, takeRestoreScroll());
+  document.getElementById('shopping-list-title').focus({ preventScroll: true });
 }
 
 function showView(name) {
   document.getElementById('index').style.display = name === 'index' ? 'block' : 'none';
   document.getElementById('recipe-view').style.display = name === 'recipe' ? 'block' : 'none';
   document.getElementById('shopping-list-view').style.display = name === 'shopping-list' ? 'block' : 'none';
+  updateNavCurrent(name);
+  updateBackToTop();
+}
+
+// A recipe page counts as part of "Recipes" in the nav.
+function updateNavCurrent(view) {
+  const current = view === 'shopping-list' ? 'shopping-list-link' : 'nav-recipes';
+  ['nav-recipes', 'shopping-list-link'].forEach(id => {
+    const link = document.getElementById(id);
+    if (id === current) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+}
+
+function currentHeading() {
+  const ids = { index: 'site-title', recipe: 'recipe-title', 'shopping-list': 'shopping-list-title' };
+  return document.getElementById(ids[currentView()]);
+}
+
+// ─────────────────────────────────────────────
+//  BACK TO TOP
+// ─────────────────────────────────────────────
+
+// Shown once you've scrolled about a screen, and kept out of the way of
+// the toast, which shares the bottom of the screen.
+function updateBackToTop() {
+  document.getElementById('back-to-top').hidden =
+    window.scrollY < window.innerHeight || !document.getElementById('toast').hidden;
+}
+
+function backToTop() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  currentHeading()?.focus({ preventScroll: true });
+}
+
+// ─────────────────────────────────────────────
+//  SCROLL MEMORY — back and forward return you to where you were
+// ─────────────────────────────────────────────
+
+// Each history entry keeps its own scroll position in history.state. It's
+// saved shortly after you stop scrolling and on every click (which is how
+// you leave a page), so it's there when you come back with the browser's
+// back or forward button. A brand new entry has no saved position and
+// opens at the top.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+let restoreScrollY = null;
+// Where you were on the index, so the nav's "Recipes" link takes you back
+// to the same place in the list.
+let lastIndexScrollY = 0;
+
+function takeRestoreScroll() {
+  const y = restoreScrollY ?? 0;
+  restoreScrollY = null;
+  return y;
+}
+
+function saveScroll() {
+  if (currentView() === 'index') lastIndexScrollY = window.scrollY;
+  const state = history.state && typeof history.state === 'object' ? history.state : {};
+  history.replaceState({ ...state, scrollY: window.scrollY }, '');
+}
+
+let saveScrollTimer = null;
+window.addEventListener('scroll', () => {
+  clearTimeout(saveScrollTimer);
+  saveScrollTimer = setTimeout(saveScroll, 200);
+}, { passive: true });
+document.addEventListener('click', () => { clearTimeout(saveScrollTimer); saveScroll(); }, true);
+window.addEventListener('pagehide', saveScroll);
+
+function savedScrollY() {
+  const y = history.state?.scrollY;
+  return typeof y === 'number' ? y : null;
 }
 
 // ─────────────────────────────────────────────
@@ -2107,6 +2327,7 @@ document.getElementById('recipe-content').addEventListener('click', e => {
 
 function route() {
   const { id, step } = parseHash();
+  restoreScrollY = savedScrollY();
   if (id === 'shopping-list') {
     renderShoppingListView();
     return;
@@ -2114,6 +2335,8 @@ function route() {
   const recipe = recipes.find(r => r.id === id);
   if (recipe && currentView() === 'recipe' && renderedRecipeId === recipe.id) {
     showStep(step);
+    if (!step) window.scrollTo(0, takeRestoreScroll());
+    restoreScrollY = null;
   } else if (recipe) {
     navigateWithTransition('recipe', () => { renderRecipe(recipe); showStep(step); });
   } else {
@@ -2151,13 +2374,16 @@ function showRecipe(id) {
   location.hash = id;
 }
 
-function showShoppingList() {
-  location.hash = 'shopping-list';
-}
-
+// The nav's "Recipes" link. From another page it returns you to where you
+// were in the list; on the index itself it goes back to the top.
 function showIndex() {
+  if (currentView() === 'index') {
+    backToTop();
+    return;
+  }
+  restoreScrollY = lastIndexScrollY;
   if (location.hash) {
-    history.pushState('', document.title, location.pathname + location.search);
+    history.pushState(null, '', location.pathname + location.search);
   }
   navigateWithTransition('index', renderIndexView);
 }
@@ -2169,7 +2395,11 @@ initSearch();
 renderList();
 renderBasketBadge();
 
+updateNavCurrent('index');
+
+// On a reload, pick up where you were.
 const initial = parseHash();
+restoreScrollY = savedScrollY();
 if (initial.id === 'shopping-list') {
   renderShoppingListView();
 } else {
@@ -2177,6 +2407,8 @@ if (initial.id === 'shopping-list') {
   if (initialRecipe) {
     renderRecipe(initialRecipe);
     showStep(initial.step);
+  } else {
+    window.scrollTo(0, takeRestoreScroll());
   }
 }
 </script>
