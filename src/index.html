@@ -1561,6 +1561,9 @@ function initSearch() {
   input.addEventListener('input', () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
+      // Nothing to do if the words haven't changed (e.g. a trailing space),
+      // so the list doesn't re-render or move under you.
+      if (input.value.trim() === searchQuery) return;
       searchQuery = input.value.trim();
       renderList();
       scrollToResultsIfStuck();
@@ -1633,6 +1636,9 @@ function setFilter(category, value) {
 // back to the top of the new results rather than leaving you partway down.
 function scrollToResultsIfStuck() {
   const filters = document.querySelector('.filters');
+  // The is-stuck class only refreshes on the next animation frame after a
+  // scroll, so recheck it now rather than trusting a stale value.
+  updateFilterBarStuck();
   if (filters.classList.contains('is-stuck')) {
     const count = document.getElementById('results-count');
     window.scrollTo(0, count.getBoundingClientRect().top + window.scrollY - filters.offsetHeight);
