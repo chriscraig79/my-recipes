@@ -389,6 +389,8 @@ check("Clear list sits with the recipe chips, empties the list and can be undone
   await page.locator(".clear-list-btn").click();
   await page.waitForSelector("#toast:not([hidden])");
   assert.equal(await page.locator(".shopping-item").count(), 0, "expected the list to be empty");
+  assert.ok(await page.isVisible("#shopping-list-view .empty-state"), "expected the empty state");
+  assert.equal(await page.locator("#shopping-list-view .footer-rule").count(), 0, "no rules around the empty state");
   assert.equal((await page.textContent("#nav-count")).trim(), "0", "expected the nav count to drop to 0");
   assert.ok(await page.locator("#toast-action").evaluate(el => el === document.activeElement), "expected focus on Undo");
   await page.waitForFunction(() => document.getElementById("live-status").textContent.includes("Shopping list cleared"));
@@ -400,6 +402,14 @@ check("Clear list sits with the recipe chips, empties the list and can be undone
   await page.keyboard.press("Escape");
   assert.ok(await page.isHidden("#toast"), "expected Escape to close the toast");
   await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("empty shopping list offers a way back to the recipes", async page => {
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view .empty-state", { state: "visible" });
+  assert.equal((await page.textContent(".empty-state-title")).trim(), "Nothing on your list yet");
+  await page.locator(".empty-state-action").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
 

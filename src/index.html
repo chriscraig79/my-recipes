@@ -1076,7 +1076,8 @@
     margin-bottom: var(--space-section);
   }
 
-  .whatsapp-btn {
+  .whatsapp-btn,
+  .empty-state-action {
     display: inline-block;
     background: var(--accent);
     color: var(--warm-white);
@@ -1094,7 +1095,67 @@
     transition: opacity 0.15s;
   }
 
-  .whatsapp-btn:hover { opacity: 0.85; }
+  .whatsapp-btn:hover,
+  .empty-state-action:hover { opacity: 0.85; }
+  .empty-state-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ── Empty shopping list ──
+     Centred, with no rules around it: an icon, a short heading, a line
+     showing the same + button you tap on a recipe, and a way back to the
+     recipes. */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 24rem;
+    margin: 0 auto;
+    padding: 2.5rem 0 1rem;
+  }
+
+  .empty-state-icon {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .empty-state-icon svg { width: 1.75rem; height: 1.75rem; }
+
+  .empty-state-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .empty-state-text {
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* A small copy of the + button from the recipe cards, so you know what to look for. */
+  .empty-state-plus {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0 0.1rem;
+    vertical-align: -0.3rem;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--ink);
+  }
+  .empty-state-plus svg { width: 0.8rem; height: 0.8rem; }
 
   /* Same shape as the WhatsApp button, outlined so WhatsApp stays the
      primary action. */
@@ -1933,6 +1994,7 @@ function tagPanelClass(tags) {
 }
 
 const PLUS_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
+const BASKET_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14l-1.5 10a2 2 0 0 1-2 1.7h-7a2 2 0 0 1-2-1.7Z"/><path d="m9 9 3-5 3 5"/><path d="M10 13v4M14 13v4"/></svg>';
 const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
 
 function renderList() {
@@ -2194,9 +2256,18 @@ function renderShoppingListContent() {
         ` : `<span class="all-checked-note">Everything's checked off</span>`}
       </div>
       ${sectionsHtml}
-    ` : `<p class="no-results">Your shopping list is empty. Add recipes from the index or a recipe page.</p>`}
-
-    <hr class="footer-rule">
+      <hr class="footer-rule">
+    ` : `
+      <div class="empty-state">
+        <span class="empty-state-icon" aria-hidden="true">${BASKET_ICON}</span>
+        <h2 class="empty-state-title">Nothing on your list yet</h2>
+        <p class="empty-state-text">
+          Tap <span class="empty-state-plus" aria-hidden="true">${PLUS_ICON}</span><span class="visually-hidden">the plus button</span>
+          on any recipe and its ingredients will appear here, grouped by aisle.
+        </p>
+        <a class="empty-state-action" href="#" onclick="event.preventDefault(); showIndex()">Browse recipes</a>
+      </div>
+    `}
   `;
 
   window.scrollTo(0, scrollY);
