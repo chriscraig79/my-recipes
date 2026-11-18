@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Recipes</title>
+<!-- Shown when a link is shared (WhatsApp, Messages, Slack, etc.). The
+     page has no visible title, so this is where the site's name and
+     description live. -->
+<meta name="description" content="Recipe collection &amp; shopping list generator">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="My Recipes">
+<meta property="og:title" content="My Recipes">
+<meta property="og:description" content="Recipe collection &amp; shopping list generator">
+<meta property="og:url" content="https://chriscraig79.github.io/my-recipes/">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:wght@300;400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,13 +45,9 @@
     /* Width of the recipe/shopping list column, padding included. */
     --reading-width: 720px;
     --space-heading: 1.25rem;
-    /* Equal space above and below the accent dash: from the top of the
-       page (index) or the back link (recipe, shopping list) down to the
-       dash, and from the dash to the text beneath it. The eyebrow's line
-       box sits a few px above its letters, so the gap under the dash is
-       trimmed by that much to look the same as the gap above. */
-    --dash-gap: 1.25rem;
-    --eyebrow-lead: 0.05rem;
+    /* Space between the site nav and the top of each page's header, the
+       same on every page. */
+    --page-top: 1.75rem;
   }
 
   body {
@@ -58,41 +63,7 @@
   #index {
     max-width: 1120px;
     margin: 0 auto;
-    padding: var(--dash-gap) 2rem 5rem;
-  }
-
-  /* A light masthead: a short accent dash above a small uppercase title,
-     no rules, all centred. Recipe and shopping list headers are centred
-     on the same axis, so the dash only ever moves straight up or down. The same dash sits at the top of recipe and shopping list
-     headers, and glides between the two when you open or leave a recipe
-     (see "View transitions" below). */
-  /* The header shares the recipe pages' centred column (its content box
-     is the column minus the views' 2rem side padding), so the dash and
-     title line up with the recipe header at every width, while the filters
-     and grid below keep the index's full width. */
-  .site-header {
-    max-width: calc(var(--reading-width) - 4rem);
-    margin: 0 auto 0.85rem;
-    text-align: center;
-  }
-
-  .masthead-dash {
-    display: block;
-    width: 2.25rem;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--accent);
-    margin: 0 auto calc(var(--dash-gap) - var(--eyebrow-lead));
-  }
-
-  .site-title {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 500;
-    line-height: 1.4;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--ink);
+    padding: var(--page-top) 2rem 5rem;
   }
 
   /* ── Filters ── */
@@ -543,45 +514,188 @@
     color: var(--warm-white);
   }
 
-  /* ── Basket badge ── */
-  .basket-badge {
+  /* ── Site nav ──
+     One row of small uppercase links at the top of every page. The page
+     you're on is marked with aria-current="page" and shown in ink with an
+     accent underline. It isn't pinned, so the sticky filter bar and the
+     recipe jump bar keep the top of the screen to themselves. */
+  .site-nav {
+    max-width: var(--reading-width);
+    margin: 0 auto;
+    padding: 1rem 2rem 0;
+  }
+
+  /* The list and the sliding indicator share this box, so the indicator
+     can be positioned under whichever link is current. */
+  .site-nav-inner {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .site-nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1.75rem;
+  }
+
+  .site-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.15s;
+  }
+
+  .site-nav-link:hover { color: var(--accent); }
+  .site-nav-link[aria-current="page"] { color: var(--ink); }
+  .site-nav-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* One accent bar that slides under whichever link is current (set from
+     JS in placeNavIndicator). It fades out on recipe pages, where nothing
+     in the nav is the current page. */
+  .nav-indicator {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-indicator.is-ready {
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), width 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.2s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-indicator.is-ready { transition: opacity 0.2s; }
+  }
+
+  .nav-back-arrow { font-size: 0.85rem; line-height: 1; }
+
+  /* Number of recipes in the basket, as a small filled pill. */
+  .nav-count {
+    min-width: 1.15rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--warm-white);
+    font-size: 0.62rem;
+    letter-spacing: 0;
+    line-height: 1.3;
+    text-align: center;
+  }
+  /* Nothing in the list yet: a dulled-out 0, so the link keeps its shape. */
+  .nav-count.is-empty { background: var(--border); color: var(--muted); }
+
+  /* ── Back to top ──
+     Takes the bottom-right corner once you've scrolled about a screen. */
+  .back-to-top {
     position: fixed;
     bottom: 1.5rem;
     right: 1.5rem;
-    background: var(--ink);
-    color: var(--warm-white);
-    border: none;
-    border-radius: var(--radius-pill);
-    padding: 0.65rem 1.1rem;
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 0.8rem;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(28, 24, 18, 0.25);
-    transition: background 0.15s;
     z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--card-bg);
+    color: var(--muted);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(28, 24, 18, 0.12);
+    /* Hidden: below its spot and faded. It eases out quickly, and
+       visibility flips only once it has gone, so it can't be tabbed to. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1.5rem);
+    transition:
+      transform 0.25s cubic-bezier(0.4, 0, 1, 1),
+      opacity 0.2s cubic-bezier(0.4, 0, 1, 1),
+      visibility 0s linear 0.25s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .back-to-top svg { width: 1.1rem; height: 1.1rem; }
+  /* Shown: slides up into place, easing in to land softly. */
+  .back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0, 0, 1),
+      opacity 0.3s cubic-bezier(0.2, 0, 0, 1),
+      visibility 0s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .back-to-top:hover { color: var(--accent); border-color: var(--accent); }
+  .back-to-top:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top, .back-to-top.is-visible { transform: none; }
   }
 
-  .basket-badge:hover { background: var(--accent); }
-  .basket-badge[hidden] { display: none; }
+  /* ── Toast (e.g. "Shopping list cleared · Undo") ── */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 20;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: calc(100vw - 2rem);
+    padding: 0.7rem 0.8rem 0.7rem 1.15rem;
+    border-radius: var(--radius-pill);
+    background: var(--ink);
+    color: var(--warm-white);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    box-shadow: 0 4px 14px rgba(28, 24, 18, 0.25);
+  }
+  .toast[hidden] { display: none; }
+  #toast-message { white-space: nowrap; }
+
+  .toast-action {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--warm-white);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .toast-action:hover { background: var(--warm-white); color: var(--ink); }
+  .toast-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ── Recipe view / Shopping list view ──
-     A centred fixed-width reading column. The index header uses the same
-     column (see .site-header), so the accent dash sits in the same place
-     on every page and only moves vertically between them. */
+     A centred fixed-width reading column. */
   #recipe-view, #shopping-list-view {
     display: none;
     max-width: var(--reading-width);
     margin: 0 auto;
-    padding: 2rem 2rem 5rem;
+    padding: var(--page-top) 2rem 5rem;
   }
 
   /* The recipe illustration sits in the header, under the description and
      above the stats, with no frame: its paper tone is multiplied into the
-     page and its edges fade out, so the sketch looks drawn on the page.
-     Keeping it inside the header leaves the even space around the accent
-     dash untouched. */
+     page and its edges fade out, so the sketch looks drawn on the page. */
   .recipe-hero {
     max-width: 30rem;
     margin: 0.5rem auto 0;
@@ -598,30 +712,7 @@
     mask-image: radial-gradient(ellipse 60% 62% at 50% 54%, #000 62%, transparent 100%);
   }
 
-  .back-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 0;
-    /* Centred above the dash, so when a recipe opens the link drops in and
-       the dash glides down beneath it on the same axis. */
-    display: flex;
-    width: fit-content;
-    margin: 0 auto var(--dash-gap);
-    align-items: center;
-    gap: 0.4rem;
-    transition: color 0.15s;
-  }
-
-  .back-btn:hover { color: var(--accent); }
-
-  /* Same light masthead as the index: a short accent bar above the label,
-     no heavy rules. */
+  /* Same light masthead as the index: a small label, no heavy rules. */
   .recipe-header {
     margin-bottom: var(--space-section);
     text-align: center;
@@ -633,7 +724,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
-    line-height: 1.4; /* same as .site-title, so the gap under the dash matches on every page */
+    line-height: 1.4;
     margin-bottom: 0.75rem;
   }
 
@@ -952,7 +1043,6 @@
     flex-wrap: wrap;
     gap: 0.4rem;
     justify-content: center;
-    margin-top: 1.25rem;
   }
 
   .basket-chip {
@@ -986,7 +1076,8 @@
     margin-bottom: var(--space-section);
   }
 
-  .whatsapp-btn {
+  .whatsapp-btn,
+  .empty-state-action {
     display: inline-block;
     background: var(--accent);
     color: var(--warm-white);
@@ -1004,7 +1095,67 @@
     transition: opacity 0.15s;
   }
 
-  .whatsapp-btn:hover { opacity: 0.85; }
+  .whatsapp-btn:hover,
+  .empty-state-action:hover { opacity: 0.85; }
+  .empty-state-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ── Empty shopping list ──
+     Centred, with no rules around it: an icon, a short heading, a line
+     showing the same + button you tap on a recipe, and a way back to the
+     recipes. */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 24rem;
+    margin: 0 auto;
+    padding: 2.5rem 0 1rem;
+  }
+
+  .empty-state-icon {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .empty-state-icon svg { width: 1.75rem; height: 1.75rem; }
+
+  .empty-state-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .empty-state-text {
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* A small copy of the + button from the recipe cards, so you know what to look for. */
+  .empty-state-plus {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0 0.1rem;
+    vertical-align: -0.3rem;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--ink);
+  }
+  .empty-state-plus svg { width: 0.8rem; height: 0.8rem; }
 
   /* Same shape as the WhatsApp button, outlined so WhatsApp stays the
      primary action. */
@@ -1030,18 +1181,24 @@
     color: var(--warm-white);
   }
 
+  /* Sits at the end of the recipe chips, since it does the same job for
+     all of them at once. Same size as a chip, but a plain text button so
+     it reads as secondary. */
   .clear-list-btn {
     background: none;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
     color: var(--muted);
     font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 0.78rem;
     text-decoration: underline;
+    text-underline-offset: 0.2em;
     cursor: pointer;
-    padding: 0;
+    padding: 0.25rem 0.5rem;
+    transition: color 0.15s;
   }
+  .clear-list-btn:hover { color: var(--accent); }
+  .clear-list-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
   .shopping-items { list-style: none; }
 
@@ -1126,13 +1283,9 @@
 
   /* ── View transitions: index ⇄ recipe ──
      Two beats:
-     1. the page you're leaving fades out quickly, with a small drift (and
-        the back link lifts out when going back to the list);
-     2. the page you're arriving at fades and drifts into place while the
-        accent dash glides to its new spot (and the back link drops in when
-        opening a recipe). Everything in this beat shares one start, one
-        duration and one easing curve, so the dash moves as part of the
-        arriving header and lands with it rather than ahead of it.
+     1. the page you're leaving fades out quickly, with a small drift;
+     2. the page you're arriving at fades and drifts into place.
+     The site nav stays put.
      Names are only applied while a transition is running (html[data-nav]),
      so they never affect normal layout. Browsers without view transitions,
      and anyone who prefers reduced motion, get an instant switch instead
@@ -1141,7 +1294,7 @@
     --vt-total: 460ms;   /* whole transition */
     --vt-out: 180ms;     /* leaving page fades out */
     --vt-in-delay: 140ms;
-    --vt-in: calc(var(--vt-total) - var(--vt-in-delay)); /* arriving page lands with the dash */
+    --vt-in: calc(var(--vt-total) - var(--vt-in-delay)); /* arriving page */
     --vt-ease-in: cubic-bezier(0.2, 0, 0, 1);
     --vt-ease-out: cubic-bezier(0.4, 0, 1, 1);
   }
@@ -1150,8 +1303,6 @@
   html[data-nav] #recipe-view { view-transition-name: recipe-view; }
   /* The recipe arrives over the list, so its snapshot needs to be opaque. */
   html[data-nav] #recipe-view { background: var(--warm-white); min-height: 100vh; }
-  html[data-nav] .masthead-dash { view-transition-name: masthead-dash; }
-  html[data-nav] #recipe-view .back-btn { view-transition-name: back-link; }
 
   /* Only the named parts move; the page background stays put. */
   ::view-transition-old(root),
@@ -1159,24 +1310,10 @@
   ::view-transition-old(root) { display: none; }
 
   ::view-transition-group(recipe-view) { z-index: 2; }
-  ::view-transition-group(masthead-dash),
-  ::view-transition-group(back-link) { z-index: 3; }
-
-  /* The dash is identical on both pages, so skip the cross-fade and just move it. */
-  ::view-transition-group(masthead-dash) {
-    animation-delay: var(--vt-in-delay);
-    animation-duration: var(--vt-in);
-    animation-timing-function: var(--vt-ease-in);
-    animation-fill-mode: both;
-  }
-  ::view-transition-old(masthead-dash) { animation: none; opacity: 0; }
-  ::view-transition-new(masthead-dash) { animation: none; }
 
   @keyframes vt-fade-out-down { to { opacity: 0; transform: translateY(0.75rem); } }
   @keyframes vt-fade-in-up { from { opacity: 0; transform: translateY(1.5rem); } }
   @keyframes vt-fade-in-down { from { opacity: 0; transform: translateY(-0.75rem); } }
-  @keyframes vt-drop-in { from { opacity: 0; transform: translateY(-100%); } }
-  @keyframes vt-lift-out { to { opacity: 0; transform: translateY(-100%); } }
 
   /* Opening a recipe */
   html[data-nav="forward"]::view-transition-old(index-view) {
@@ -1185,16 +1322,10 @@
   html[data-nav="forward"]::view-transition-new(recipe-view) {
     animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-fade-in-up;
   }
-  html[data-nav="forward"]::view-transition-new(back-link) {
-    animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-drop-in;
-  }
 
   /* Going back to the list */
   html[data-nav="back"]::view-transition-old(recipe-view) {
     animation: var(--vt-out) var(--vt-ease-out) both vt-fade-out-down;
-  }
-  html[data-nav="back"]::view-transition-old(back-link) {
-    animation: var(--vt-out) var(--vt-ease-out) both vt-lift-out;
   }
   html[data-nav="back"]::view-transition-new(index-view) {
     animation: var(--vt-in) var(--vt-ease-in) var(--vt-in-delay) both vt-fade-in-down;
@@ -1206,14 +1337,16 @@
     .recipe-stats { grid-template-columns: 1fr; }
     .recipe-stat { border-right: none; border-bottom: 1px solid var(--border); }
     .recipe-stat:last-child { border-bottom: none; }
-    .basket-badge { right: 1rem; bottom: 1rem; padding: 0.55rem 0.9rem; font-size: 0.75rem; }
+    .back-to-top { right: 1rem; bottom: 1rem; }
+    .toast { bottom: 1rem; }
+    .site-nav { padding: 0.75rem 1rem 0; }
+    .site-nav-list { gap: 1.25rem; }
 
-    #index { padding: var(--dash-gap) 1rem 3rem; }
-    .site-header { margin-bottom: 0.65rem; max-width: none; }
+    #index { padding: var(--page-top) 1rem 3rem; }
     .filter-bar { max-width: none; }
 
-    :root { --space-section: 2rem; --space-heading: 1rem; --dash-gap: 1rem; }
-    #recipe-view, #shopping-list-view { padding: 1.25rem 1rem 3rem; }
+    :root { --space-section: 2rem; --space-heading: 1rem; --page-top: 1.25rem; }
+    #recipe-view, #shopping-list-view { padding: var(--page-top) 1rem 3rem; }
     .recipe-jump { padding: 0.5rem 1rem; margin: -0.5rem -1rem calc(var(--space-section) - 0.5rem - 1px); }
     .filters { padding: 0.5rem 1rem; margin: -0.5rem -1rem 0.35rem; }
     .filter-bar { gap: 0.1rem; }
@@ -1228,13 +1361,22 @@
 </head>
 <body>
 
+<nav class="site-nav" aria-label="Site">
+  <div class="site-nav-inner">
+    <ul class="site-nav-list">
+      <li><a class="site-nav-link" id="nav-recipes" href="#" onclick="event.preventDefault(); showIndex()">Recipes</a></li>
+      <li><a class="site-nav-link" id="shopping-list-link" href="#shopping-list">Shopping list <span class="nav-count is-empty" id="nav-count">0</span><span class="visually-hidden" id="nav-count-unit"> recipes</span></a></li>
+    </ul>
+    <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
+  </div>
+</nav>
+
 <main>
 
 <div id="index">
-  <header class="site-header">
-    <span class="masthead-dash" aria-hidden="true"></span>
-    <h1 class="site-title" id="site-title" tabindex="-1">Recipe collection &amp; shopping list generator</h1>
-  </header>
+  <!-- No visible title (the nav says where you are), but kept for screen
+       readers and as the place focus lands when you arrive on the page. -->
+  <h1 class="visually-hidden" id="site-title" tabindex="-1">Recipes</h1>
 
   <div class="filters">
     <div class="search-field" role="search">
@@ -1250,18 +1392,24 @@
 </div>
 
 <div id="recipe-view">
-  <button class="back-btn" onclick="showIndex()">← All recipes</button>
   <div id="recipe-content"></div>
 </div>
 
 <div id="shopping-list-view">
-  <button class="back-btn" onclick="showIndex()">← All recipes</button>
   <div id="shopping-list-content"></div>
 </div>
 
 </main>
 
-<button id="basket-badge" class="basket-badge" hidden onclick="showShoppingList()">🛒 Shopping list (0)</button>
+<button id="back-to-top" class="back-to-top" aria-label="Back to top" onclick="backToTop()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+
+<!-- Always in the page so screen readers reliably announce what's put in it. -->
+<p id="live-status" class="visually-hidden" role="status"></p>
+
+<div id="toast" class="toast" hidden>
+  <span id="toast-message"></span>
+  <button id="toast-action" class="toast-action" type="button"></button>
+</div>
 
 <script>
 // ─────────────────────────────────────────────
@@ -1367,20 +1515,81 @@ function removeFromBasket(id) {
   renderShoppingListContent();
 }
 
+// Clears straight away, then offers Undo for a few seconds rather than
+// asking "are you sure?" first. Focus moves to Undo, since the button you
+// pressed is gone once the list is empty.
 function clearBasket() {
+  const previous = { basket: [...basket], checked: [...checkedItems] };
   basket.clear();
   checkedItems.clear();
   saveBasket();
   saveCheckedItems();
   renderBasketBadge();
   renderShoppingListContent();
+  showToast('Shopping list cleared', 'Undo', () => {
+    previous.basket.forEach(id => basket.add(id));
+    previous.checked.forEach(name => checkedItems.add(name));
+    saveBasket();
+    saveCheckedItems();
+    renderBasketBadge();
+    renderShoppingListContent();
+    announce('Shopping list restored');
+    document.getElementById('shopping-list-title')?.focus({ preventScroll: true });
+  });
 }
 
+// Keeps the recipe count in the nav's Shopping list link up to date.
 function renderBasketBadge() {
-  const badge = document.getElementById('basket-badge');
-  badge.hidden = basket.size === 0;
-  badge.textContent = `🛒 Shopping list (${basket.size})`;
+  const count = document.getElementById('nav-count');
+  count.classList.toggle('is-empty', basket.size === 0);
+  count.textContent = basket.size;
+  // Read out as "Shopping list 2 recipes", keeping the visible text first.
+  document.getElementById('nav-count-unit').textContent = basket.size === 1 ? ' recipe' : ' recipes';
+  placeNavIndicator(); // the count's width can change
 }
+
+// ─────────────────────────────────────────────
+//  TOAST & ANNOUNCEMENTS
+// ─────────────────────────────────────────────
+
+function announce(text) {
+  const live = document.getElementById('live-status');
+  live.textContent = '';
+  // A fresh change on the next frame, so repeating the same text is still read out.
+  requestAnimationFrame(() => { live.textContent = text; });
+}
+
+const TOAST_MS = 6000;
+let toastTimer = null;
+
+function showToast(message, actionLabel, onAction) {
+  const toast = document.getElementById('toast');
+  const action = document.getElementById('toast-action');
+  document.getElementById('toast-message').textContent = message;
+  action.textContent = actionLabel;
+  action.onclick = () => { hideToast(false); onAction(); };
+  toast.hidden = false;
+  updateBackToTop();
+  announce(`${message}. ${actionLabel} button available.`);
+  action.focus();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => hideToast(true), TOAST_MS);
+}
+
+// When the toast times out while its button has focus, hand focus to the
+// page heading so it isn't lost.
+function hideToast(returnFocus) {
+  clearTimeout(toastTimer);
+  const toast = document.getElementById('toast');
+  const hadFocus = toast.contains(document.activeElement);
+  toast.hidden = true;
+  updateBackToTop();
+  if (returnFocus && hadFocus) currentHeading()?.focus({ preventScroll: true });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !document.getElementById('toast').hidden) hideToast(true);
+});
 
 // Ingredients with the same name (across recipes, or repeated within one)
 // are combined into a single line listing every recipe that needs it —
@@ -1785,6 +1994,7 @@ function tagPanelClass(tags) {
 }
 
 const PLUS_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
+const BASKET_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14l-1.5 10a2 2 0 0 1-2 1.7h-7a2 2 0 0 1-2-1.7Z"/><path d="m9 9 3-5 3 5"/><path d="M10 13v4M14 13v4"/></svg>';
 const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
 
 function renderList() {
@@ -1878,7 +2088,6 @@ function renderRecipe(r) {
 
   document.getElementById('recipe-content').innerHTML = `
     <header class="recipe-header">
-      <span class="masthead-dash" aria-hidden="true"></span>
       <p class="recipe-label">${esc(r.label)} — serves ${esc(r.servings)}</p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
       <p class="recipe-description">${esc(r.description)}</p>
@@ -1917,8 +2126,8 @@ function renderRecipe(r) {
   renderedRecipeId = r.id;
   showView('recipe');
   document.title = `${r.title} – My Recipes`;
-  window.scrollTo(0, 0);
-  document.getElementById('recipe-title').focus();
+  window.scrollTo(0, takeRestoreScroll());
+  document.getElementById('recipe-title').focus({ preventScroll: true });
   updateJumpBar();
 }
 
@@ -1969,7 +2178,7 @@ let jumpBarFrame = null;
 window.addEventListener('scroll', () => {
   if (jumpLocked) releaseJumpLockSoon();
   if (jumpBarFrame) return;
-  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); updateFilterBarStuck(); });
+  jumpBarFrame = requestAnimationFrame(() => { jumpBarFrame = null; updateJumpBar(); updateFilterBarStuck(); updateBackToTop(); });
 }, { passive: true });
 
 function renderIndexView() {
@@ -1980,8 +2189,8 @@ function renderIndexView() {
   renderList();
   showView('index');
   document.title = 'My Recipes';
-  window.scrollTo(0, 0);
-  document.getElementById('site-title').focus();
+  window.scrollTo(0, takeRestoreScroll());
+  document.getElementById('site-title').focus({ preventScroll: true });
 }
 
 // Rebuilds the shopping list content in place — used for interactions
@@ -2029,10 +2238,14 @@ function renderShoppingListContent() {
 
   document.getElementById('shopping-list-content').innerHTML = `
     <header class="recipe-header">
-      <span class="masthead-dash" aria-hidden="true"></span>
-      <p class="recipe-label">Shopping list — ${basketRecipes.length} recipe${basketRecipes.length !== 1 ? 's' : ''}</p>
-      <h1 class="recipe-title" id="shopping-list-title" tabindex="-1">Shopping <em>List</em></h1>
-      ${basketRecipes.length ? `<div class="basket-chips">${chipsHtml}</div>` : ''}
+      <!-- The nav already says "Shopping list" and the count, so the title
+           is for screen readers only. -->
+      <h1 class="visually-hidden" id="shopping-list-title" tabindex="-1">Shopping list</h1>
+      ${basketRecipes.length ? `
+        <div class="basket-chips">
+          ${chipsHtml}
+          <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
+        </div>` : ''}
     </header>
 
     ${basketRecipes.length ? `
@@ -2041,12 +2254,20 @@ function renderShoppingListContent() {
           <a class="whatsapp-btn" href="${buildWhatsAppUrl(groups)}" target="_blank" rel="noopener">Send to WhatsApp</a>
           <button class="copy-list-btn" aria-live="polite" onclick="copyShoppingList(this)">Copy list</button>
         ` : `<span class="all-checked-note">Everything's checked off</span>`}
-        <button class="clear-list-btn" onclick="clearBasket()">Clear list</button>
       </div>
       ${sectionsHtml}
-    ` : `<p class="no-results">Your shopping list is empty. Add recipes from the index or a recipe page.</p>`}
-
-    <hr class="footer-rule">
+      <hr class="footer-rule">
+    ` : `
+      <div class="empty-state">
+        <span class="empty-state-icon" aria-hidden="true">${BASKET_ICON}</span>
+        <h2 class="empty-state-title">Nothing on your list yet</h2>
+        <p class="empty-state-text">
+          Tap <span class="empty-state-plus" aria-hidden="true">${PLUS_ICON}</span><span class="visually-hidden">the plus button</span>
+          on any recipe and its ingredients will appear here, grouped by aisle.
+        </p>
+        <a class="empty-state-action" href="#" onclick="event.preventDefault(); showIndex()">Browse recipes</a>
+      </div>
+    `}
   `;
 
   window.scrollTo(0, scrollY);
@@ -2059,14 +2280,118 @@ function renderShoppingListView() {
   renderShoppingListContent();
   showView('shopping-list');
   document.title = 'Shopping List – My Recipes';
-  window.scrollTo(0, 0);
-  document.getElementById('shopping-list-title').focus();
+  window.scrollTo(0, takeRestoreScroll());
+  document.getElementById('shopping-list-title').focus({ preventScroll: true });
 }
 
 function showView(name) {
   document.getElementById('index').style.display = name === 'index' ? 'block' : 'none';
   document.getElementById('recipe-view').style.display = name === 'recipe' ? 'block' : 'none';
   document.getElementById('shopping-list-view').style.display = name === 'shopping-list' ? 'block' : 'none';
+  updateNavCurrent(name);
+  updateBackToTop();
+}
+
+// A recipe page counts as part of "Recipes" in the nav.
+// On a recipe page nothing in the nav is the current page, so "Recipes"
+// becomes "← Back to recipes" instead of being marked as current.
+function updateNavCurrent(view) {
+  const current = { index: 'nav-recipes', 'shopping-list': 'shopping-list-link' }[view] || null;
+  const recipes = document.getElementById('nav-recipes');
+  const label = view === 'recipe'
+    ? '<span class="nav-back-arrow" aria-hidden="true">←</span> Back to recipes'
+    : 'Recipes';
+  if (recipes.innerHTML !== label) recipes.innerHTML = label;
+  ['nav-recipes', 'shopping-list-link'].forEach(id => {
+    const link = document.getElementById(id);
+    if (id === current) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  placeNavIndicator();
+}
+
+// Moves the accent bar under the current link. It slides between links,
+// and stays where it was (just fading out) when there's no current link.
+function placeNavIndicator() {
+  const indicator = document.getElementById('nav-indicator');
+  const current = document.querySelector('.site-nav-link[aria-current="page"]');
+  if (current) {
+    const inner = indicator.parentElement.getBoundingClientRect();
+    const box = current.getBoundingClientRect();
+    indicator.style.transform = `translateX(${box.left - inner.left}px)`;
+    indicator.style.width = `${box.width}px`;
+  }
+  indicator.style.opacity = current ? '1' : '0';
+  // Only animate after it's first been placed, so it doesn't slide in on load.
+  if (!indicator.classList.contains('is-ready')) {
+    requestAnimationFrame(() => indicator.classList.add('is-ready'));
+  }
+}
+
+window.addEventListener('resize', placeNavIndicator);
+document.fonts?.ready.then(placeNavIndicator);
+
+function currentHeading() {
+  const ids = { index: 'site-title', recipe: 'recipe-title', 'shopping-list': 'shopping-list-title' };
+  return document.getElementById(ids[currentView()]);
+}
+
+// ─────────────────────────────────────────────
+//  BACK TO TOP
+// ─────────────────────────────────────────────
+
+// Shown once you've scrolled half a screen, and kept out of the way of
+// the toast, which shares the bottom of the screen.
+function updateBackToTop() {
+  const show = window.scrollY > window.innerHeight / 2 && document.getElementById('toast').hidden;
+  document.getElementById('back-to-top').classList.toggle('is-visible', show);
+}
+
+function backToTop() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  currentHeading()?.focus({ preventScroll: true });
+}
+
+// ─────────────────────────────────────────────
+//  SCROLL MEMORY — back and forward return you to where you were
+// ─────────────────────────────────────────────
+
+// Each history entry keeps its own scroll position in history.state. It's
+// saved shortly after you stop scrolling and on every click (which is how
+// you leave a page), so it's there when you come back with the browser's
+// back or forward button. A brand new entry has no saved position and
+// opens at the top.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+let restoreScrollY = null;
+// Where you were on the index, so the nav's "Recipes" link takes you back
+// to the same place in the list.
+let lastIndexScrollY = 0;
+
+function takeRestoreScroll() {
+  const y = restoreScrollY ?? 0;
+  restoreScrollY = null;
+  return y;
+}
+
+function saveScroll() {
+  if (currentView() === 'index') lastIndexScrollY = window.scrollY;
+  const state = history.state && typeof history.state === 'object' ? history.state : {};
+  history.replaceState({ ...state, scrollY: window.scrollY }, '');
+}
+
+let saveScrollTimer = null;
+window.addEventListener('scroll', () => {
+  clearTimeout(saveScrollTimer);
+  saveScrollTimer = setTimeout(saveScroll, 200);
+}, { passive: true });
+document.addEventListener('click', () => { clearTimeout(saveScrollTimer); saveScroll(); }, true);
+window.addEventListener('pagehide', saveScroll);
+
+function savedScrollY() {
+  const y = history.state?.scrollY;
+  return typeof y === 'number' ? y : null;
 }
 
 // ─────────────────────────────────────────────
@@ -2107,6 +2432,7 @@ document.getElementById('recipe-content').addEventListener('click', e => {
 
 function route() {
   const { id, step } = parseHash();
+  restoreScrollY = savedScrollY();
   if (id === 'shopping-list') {
     renderShoppingListView();
     return;
@@ -2114,6 +2440,8 @@ function route() {
   const recipe = recipes.find(r => r.id === id);
   if (recipe && currentView() === 'recipe' && renderedRecipeId === recipe.id) {
     showStep(step);
+    if (!step) window.scrollTo(0, takeRestoreScroll());
+    restoreScrollY = null;
   } else if (recipe) {
     navigateWithTransition('recipe', () => { renderRecipe(recipe); showStep(step); });
   } else {
@@ -2151,13 +2479,16 @@ function showRecipe(id) {
   location.hash = id;
 }
 
-function showShoppingList() {
-  location.hash = 'shopping-list';
-}
-
+// The nav's "Recipes" link. From another page it returns you to where you
+// were in the list; on the index itself it goes back to the top.
 function showIndex() {
+  if (currentView() === 'index') {
+    backToTop();
+    return;
+  }
+  restoreScrollY = lastIndexScrollY;
   if (location.hash) {
-    history.pushState('', document.title, location.pathname + location.search);
+    history.pushState(null, '', location.pathname + location.search);
   }
   navigateWithTransition('index', renderIndexView);
 }
@@ -2169,7 +2500,11 @@ initSearch();
 renderList();
 renderBasketBadge();
 
+updateNavCurrent('index');
+
+// On a reload, pick up where you were.
 const initial = parseHash();
+restoreScrollY = savedScrollY();
 if (initial.id === 'shopping-list') {
   renderShoppingListView();
 } else {
@@ -2177,6 +2512,8 @@ if (initial.id === 'shopping-list') {
   if (initialRecipe) {
     renderRecipe(initialRecipe);
     showStep(initial.step);
+  } else {
+    window.scrollTo(0, takeRestoreScroll());
   }
 }
 </script>

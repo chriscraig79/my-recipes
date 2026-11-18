@@ -140,7 +140,11 @@ jump to it from anywhere on the index.
 
 ## Shopping list
 
-Any recipe can be added to a shopping basket — via the "+" button on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload, and a "🛒 Shopping list (N)" badge (bottom-right) links to the shopping list view.
+Any recipe can be added to a shopping basket — via the "+" button on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload.
+
+A site nav at the top of every page (**Recipes · Shopping list N**) moves between the index and the shopping list, with the current page marked. On a recipe page, "Recipes" reads "← Back to recipes". Each history entry remembers its scroll position, so going back (with the nav or the browser) returns you to where you were. Once you've scrolled half a screen, a back-to-top button appears in the bottom-right.
+
+**Clear list** sits at the end of the row of recipe chips and clears straight away, with an Undo toast (focus moves to Undo, and the change is announced to screen readers). An empty list shows a short prompt and a "Browse recipes" button back to the index.
 
 The shopping list groups every basket recipe's ingredients into supermarket sections, in walking order:
 
@@ -175,9 +179,11 @@ npm test    # builds, then runs the Playwright smoke test against build/index.ht
 `scripts/smoke-test.mjs` is a plain script (not a test framework) that opens
 the built page in headless Chromium and checks the things that a YAML/HTML
 syntax check can't: the filter dropdowns sit on one row, actually filter
-the list and work from the keyboard, the no-results state shows up, adding a recipe to the basket flips its
-icon and updates the badge, opening a recipe renders its detail view, and
-the pinned Ingredients | Method bar jumps to and highlights each section.
+the list and work from the keyboard, the no-results state shows up, search
+finds recipes, adding a recipe to the basket flips its icon and updates the
+nav count, the nav and scroll memory work, Clear list can be undone, opening
+a recipe renders its detail view, and the pinned Ingredients | Method bar
+jumps to and highlights each section.
 It's meant to catch a broken `onclick` handler or a renamed class/id before
 it ships — not to be exhaustive. This runs automatically on every pull
 request into `main` (`.github/workflows/test.yml`) and again before every

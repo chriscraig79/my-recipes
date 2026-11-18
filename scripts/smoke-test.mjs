@@ -171,17 +171,44 @@ check("filter dropdowns work from the keyboard", async page => {
   await clearFilter(page, "Carbs");
 });
 
-check("adding a recipe to the basket updates the icon and badge", async page => {
+check("adding a recipe to the basket updates the icon and the nav count", async page => {
   const toggle = page.locator(".basket-toggle").first();
   await toggle.click();
-  await page.waitForSelector(".basket-badge:not([hidden])");
-  const badgeText = await page.textContent("#basket-badge");
-  assert.match(badgeText, /Shopping list \(1\)/, `unexpected badge text: "${badgeText}"`);
+  assert.equal((await page.textContent("#nav-count")).trim(), "1", "expected the nav count to show 1");
+  assert.equal(await page.locator("#nav-count.is-empty").count(), 0, "a non-zero count shouldn't be dulled");
+  assert.match(await page.textContent("#shopping-list-link"), /Shopping list\s*1 recipe$/);
   const isActive = await page.locator(".basket-toggle.active").count();
   assert.equal(isActive, 1, "expected exactly one active basket-toggle");
   await page.locator(".basket-toggle.active").click(); // reset
-  const hidden = await page.getAttribute("#basket-badge", "hidden");
-  assert.notEqual(hidden, null, "expected badge to hide again once basket is empty");
+  assert.equal((await page.textContent("#nav-count")).trim(), "0", "expected a 0 count once the basket is empty");
+  assert.equal(await page.locator("#nav-count.is-empty").count(), 1, "expected the 0 count to be dulled");
+  assert.match(await page.textContent("#shopping-list-link"), /Shopping list\s*0 recipes$/);
+});
+
+check("site nav is on every page and marks the current one", async page => {
+  const current = () => page.evaluate(() => document.querySelector('.site-nav-link[aria-current="page"]')?.id ?? null);
+  // The indicator sits under the current link (allowing for it mid-slide).
+  const indicatorUnder = id => page.waitForFunction(id => {
+    const bar = document.getElementById("nav-indicator").getBoundingClientRect();
+    const link = document.getElementById(id).getBoundingClientRect();
+    return Math.abs(bar.left - link.left) < 1 && Math.abs(bar.width - link.width) < 1;
+  }, id);
+  assert.equal(await current(), "nav-recipes", "expected Recipes to be current on the index");
+  await indicatorUnder("nav-recipes");
+  await page.locator(".recipe-card-btn").first().click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  assert.ok(await page.isVisible(".site-nav"), "expected the nav on a recipe page");
+  assert.equal(await current(), null, "nothing in the nav is current on a recipe page");
+  assert.match(await page.textContent("#nav-recipes"), /Back to recipes/, "expected Recipes to read Back to recipes");
+  await page.waitForFunction(() => getComputedStyle(document.getElementById("nav-indicator")).opacity === "0");
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  assert.equal(await current(), "shopping-list-link", "expected Shopping list to be current on its page");
+  assert.equal((await page.textContent("#nav-recipes")).trim(), "Recipes");
+  await indicatorUnder("shopping-list-link");
+  assert.equal(await page.locator(".back-btn").count(), 0, "the old back links should be gone");
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
 });
 
 check("opening a recipe shows its detail view", async page => {
@@ -193,7 +220,7 @@ check("opening a recipe shows its detail view", async page => {
   assert.ok(stepCount > 0, "expected at least one method step");
   const statLabels = await page.locator(".stat-label").allTextContents();
   assert.ok(statLabels.includes("Cooked in"), `missing "Cooked in" stat, got: ${statLabels}`);
-  await page.locator("#recipe-view .back-btn").click();
+  await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
 
@@ -203,16 +230,11 @@ check("opening and leaving a recipe animates and then cleans up", async page => 
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "forward");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#recipe-view"), "expected the recipe view after the transition");
-  const dashLeft = () => page.evaluate(() => [...document.querySelectorAll(".masthead-dash")]
-    .filter(el => el.offsetParent).map(el => Math.round(el.getBoundingClientRect().left))[0]);
-  const recipeDashLeft = await dashLeft();
-  await page.locator("#recipe-view .back-btn").click();
+  await page.locator("#nav-recipes").click();
   if (supported) await page.waitForFunction(() => document.documentElement.dataset.nav === "back");
   await page.waitForFunction(() => !document.documentElement.dataset.nav);
   assert.ok(await page.isVisible("#index"), "expected the index after going back");
-  assert.equal(await dashLeft(), recipeDashLeft, "the accent dash should keep the same left edge on both views, so it only moves vertically");
-  const title = (await page.textContent("#site-title")).trim();
-  assert.match(title, /Recipe collection/i, `unexpected index title: "${title}"`);
+  assert.equal((await page.textContent("#site-title")).trim(), "Recipes", "expected the index's (visually hidden) h1");
 });
 
 check("ingredients are a 2-column grid with equal-height cells", async page => {
@@ -234,7 +256,7 @@ check("ingredients are a 2-column grid with equal-height cells", async page => {
   assert.equal(layout.columns, 2, "expected 2 ingredient columns at desktop width");
   assert.equal(layout.heights, 1, "expected every ingredient cell to be the same height");
   assert.ok(layout.flush, "expected ingredient cells to reach the edges of the card");
-  await page.locator("#recipe-view .back-btn").click();
+  await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
 
@@ -249,7 +271,7 @@ check("recipe jump bar scrolls to and highlights Method / Ingredients", async pa
   await page.locator('.jump-btn[data-target="recipe-ingredients"]').click();
   await page.waitForFunction(() => document.getElementById("recipe-ingredients").getBoundingClientRect().top < 120);
   assert.equal((await current()).trim(), "Ingredients", "expected Ingredients highlighted after jumping back");
-  await page.locator("#recipe-view .back-btn").click();
+  await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
 
@@ -272,7 +294,7 @@ check("step numbers link to #recipe/step-N and the link scrolls to and rings tha
   await page.waitForSelector("#index", { state: "visible" });
   await page.evaluate(id => { location.hash = `${id}/step-3`; }, recipeId);
   await page.waitForFunction(() => document.querySelector("#step-3.is-target"));
-  await page.locator("#recipe-view .back-btn").click();
+  await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
 
@@ -291,11 +313,11 @@ check("adding to the shopping list from a recipe page keeps scroll, focus and th
   assert.equal(await page.evaluate(() => window.scrollY), before, "scroll position changed");
   assert.ok(await toggle.evaluate(el => el === document.activeElement), "focus moved away from the toggle");
   assert.equal(await page.locator("#step-2.is-target").count(), 1, "step highlight was cleared");
-  assert.match(await page.textContent("#basket-badge"), /\(1\)/, "badge didn't update");
+  assert.equal((await page.textContent("#nav-count")).trim(), "1", "nav count didn't update");
   await page.keyboard.press("Enter"); // reset
   assert.equal(await toggle.getAttribute("aria-pressed"), "false");
   assert.ok(await toggle.evaluate(el => el === document.activeElement), "focus moved away after the second toggle");
-  await page.locator("#recipe-view .back-btn").click();
+  await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
   assert.equal(await page.locator(".basket-toggle.active").count(), 0, "index toggles out of sync with the basket");
 });
@@ -331,7 +353,7 @@ check("Copy list copies the same unchecked items as Send to WhatsApp", async pag
     });
   });
   await page.locator(".basket-toggle").first().click();
-  await page.locator("#basket-badge").click();
+  await page.locator("#shopping-list-link").click();
   await page.waitForSelector("#shopping-list-view", { state: "visible" });
   const firstItem = page.locator(".shopping-item-checkbox").first();
   const tickedName = await firstItem.getAttribute("data-name");
@@ -348,8 +370,98 @@ check("Copy list copies the same unchecked items as Send to WhatsApp", async pag
   assert.ok(!/\(.+\)$/m.test(copied.split("\n\n").slice(2).join("\n")), "ingredient lines shouldn't name recipes");
   assert.match(await page.textContent(".copy-list-btn"), /Copied/, "expected copied confirmation");
   await page.locator(".clear-list-btn").click(); // reset
+  await page.locator("#toast-action").click(); // undo, then clear for real below
+  await page.locator(".clear-list-btn").click();
+  await page.keyboard.press("Escape");
   await page.evaluate(() => { location.hash = ""; });
   await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("Clear list sits with the recipe chips, empties the list and can be undone", async page => {
+  await page.locator(".basket-toggle").first().click();
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  assert.equal(await page.locator(".basket-chips .clear-list-btn").count(), 1, "expected Clear list in the row of recipe chips");
+  assert.ok(await page.locator(".basket-chip").last().evaluate(chip => chip.nextElementSibling?.matches(".clear-list-btn")), "expected Clear list right after the last chip");
+  assert.equal(await page.locator("#shopping-list-view :is(.recipe-label, .recipe-title)").count(), 0, "no visible eyebrow or title on the shopping list");
+  assert.equal(await page.locator("#shopping-list-title").textContent(), "Shopping list", "expected an h1 for screen readers");
+  const itemCount = await page.locator(".shopping-item").count();
+  await page.locator(".clear-list-btn").click();
+  await page.waitForSelector("#toast:not([hidden])");
+  assert.equal(await page.locator(".shopping-item").count(), 0, "expected the list to be empty");
+  assert.ok(await page.isVisible("#shopping-list-view .empty-state"), "expected the empty state");
+  assert.equal(await page.locator("#shopping-list-view .footer-rule").count(), 0, "no rules around the empty state");
+  assert.equal((await page.textContent("#nav-count")).trim(), "0", "expected the nav count to drop to 0");
+  assert.ok(await page.locator("#toast-action").evaluate(el => el === document.activeElement), "expected focus on Undo");
+  await page.waitForFunction(() => document.getElementById("live-status").textContent.includes("Shopping list cleared"));
+  await page.locator("#toast-action").click();
+  assert.ok(await page.isHidden("#toast"), "expected the toast to close after Undo");
+  assert.equal(await page.locator(".shopping-item").count(), itemCount, "expected Undo to bring the items back");
+  assert.equal((await page.textContent("#nav-count")).trim(), "1", "expected the nav count back");
+  await page.locator(".clear-list-btn").click(); // reset
+  await page.keyboard.press("Escape");
+  assert.ok(await page.isHidden("#toast"), "expected Escape to close the toast");
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("empty shopping list offers a way back to the recipes", async page => {
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view .empty-state", { state: "visible" });
+  assert.equal((await page.textContent(".empty-state-title")).trim(), "Nothing on your list yet");
+  await page.locator(".empty-state-action").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("browser back returns to the same place in the list, and from the shopping list to the recipe", async page => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const card = page.locator(".recipe-card-btn").nth(8);
+  await card.scrollIntoViewIfNeeded();
+  const indexY = await page.evaluate(() => window.scrollY);
+  assert.ok(indexY > 0, "index should be long enough to scroll");
+  await card.click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  await page.waitForFunction(() => !document.documentElement.dataset.nav);
+  assert.equal(await page.evaluate(() => window.scrollY), 0, "a newly opened recipe should start at the top");
+  const recipeHash = await page.evaluate(() => location.hash);
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  await page.goBack();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  assert.equal(await page.evaluate(() => location.hash), recipeHash, "expected back from the list to return to the same recipe");
+  await page.goBack();
+  await page.waitForSelector("#index", { state: "visible" });
+  await page.waitForFunction(() => !document.documentElement.dataset.nav);
+  await page.waitForFunction(y => Math.abs(window.scrollY - y) < 2, indexY);
+});
+
+check("Recipes in the nav returns to the same place in the list", async page => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const card = page.locator(".recipe-card-btn").nth(8);
+  await card.scrollIntoViewIfNeeded();
+  const before = await page.evaluate(() => window.scrollY);
+  assert.ok(before > 0, "index should be long enough to scroll");
+  await card.click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  await page.waitForFunction(() => !document.documentElement.dataset.nav);
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+  await page.waitForFunction(() => !document.documentElement.dataset.nav);
+  await page.waitForFunction(y => Math.abs(window.scrollY - y) < 2, before);
+  await page.evaluate(() => window.scrollTo(0, 0));
+});
+
+check("back to top appears after scrolling half a screen and returns to the top", async page => {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForSelector("#back-to-top", { state: "hidden" });
+  await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.6));
+  await page.waitForSelector("#back-to-top", { state: "visible" });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.locator("#back-to-top").click();
+  await page.waitForFunction(() => window.scrollY === 0);
+  assert.ok(await page.locator("#site-title").evaluate(el => el === document.activeElement), "expected focus on the page heading");
+  await page.waitForSelector("#back-to-top", { state: "hidden" });
+  await page.emulateMedia({ reducedMotion: null });
 });
 
 async function main() {
