@@ -184,6 +184,27 @@ request into `main` (`.github/workflows/test.yml`) and again before every
 deploy (`.github/workflows/deploy.yml`), so a regression blocks the merge
 or the publish rather than going live silently.
 
+### Accessibility checks
+
+`npm test` also runs `scripts/a11y-test.mjs`, which uses
+[axe-core](https://github.com/dequelabs/axe-core) to check every view and
+state at phone and desktop widths: the index (plain, filtered, no results,
+filter dropdown open), a recipe page, a recipe opened at a step link, and
+the shopping list (empty and populated). It checks against WCAG 2.2 A/AA
+and fails on serious or critical violations; moderate and minor ones are
+printed as notes. `@axe-core/playwright` is a dev dependency only —
+nothing extra ships to the page.
+
+Automated checks catch only part of the picture, so for bigger UI changes
+(a new view, navigation, dialogs) also do a quick manual pass:
+
+- **Keyboard only:** every control reachable with Tab, in a sensible
+  order, with a visible focus ring; Esc closes menus; nothing traps focus
+- **Screen reader:** VoiceOver (iOS/macOS) or TalkBack (Android) — controls
+  have clear names, state changes are announced, headings make sense
+- **200% zoom / 320px wide:** nothing cut off, no sideways scrolling
+- **Reduced motion:** with "reduce motion" on, no animated transitions
+
 ## Editing in Claude Code
 
 Once you've cloned the repo, you can continue building the recipe collection with Claude Code. Here are some useful prompts to get started:
@@ -228,6 +249,7 @@ my-recipes/
 │   ├── build.mjs             # Compiles src/ + recipes/*.yaml -> build/index.html
 │   ├── watch.mjs             # Rebuilds automatically on changes (npm run watch)
 │   ├── smoke-test.mjs        # Playwright checks against build/index.html (npm test)
+│   ├── a11y-test.mjs         # axe accessibility checks on every view (npm test)
 │   ├── validate.mjs          # Recipe data checks run by build.mjs
 │   └── validate-test.mjs     # One fixture per validation rule (npm test)
 ├── .github/workflows/
@@ -236,7 +258,7 @@ my-recipes/
 ├── .claude/
 │   ├── launch.json           # Editor run config — npm run watch & npx serve build
 │   └── skills/add-recipe/    # Claude Code skill for adding recipes
-├── package.json             # js-yaml, esbuild, and playwright dependencies
+├── package.json             # js-yaml, esbuild, playwright and @axe-core/playwright dependencies
 ├── package-lock.json
 ├── .gitignore
 ├── README.md
