@@ -169,6 +169,11 @@ This is handled by the `add-recipe` skill (`.claude/skills/add-recipe/`), which 
 **Fixing a bug**
 > "There's a YAML syntax error in recipes/[recipe id].yaml — find and fix it." or "The build script is failing, here's the error: [paste it]." or "Something's wrong with the page layout/styling — it's in src/index.html."
 
+**Reviewing accessibility**
+> "Review the accessibility of the shopping list, including adding and removing recipes from it." or "Retest issue #47."
+
+This uses the `accessibility-runtime-review` skill (`.claude/skills/accessibility-runtime-review/`), which targets WCAG 2.2 AA. It works through real keyboard journeys, focus, semantics, contrast, zoom and reflow, and separates what it actually verified in the browser from what it only read in the source. It reviews by default and changes code only when asked.
+
 **Checking for errors before pushing**
 > "Run `npm test` and check the output for warnings or failures." (This builds and runs the smoke test — see "Testing" above.)
 
@@ -204,7 +209,10 @@ my-recipes/
 │   └── test.yml              # Runs the smoke test on every pull request into main
 ├── .claude/
 │   ├── launch.json           # Editor run config — npm run watch & npx serve build
-│   └── skills/add-recipe/    # Claude Code skill for adding recipes
+│   └── skills/
+│       ├── add-recipe/                      # Adding a recipe in the right format
+│       ├── recipe-illustration/             # Drawing a recipe's illustration
+│       └── accessibility-runtime-review/    # Keyboard, focus and WCAG 2.2 AA review of the UI
 ├── package.json             # js-yaml, esbuild, and playwright dependencies
 ├── package-lock.json
 ├── .gitignore

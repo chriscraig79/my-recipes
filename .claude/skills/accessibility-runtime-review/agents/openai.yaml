@@ -1,0 +1,4 @@
+interface:
+  display_name: "Accessibility Runtime Review"
+  short_description: "Review UI accessibility with runtime and source evidence"
+  default_prompt: "Use $accessibility-runtime-review to review the specified UI journey, following project test restrictions and distinguishing runtime evidence, source findings and unverified coverage."
