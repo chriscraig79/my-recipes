@@ -200,8 +200,11 @@ check("choosing filters doesn't move the other segments (desktop and 375px phone
     assert.ok(last.x + last.width <= bar.x + bar.width, `last segment overflows the bar at ${viewport.width}px`);
     const title = await page.getAttribute('.filter-seg[data-category="Time"] .filter-trigger', "title");
     assert.match(title, /Under 30 min/, "full choice should be in the title");
-    await clearFilter(page, "Protein");
-    await clearFilter(page, "Time");
+    // Phones have no ×; "All" in the dropdown clears instead.
+    const clearVisible = await page.locator('.filter-seg[data-category="Protein"] .filter-clear').isVisible();
+    assert.equal(clearVisible, viewport.width > 500, `× should ${viewport.width > 500 ? "" : "not "}show at ${viewport.width}px`);
+    await chooseFilter(page, "Protein", "");
+    await chooseFilter(page, "Time", "");
   }
   await page.setViewportSize(original);
 });
