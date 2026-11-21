@@ -280,6 +280,10 @@
   /* Active: the whole cell fills orange (covering its divider too), the
      chosen value becomes the label, and an × beside it clears it. */
   .filter-seg.active { background: var(--accent); border-left-color: var(--accent); }
+  /* Run a chosen cell out over the bar's own 1px border, so no grey edge
+     shows above, below or (on the last, rounded cell) around the orange. */
+  .filter-seg.active { margin-block: -1px; }
+  .filter-seg.active:last-child { margin-right: -1px; }
   /* A chosen cell's width still comes from the bar's equal share, not from
      its category name plus the ×, so choosing never pushes the others along. */
   .filter-seg.active .filter-sizer { display: none; }
