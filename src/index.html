@@ -1461,7 +1461,7 @@
 <nav class="site-nav" aria-label="Site">
   <div class="site-nav-inner">
     <ul class="site-nav-list">
-      <li><a class="site-nav-link" id="nav-recipes" href="#" onclick="event.preventDefault(); showIndex()">Recipes</a></li>
+      <li><a class="site-nav-link" id="nav-recipes" href="#" onclick="event.preventDefault(); navRecipes()">Recipes</a></li>
       <li><a class="site-nav-link" id="shopping-list-link" href="#shopping-list">Shopping list <span class="nav-count is-empty" id="nav-count">0</span><span class="visually-hidden" id="nav-count-unit"> recipes</span></a></li>
     </ul>
     <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
@@ -2232,7 +2232,7 @@ function renderRecipe(r) {
   const stats = [
     { label: 'Time', value: r.time },
     { label: 'Servings', value: r.servings },
-    { label: 'Cooked in', value: r.cookedIn }
+    { label: 'Cook', value: r.cookedIn }
   ];
   const statsHtml = stats.map(s => `
     <div class="recipe-stat">
@@ -2449,14 +2449,22 @@ function showView(name) {
 
 // A recipe page counts as part of "Recipes" in the nav.
 // On a recipe page nothing in the nav is the current page, so "Recipes"
-// becomes "← Back to recipes" instead of being marked as current.
+// becomes "← Back to recipes" instead of being marked as current. On the
+// shopping list, if you came from a recipe, it becomes "← Back to recipe"
+// and takes you back to that recipe.
 function updateNavCurrent(view) {
   const current = { index: 'nav-recipes', 'shopping-list': 'shopping-list-link' }[view] || null;
   const recipes = document.getElementById('nav-recipes');
+  const returnTo = view === 'shopping-list' && shoppingListReturnRecipe();
   const label = view === 'recipe'
     ? '<span class="nav-back-arrow" aria-hidden="true">←</span> Back to recipes'
-    : 'Recipes';
+    : returnTo
+      ? '<span class="nav-back-arrow" aria-hidden="true">←</span> Back to recipe'
+      : 'Recipes';
   if (recipes.innerHTML !== label) recipes.innerHTML = label;
+  recipes.setAttribute('href', returnTo ? `#${returnTo.id}` : '#');
+  if (returnTo) recipes.title = `Back to ${returnTo.title}`;
+  else recipes.removeAttribute('title');
   ['nav-recipes', 'shopping-list-link'].forEach(id => {
     const link = document.getElementById(id);
     if (id === current) link.setAttribute('aria-current', 'page');
@@ -2589,6 +2597,12 @@ function route() {
   const { id, step } = parseHash();
   restoreScrollY = savedScrollY();
   if (id === 'shopping-list') {
+    // Remember the recipe you came from on this history entry, so the nav
+    // can offer "Back to recipe" (and still does after a reload).
+    if (currentView() === 'recipe' && renderedRecipeId) {
+      const state = history.state && typeof history.state === 'object' ? history.state : {};
+      history.replaceState({ ...state, returnTo: renderedRecipeId }, '');
+    }
     renderShoppingListView();
     return;
   }
@@ -2632,6 +2646,23 @@ function navigateWithTransition(to, update) {
 
 function showRecipe(id) {
   location.hash = id;
+}
+
+// The recipe the open shopping list was reached from, if any.
+function shoppingListReturnRecipe() {
+  const id = history.state?.returnTo;
+  return id ? recipes.find(r => r.id === id) || null : null;
+}
+
+// The nav's first link: "Back to recipe" on a shopping list reached from a
+// recipe (going back in history, so you land where you were on it), and
+// "Recipes" / "Back to recipes" everywhere else.
+function navRecipes() {
+  if (currentView() === 'shopping-list' && shoppingListReturnRecipe()) {
+    history.back();
+    return;
+  }
+  showIndex();
 }
 
 // The nav's "Recipes" link. From another page it returns you to where you

@@ -277,9 +277,35 @@ check("site nav is on every page and marks the current one", async page => {
   await page.locator("#shopping-list-link").click();
   await page.waitForSelector("#shopping-list-view", { state: "visible" });
   assert.equal(await current(), "shopping-list-link", "expected Shopping list to be current on its page");
-  assert.equal((await page.textContent("#nav-recipes")).trim(), "Recipes");
   await indicatorUnder("shopping-list-link");
   assert.equal(await page.locator(".back-btn").count(), 0, "the old back links should be gone");
+  // Reached from a recipe, the first link goes back to it.
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+  // Reached straight from the index, the shopping list's first link is plain "Recipes".
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  assert.equal((await page.textContent("#nav-recipes")).trim(), "Recipes");
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("shopping list reached from a recipe goes back to that recipe", async page => {
+  await page.locator(".recipe-card-btn").nth(1).click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  const title = (await page.textContent("#recipe-title")).trim();
+  await page.locator("#shopping-list-link").click();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  assert.match(await page.textContent("#nav-recipes"), /Back to recipe$/, "expected Back to recipe on the shopping list");
+  // Still offered after a reload.
+  await page.reload();
+  await page.waitForSelector("#shopping-list-view", { state: "visible" });
+  assert.match(await page.textContent("#nav-recipes"), /Back to recipe$/, "expected Back to recipe after a reload");
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#recipe-view", { state: "visible" });
+  assert.equal((await page.textContent("#recipe-title")).trim(), title, "expected the same recipe");
   await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
@@ -292,7 +318,7 @@ check("opening a recipe shows its detail view", async page => {
   const stepCount = await page.locator(".step").count();
   assert.ok(stepCount > 0, "expected at least one method step");
   const statLabels = await page.locator(".stat-label").allTextContents();
-  assert.ok(statLabels.includes("Cooked in"), `missing "Cooked in" stat, got: ${statLabels}`);
+  assert.ok(statLabels.includes("Cook"), `missing "Cook" stat, got: ${statLabels}`);
   await page.locator("#nav-recipes").click();
   await page.waitForSelector("#index", { state: "visible" });
 });
