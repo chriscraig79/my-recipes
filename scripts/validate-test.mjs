@@ -77,6 +77,10 @@ expectError("attributes on an allowed tag are rejected", { recipe: withField("ti
   /`titleHtml` may only use .* found <em onclick/);
 cases.push({ name: "<strong> in titleHtml passes", fn: () =>
   assert.deepEqual(run({ recipe: withField("titleHtml", "Test <strong>Dish</strong>") }), []) });
+expectError("servings that aren't a number are rejected", { recipe: withField("servings", "a crowd") },
+  /`servings` is "a crowd"; must be a whole number/);
+expectError("servings of zero are rejected", { recipe: withField("servings", "0") }, /`servings` is "0"/);
+cases.push({ name: "a servings range passes", fn: () => assert.deepEqual(run({ recipe: withField("servings", "3–4") }), []) });
 expectError("empty steps list is rejected", { recipe: withField("steps", []) }, /`steps` must be a non-empty list/);
 expectError("step without content is rejected", { recipe: withField("steps", [{ title: "Cook" }]) }, /steps\[0\] is missing `content`/);
 
