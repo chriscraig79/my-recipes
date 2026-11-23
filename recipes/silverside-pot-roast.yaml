@@ -1,0 +1,74 @@
+id: silverside-pot-roast
+title: Oven Pot-Roast Silverside
+titleHtml: Oven Pot-Roast <em>Silverside</em>
+label: Main course
+servings: '6'
+time: 3 hrs 15 min
+timeMins: 195
+cookedIn: Oven
+description: The quicker take on the slow-cooker pot roast — a silverside joint braised in one lidded casserole over root veg, wine and stock, with the juices reduced into gravy.
+tags:
+  - beef
+  - carrot
+  - mushroom
+  - roast
+ingredients:
+  - name: Beef silverside joint
+    amount: 1.1kg
+    prep: string left on
+  - name: Salt
+    amount: to taste
+  - name: Black pepper
+    amount: to taste
+  - name: Plain flour
+    amount: 2 tbsp
+  - name: Sunflower oil
+    amount: 2 tbsp
+  - name: Onions
+    amount: '1'
+    prep: cut into wedges
+  - name: Carrots
+    amount: '3'
+    prep: cut into chunks
+  - name: Celery sticks
+    amount: '3'
+    prep: chopped
+  - name: Parsnips
+    amount: '2'
+    prep: cut into chunks
+  - name: Button mushrooms
+    amount: 80g
+  - name: Garlic cloves
+    amount: '2'
+    prep: crushed
+  - name: English mustard
+    amount: 2 tsp
+  - name: Red wine
+    amount: 250ml
+  - name: Chicken stock
+    amount: 250ml
+    prep: or beef stock
+  - name: Bay leaves
+    amount: '2'
+steps:
+  - title: Prep the beef
+    content: Take the beef out of the fridge about 30 minutes before you start. Pat it dry, season well with salt and pepper and dust it all over with the flour. Heat the oven to 160°C (140°C fan).
+  - title: Sear the beef
+    content: Heat the oil in a large lidded casserole dish over a high heat. Brown the beef well on every side, including the ends, then lift it out onto a plate.
+    timer: ⏱ 10 minutes
+  - title: Colour the veg
+    content: Turn the heat down to medium. Add the onion, carrots, celery, parsnips and mushrooms and cook until they're starting to colour. Stir in the garlic and mustard for a minute.
+    timer: ⏱ 5 minutes
+  - title: Add the liquid
+    content: Pour in the wine and let it bubble for a couple of minutes, scraping up the browned bits from the bottom. Add the stock and bay leaves and bring to a simmer.
+  - title: Braise
+    content: Sit the beef on top of the veg. The liquid should come about a third of the way up the joint, so top up with a splash of water if needed. Put the lid on and cook in the oven, turning the joint halfway through. It's ready when a skewer slides in easily.
+    timer: ⏱ 2½ hours
+  - title: Rest the beef
+    content: Lift the beef onto a board, cover it loosely with foil and leave it to rest while you make the gravy.
+    timer: ⏱ 15 minutes
+  - title: Reduce the gravy
+    content: Lift the veg out with a slotted spoon and keep them warm. Fish out the bay leaves, then boil the liquid in the casserole on the hob until it's reduced to a rich gravy. Taste and season.
+  - title: Serve
+    content: Remove the string and slice the beef thinly against the grain. Serve with roast potatoes, the softened veg, gravy, and wilted greens if you like.
+notes: Silverside is much leaner than brisket, so it dries out if it's cooked uncovered or overcooked. Keep the lid on, and start checking it with a skewer after 2 hours if your joint is smaller. Chicken stock works fine here because the wine, mustard and browned veg give plenty of beefy flavour. Slicing thinly against the grain is what makes it tender on the plate. Leftovers make great cold sandwiches. For a fall-apart version with a brisket joint, see the slow-cooker beef pot roast.
