@@ -50,7 +50,7 @@ steps:
     content: Roast for 30 minutes, until the skin starts to blister and puff.
     timer: ⏱ 30 minutes
   - title: Slow roast
-    content: Turn the oven down to 170°C (150°C fan). Pour the cider and 150ml water into the tin, not over the skin. Roast for about 3 hours, until a fork slides easily into the meat. Check after 90 minutes and add a splash of water if the tin looks dry.
+    content: Turn the oven down to 170°C (150°C fan). Pour the cider and {{150ml}} water into the tin, not over the skin. Roast for about 3 hours, until a fork slides easily into the meat. Check after 90 minutes and add a splash of water if the tin looks dry.
     timer: ⏱ 3 hours
   - title: Rest and make the sauce
     content: Lift the pork onto a board and rest it uncovered for 20–30 minutes, so the crackling stays crisp. Meanwhile, squash the soft apples and onions into the tin juices. Stir in the mustard to balance the sweetness of the cider, then taste and add salt if needed.

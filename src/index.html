@@ -1160,6 +1160,13 @@
     line-height: 1.65;
   }
 
+  /* Amounts in the method that follow the servings stepper. A touch
+     heavier than the step text so they stand out when scanning mid-cook. */
+  .step-amount {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
   .step-timer {
     display: inline-block;
     margin-top: 0.4rem;
@@ -2303,7 +2310,7 @@ function renderRecipe(r) {
         <a class="step-number" href="#${r.id}/step-${i + 1}" aria-label="Link to step ${i + 1}">${i + 1}</a>
         <div class="step-title">${esc(step.title)}</div>
       </div>
-      <div class="step-content">${esc(step.content)}</div>
+      <div class="step-content">${stepContentHtml(step.content)}</div>
       ${step.timer ? `<span class="step-timer">${esc(step.timer)}</span>` : ''}
     </li>
   `).join('');
@@ -2383,6 +2390,15 @@ const MIN_SERVINGS = 1;
 const MAX_SERVINGS = 24;
 // The servings the open recipe is scaled to, or null for the recipe's own.
 let currentServings = null;
+
+// A step's text, with the {{amounts}} that scale with servings wrapped so
+// applyServings can rewrite them (see splitScaleMarkers in src/scale.js).
+function stepContentHtml(content) {
+  return splitScaleMarkers(String(content ?? '')).map(part => part.amount === undefined
+    ? esc(part.text)
+    : `<span class="step-amount" data-step-amount="${esc(part.amount)}">${esc(part.amount)}</span>`
+  ).join('');
+}
 
 function servingsStatHtml() {
   return `
@@ -2477,6 +2493,9 @@ function applyServings(r) {
   document.querySelectorAll('#recipe-content [data-ingredient]').forEach(el => {
     el.textContent = scaleAmount(r.ingredients[Number(el.dataset.ingredient)].amount || '', factor);
   });
+  document.querySelectorAll('#recipe-content [data-step-amount]').forEach(el => {
+    el.textContent = scaleAmount(el.dataset.stepAmount, factor);
+  });
 
   const note = document.getElementById('servings-note');
   if (n === null) {
@@ -2485,7 +2504,7 @@ function applyServings(r) {
     return;
   }
   note.innerHTML = `
-    Amounts scaled for ${n} (the recipe serves ${esc(r.servings)}). Any quantities in the method are still for ${esc(r.servings)}.
+    Amounts scaled for ${n}, in the ingredients and the method (the recipe serves ${esc(r.servings)}).
     <button class="servings-reset" type="button" onclick="resetServings()">Reset to ${esc(r.servings)}</button>
   `;
   note.hidden = false;

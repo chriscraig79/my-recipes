@@ -40,7 +40,7 @@ steps:
   - title: Slice the vegetables
     content: Using a mandolin, thinly slice the cabbage, carrots, and onion into a large bowl. A mandolin gives you the fine, even shreds that make a slaw properly crunchy — take care with the guard.
   - title: Salt and drain the cabbage
-    content: Transfer the sliced cabbage to a colander and toss with 1 tsp salt. Let it sit for 15 minutes — this draws out excess water so the slaw stays crunchy instead of turning watery. Squeeze or pat dry with a clean tea towel, then combine with the carrots and onion.
+    content: Transfer the sliced cabbage to a colander and toss with {{1 tsp}} salt. Let it sit for 15 minutes — this draws out excess water so the slaw stays crunchy instead of turning watery. Squeeze or pat dry with a clean tea towel, then combine with the carrots and onion.
     timer: ⏱ 15 minutes
   - title: Make the dressing
     content: In a separate small bowl or jug, whisk together the oil, red wine vinegar, Cajun seasoning, salt, and pepper. Once combined, whisk in the mayonnaise until smooth.

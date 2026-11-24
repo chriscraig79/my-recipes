@@ -127,6 +127,16 @@ export function validateRecipes({ order, files, registry, images }) {
           if (!step || typeof step !== "object") return err(`${where} must be { title, content, timer? }`);
           if (!isText(step.title)) err(`${where} is missing \`title\``);
           if (!isText(step.content)) err(`${where} is missing \`content\``);
+          // {{amount}} marks a quantity the servings stepper rescales (see
+          // splitScaleMarkers in src/scale.js); it has to hold a number.
+          if (isText(step.content)) {
+            for (const [, inner] of step.content.matchAll(/\{\{([^{}]*)\}\}/g)) {
+              if (!/\d|[½⅓⅔¼¾]/.test(inner)) err(`${where} marks {{${inner}}} to scale, but it has no number in it`);
+            }
+            if (/\{\{|\}\}/.test(step.content.replace(/\{\{[^{}]*\}\}/g, ""))) {
+              err(`${where} has an unclosed {{ or a stray }} — mark amounts that scale like {{250ml}}`);
+            }
+          }
           if (step.timer !== undefined && typeof step.timer !== "string") err(`${where}.timer must be text`);
         });
       }

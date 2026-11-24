@@ -49,12 +49,12 @@ ingredients:
     prep: chopped
 steps:
   - title: Sear the beef
-    content: Heat the slow cooker to low. Heat 2 tbsp of the oil in a deep frying pan over medium heat. Season and sear the beef in batches until browned all over, then transfer to a plate.
+    content: Heat the slow cooker to low. Heat {{2 tbsp}} of the oil in a deep frying pan over medium heat. Season and sear the beef in batches until browned all over, then transfer to a plate.
   - title: Soften the veg
     content: Add the remaining oil to the pan and fry the onions for 10 minutes until lightly golden. Add the peppers and garlic and fry for a further 5–10 minutes.
     timer: ⏱ 15–20 minutes
   - title: Build the sauce
-    content: Stir in the flour and all the spices and cook for 2 minutes. Stir in the tomato purée, chopped tomatoes and 400ml of the beef stock. Season well and bring to a simmer.
+    content: Stir in the flour and all the spices and cook for 2 minutes. Stir in the tomato purée, chopped tomatoes and {{400ml}} of the beef stock. Season well and bring to a simmer.
   - title: Slow cook
     content: Tip the sauce into the slow cooker with the seared beef. Add the remaining stock if needed to cover the meat. Cover and cook for 6–7 hours until the beef is tender and the sauce has thickened slightly.
     timer: ⏱ 6–7 hours

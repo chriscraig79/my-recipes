@@ -55,7 +55,9 @@ ingredients:
   # into one line. See "Ingredient names" below.
   - { name: Carrots, amount: 300g, prep: thinly sliced }
 steps:
-  - { title: Step title, content: Step instructions., timer: "⏱ 20 minutes" }
+  # Wrap ingredient quantities in the method in {{ }} so they follow the
+  # servings stepper — see "Servings" below.
+  - { title: Step title, content: "Add {{250ml}} water and simmer.", timer: "⏱ 20 minutes" }
 notes: Extra tips shown at the bottom of the recipe.
 ```
 
@@ -112,6 +114,8 @@ error listing each problem (file and field) if any of these fail:
   lists one twice)
 - `servings` isn't a whole number (`"4"`) or a range (`"3–4"`) — the
   servings stepper needs a number to scale from
+- A step marks `{{something}}` to scale with no number in it, or has an
+  unclosed `{{` or stray `}}`
 - `cookedIn` isn't one of the allowed values
 - `timeMins` isn't a positive number
 - An ingredient `name` isn't in `ingredients.yaml`
@@ -168,7 +172,16 @@ and works on the free-text `amount`:
   `400g tin` becomes `2 x 400g tins`; `(250g each)` stays as written
 - Amounts without a number (`to taste`, `a squeeze`) never change
 
-Quantities written in the method steps aren't scaled — the note says so.
+Quantities in the method scale too, but only where the recipe marks them
+in double braces: `Heat {{2 tbsp}} of the oil`, `Add {{250ml}} water`. The
+braces don't show on the page; the amount is shown slightly bolder and
+follows the stepper. Mark only quantities of food or liquid — not times,
+temperatures, dish or cut sizes, or per-item amounts ("about 3 tbsp of
+batter per crêpe") — and write the marker the way you'd write an
+ingredient `amount`, count word included (`{{6 slices}}`, `{{1 tsp}}`
+rather than "a teaspoon"). The build rejects a marker with no number in it
+or an unclosed `{{`.
+
 `scripts/scale-test.mjs` (run by `npm test`) covers each of these forms;
 add a case there if a new recipe writes an amount in a new way.
 

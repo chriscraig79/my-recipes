@@ -11,8 +11,8 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const source = fs.readFileSync(path.join(__dirname, "..", "src", "scale.js"), "utf8");
 const context = {};
-vm.runInNewContext(`${source}\n;globalThis.api = { scaleAmount, parseServings };`, context);
-const { scaleAmount, parseServings } = context.api;
+vm.runInNewContext(`${source}\n;globalThis.api = { scaleAmount, parseServings, splitScaleMarkers };`, context);
+const { scaleAmount, parseServings, splitScaleMarkers } = context.api;
 
 const cases = [
   // [amount, factor, expected]
@@ -108,7 +108,32 @@ for (const [text, expected] of servingsCases) {
   }
 }
 
-const total = cases.length + servingsCases.length;
+// Step text: {{amount}} markers split out; everything else stays as text.
+const markerCases = [
+  ["Add {{250ml}} water and {{½ tsp}} salt.", [
+    { text: "Add " }, { text: "250ml", amount: "250ml" }, { text: " water and " },
+    { text: "½ tsp", amount: "½ tsp" }, { text: " salt." },
+  ]],
+  ["Cook for 20 minutes at 180°C.", [{ text: "Cook for 20 minutes at 180°C." }]],
+  ["{{3 eggs}}", [{ text: "3 eggs", amount: "3 eggs" }]],
+];
+for (const [text, expected] of markerCases) {
+  const actual = JSON.parse(JSON.stringify(splitScaleMarkers(text)));
+  try {
+    assert.deepEqual(actual, expected);
+  } catch {
+    failures.push(`splitScaleMarkers(${JSON.stringify(text)}) = ${JSON.stringify(actual)}`);
+  }
+}
+
+// The amounts marked in the method with a wording of their own.
+cases.push(["1 yolk", 2, "2 yolks"], ["1½ tins", 2, "3 tins"], ["1½ tins", 0.5, "¾ tin"], ["6 slices", 0.5, "3 slices"]);
+for (const [amount, factor, expected] of cases.slice(-4)) {
+  const actual = scaleAmount(amount, factor);
+  if (actual !== expected) failures.push(`scaleAmount(${JSON.stringify(amount)}, ${factor}) = ${JSON.stringify(actual)}, expected ${JSON.stringify(expected)}`);
+}
+
+const total = cases.length + servingsCases.length + markerCases.length;
 if (failures.length) {
   console.error(failures.map(f => `FAIL  ${f}`).join("\n"));
   console.error(`\n${total - failures.length}/${total} scaling checks passed.`);

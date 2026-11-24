@@ -10,6 +10,7 @@
 // stay plain browser JavaScript: function declarations, no imports.
 //
 // Amounts with no number in them ("to taste", "a squeeze") never change.
+// Method steps opt in per amount with {{ }} markers; see splitScaleMarkers.
 
 const SCALE_FRACTION_GLYPHS = { '½': 1 / 2, '⅓': 1 / 3, '⅔': 2 / 3, '¼': 1 / 4, '¾': 3 / 4 };
 const SCALE_NICE_FRACTIONS = [[0, ''], [1 / 4, '¼'], [1 / 3, '⅓'], [1 / 2, '½'], [2 / 3, '⅔'], [3 / 4, '¾'], [1, '']];
@@ -189,4 +190,22 @@ function scaleAmount(amount, factor) {
     .split(/(\([^)]*\beach\b[^)]*\))/i)
     .map((part, i) => (i % 2 ? part : scaleQuantities(part, factor)))
     .join('');
+}
+
+// Method steps mark the amounts that scale with servings in double braces:
+// "Add {{250ml}} water". Returns the text in parts, with `amount` set on
+// the marked ones, so the page can wrap them and rescale them later.
+// Anything else in a step (times, temperatures, dish sizes) stays as written.
+function splitScaleMarkers(text) {
+  const parts = [];
+  const re = /\{\{([^{}]+)\}\}/g;
+  let last = 0;
+  let m;
+  while ((m = re.exec(text))) {
+    if (m.index > last) parts.push({ text: text.slice(last, m.index) });
+    parts.push({ text: m[1], amount: m[1] });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last) });
+  return parts;
 }

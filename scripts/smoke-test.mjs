@@ -393,6 +393,24 @@ check("servings − / + rescale the ingredient amounts, survive a reload and res
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("amounts marked in the method scale with servings too", async page => {
+  await page.evaluate(() => sessionStorage.clear());
+  // Carbonara serves 2; step 2 whisks "the {{3 eggs}}, {{1 yolk}}".
+  await page.evaluate(() => { location.hash = "carbonara"; });
+  await page.waitForFunction(() => renderedRecipeId === "carbonara" && !document.documentElement.dataset.nav);
+  const stepAmounts = () => page.locator("#step-2 .step-amount").allTextContents();
+  assert.deepEqual(await stepAmounts(), ["3 eggs", "1 yolk"]);
+  assert.ok(!(await page.textContent("#recipe-method")).includes("{{"), "the {{ }} markers shouldn't show");
+  await page.click("#servings-inc");
+  await page.click("#servings-inc");
+  assert.deepEqual(await stepAmounts(), ["6 eggs", "2 yolks"]);
+  assert.match(await page.textContent("#step-2 .step-content"), /whisk together the 6 eggs, 2 yolks, and/);
+  await page.click(".servings-reset");
+  assert.deepEqual(await stepAmounts(), ["3 eggs", "1 yolk"]);
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 check("opening and leaving a recipe animates and then cleans up", async page => {
   const supported = await page.evaluate(() => typeof document.startViewTransition === "function");
   await page.locator(".recipe-card-btn").first().click();

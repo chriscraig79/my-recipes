@@ -76,7 +76,7 @@ steps:
     content: Add the spice paste and fry for a further 2 minutes, stirring.
     timer: ⏱ 2 minutes
   - title: Simmer
-    content: Add 400ml water, cover with a lid, and simmer for 40–50 minutes until the lamb is tender.
+    content: Add {{400ml}} water, cover with a lid, and simmer for 40–50 minutes until the lamb is tender.
     timer: ⏱ 40–50 minutes
   - title: Finish
     content: Stir in the yoghurt and cook for a further 10 minutes. Serve garnished with the reserved coriander leaves.

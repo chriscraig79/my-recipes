@@ -84,6 +84,14 @@ cases.push({ name: "a servings range passes", fn: () => assert.deepEqual(run({ r
 expectError("empty steps list is rejected", { recipe: withField("steps", []) }, /`steps` must be a non-empty list/);
 expectError("step without content is rejected", { recipe: withField("steps", [{ title: "Cook" }]) }, /steps\[0\] is missing `content`/);
 
+const withStep = content => withField("steps", [{ title: "Cook", content }]);
+cases.push({ name: "a step with {{amount}} markers passes", fn: () =>
+  assert.deepEqual(run({ recipe: withStep("Add {{250ml}} water and {{½ tsp}} salt.") }), []) });
+expectError("a step marker with no number is rejected", { recipe: withStep("Add {{some}} water.") },
+  /steps\[0\] marks \{\{some\}\} to scale, but it has no number/);
+expectError("an unclosed step marker is rejected", { recipe: withStep("Add {{250ml water.") },
+  /steps\[0\] has an unclosed \{\{ or a stray \}\}/);
+
 let failed = 0;
 for (const { name, fn } of cases) {
   try {

@@ -37,7 +37,7 @@ ingredients:
     prep: cut into wedges, to serve (optional)
 steps:
   - title: Make the broth
-    content: Stir the coconut milk and curry paste together in a saucepan until smooth. Add 200ml hot water to loosen it — a splash more if you like a thinner broth — then add the soy sauce and black pepper. Bring to a gentle simmer over a medium heat.
+    content: Stir the coconut milk and curry paste together in a saucepan until smooth. Add {{200ml}} hot water to loosen it — a splash more if you like a thinner broth — then add the soy sauce and black pepper. Bring to a gentle simmer over a medium heat.
   - title: Cook the dumplings
     content: Drop the frozen dumplings into the simmering broth and cook according to the packet instructions until piping hot all the way through.
     timer: ⏱ 6–8 minutes

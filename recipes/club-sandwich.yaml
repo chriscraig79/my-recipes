@@ -45,9 +45,9 @@ steps:
     content: Fry or grill the bacon until properly crispy. Set aside on kitchen paper. Don't skimp on the crispiness — soggy bacon collapses the whole thing.
     timer: ⏱ 5 minutes
   - title: Toast the bread
-    content: Toast all 6 slices until golden. A club sandwich needs toasted bread on every layer — it's what gives it structure.
+    content: Toast all {{6 slices}} until golden. A club sandwich needs toasted bread on every layer — it's what gives it structure.
   - title: Mix the mayo
-    content: Stir the mustard into the mayonnaise. Season with a little salt and pepper. Spread generously on one side of all 6 slices.
+    content: Stir the mustard into the mayonnaise. Season with a little salt and pepper. Spread generously on one side of all {{6 slices}}.
   - title: Build the first layer
     content: On the first slice, lay down the lettuce, then the chicken and sliced egg. Season with salt and pepper. Top with a second slice of toast, mayo side up.
   - title: Build the second layer
