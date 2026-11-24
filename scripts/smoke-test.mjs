@@ -323,6 +323,94 @@ check("opening a recipe shows its detail view", async page => {
   await page.waitForSelector("#index", { state: "visible" });
 });
 
+check("servings − / + rescale the ingredient amounts, survive a reload and reset", async page => {
+  const openById = async id => {
+    await page.evaluate(id => { location.hash = id; }, id);
+    await page.waitForFunction(id => renderedRecipeId === id && !document.documentElement.dataset.nav, id);
+  };
+  const amountOf = name => page.evaluate(name => {
+    const r = recipes.find(r => r.id === renderedRecipeId);
+    const i = r.ingredients.findIndex(ing => ing.name === name);
+    return document.querySelector(`[data-ingredient="${i}"]`).textContent;
+  }, name);
+  await page.evaluate(() => sessionStorage.clear());
+
+  // American pancakes serve 2 with 135g flour, 1 tsp baking powder and 1 egg.
+  await openById("american-pancakes");
+  assert.equal((await page.textContent("#servings-value")).trim(), "2");
+  assert.ok(await page.isHidden("#servings-note"), "no scaling note at the recipe's own servings");
+  await page.click("#servings-inc");
+  await page.click("#servings-inc");
+  assert.equal((await page.textContent("#servings-value")).trim(), "4");
+  assert.equal((await page.textContent("#recipe-serves")).trim(), "4", "the header's serves N follows too");
+  assert.equal(await amountOf("Plain flour"), "270g");
+  assert.equal(await amountOf("Baking powder"), "2 tsp");
+  assert.equal(await amountOf("Eggs"), "2 large");
+  assert.equal(await amountOf("Salt"), "1 tsp");
+  assert.ok(await page.isVisible("#servings-note"), "expected a note saying the amounts are scaled");
+  await page.waitForFunction(() => document.getElementById("live-status").textContent.includes("Serves 4"));
+
+  // A reload keeps the choice.
+  await page.reload();
+  await page.waitForFunction(() => renderedRecipeId === "american-pancakes");
+  assert.equal((await page.textContent("#servings-value")).trim(), "4", "expected servings to survive a reload");
+  assert.equal(await amountOf("Plain flour"), "270g");
+
+  // − at 1 is the floor: the button stays focusable but does nothing.
+  await page.click("#servings-dec");
+  await page.click("#servings-dec");
+  await page.click("#servings-dec");
+  assert.equal((await page.textContent("#servings-value")).trim(), "1");
+  assert.equal(await page.getAttribute("#servings-dec", "aria-disabled"), "true");
+  // Playwright won't click an aria-disabled button, so press it from the keyboard.
+  await page.focus("#servings-dec");
+  await page.keyboard.press("Enter");
+  assert.ok(await page.evaluate(() => document.activeElement?.id === "servings-dec"), "the − button should keep focus at the floor");
+  assert.equal((await page.textContent("#servings-value")).trim(), "1", "can't go below 1");
+  assert.equal(await amountOf("Plain flour"), "70g");
+
+  // Reset puts the recipe's own amounts back and hides the note.
+  await page.click(".servings-reset");
+  assert.equal((await page.textContent("#servings-value")).trim(), "2");
+  assert.equal(await amountOf("Plain flour"), "135g");
+  assert.ok(await page.isHidden("#servings-note"));
+  assert.ok(await page.evaluate(() => document.activeElement?.id === "ingredients-heading"), "reset should leave focus by the ingredients");
+
+  // A range ("3–4") scales from its middle and steps out from either end.
+  const rangeId = await page.evaluate(() => recipes.find(r => /[–-]/.test(r.servings))?.id);
+  if (rangeId) {
+    await openById(rangeId);
+    const [lo, hi] = (await page.textContent("#servings-value")).trim().split(/[–-]/).map(Number);
+    await page.click("#servings-inc");
+    assert.equal((await page.textContent("#servings-value")).trim(), String(hi + 1));
+    await page.click(".servings-reset");
+    await page.click("#servings-dec");
+    assert.equal((await page.textContent("#servings-value")).trim(), String(lo - 1));
+    await page.click(".servings-reset");
+  }
+
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
+check("amounts marked in the method scale with servings too", async page => {
+  await page.evaluate(() => sessionStorage.clear());
+  // Carbonara serves 2; step 2 whisks "the {{3 eggs}}, {{1 yolk}}".
+  await page.evaluate(() => { location.hash = "carbonara"; });
+  await page.waitForFunction(() => renderedRecipeId === "carbonara" && !document.documentElement.dataset.nav);
+  const stepAmounts = () => page.locator("#step-2 .step-amount").allTextContents();
+  assert.deepEqual(await stepAmounts(), ["3 eggs", "1 yolk"]);
+  assert.ok(!(await page.textContent("#recipe-method")).includes("{{"), "the {{ }} markers shouldn't show");
+  await page.click("#servings-inc");
+  await page.click("#servings-inc");
+  assert.deepEqual(await stepAmounts(), ["6 eggs", "2 yolks"]);
+  assert.match(await page.textContent("#step-2 .step-content"), /whisk together the 6 eggs, 2 yolks, and/);
+  await page.click(".servings-reset");
+  assert.deepEqual(await stepAmounts(), ["3 eggs", "1 yolk"]);
+  await page.locator("#nav-recipes").click();
+  await page.waitForSelector("#index", { state: "visible" });
+});
+
 check("opening and leaving a recipe animates and then cleans up", async page => {
   const supported = await page.evaluate(() => typeof document.startViewTransition === "function");
   await page.locator(".recipe-card-btn").first().click();

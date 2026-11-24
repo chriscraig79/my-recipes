@@ -48,7 +48,7 @@ steps:
   - title: Start the sauce
     content: Turn the heat to low. In the same pan, cook the garlic for 30 seconds until fragrant, without letting it brown.
   - title: Make it creamy
-    content: Add the cream cheese and a good splash (about 100ml) of the reserved pasta water. Stir until melted into a smooth sauce, then stir in the lemon zest and half the juice.
+    content: Add the cream cheese and a good splash (about {{100ml}}) of the reserved pasta water. Stir until melted into a smooth sauce, then stir in the lemon zest and half the juice.
   - title: Wilt the spinach
     content: Add the spinach and stir until just wilted.
     timer: ⏱ 1 minute

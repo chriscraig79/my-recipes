@@ -51,7 +51,7 @@ steps:
   - title: Season and dust
     content: Pat the chicken thighs dry and season both sides with salt and pepper. In a shallow bowl, whisk together the cornflour, paprika, salt, garlic powder and black pepper. Dust the chicken in the mixture, shaking off the excess.
   - title: Sear the chicken
-    content: Heat the oil in a pan over medium-high heat. Add the chicken and sear undisturbed for 3–4 minutes, then flip and cook the other side for a further 3 minutes until golden. Work in batches if needed. If using skin-on thighs, use just 1 tbsp of oil and start them skin-side down over medium heat for 8–10 minutes until the fat has rendered and the skin is crisp, then flip for 3 minutes. Pour off all but about a tablespoon of the fat before moving on.
+    content: Heat the oil in a pan over medium-high heat. Add the chicken and sear undisturbed for 3–4 minutes, then flip and cook the other side for a further 3 minutes until golden. Work in batches if needed. If using skin-on thighs, use just {{1 tbsp}} of oil and start them skin-side down over medium heat for 8–10 minutes until the fat has rendered and the skin is crisp, then flip for 3 minutes. Pour off all but about a tablespoon of the fat before moving on.
     timer: ⏱ 6–7 minutes (skin-on 11–13 minutes)
   - title: Build the sauce
     content: Push the chicken to one side, add the butter and garlic to the pan and cook until fragrant. Stir in the honey, vinegar, soy sauce and chicken stock.

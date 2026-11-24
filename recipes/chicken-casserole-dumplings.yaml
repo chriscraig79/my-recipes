@@ -56,10 +56,10 @@ steps:
     content: Heat the oil in a casserole with a lid. Brown the chicken well on all sides, working in batches. Remove to a plate, then add the onions, carrot, lardons, bay and thyme to the pan and cook gently for 10 minutes until the onion softens.
     timer: ⏱ 10 minutes
   - title: Braise
-    content: Return the chicken and its juices to the pan. Pour in the red wine, 250ml water and the tomato paste, and crumble in the stock cube. Top up with a splash more water if needed until the chicken is almost covered. Bring to the boil, cover, and bake for 20 minutes. Remove the lid and bake for a further 10 minutes.
+    content: Return the chicken and its juices to the pan. Pour in the red wine, {{250ml}} water and the tomato paste, and crumble in the stock cube. Top up with a splash more water if needed until the chicken is almost covered. Bring to the boil, cover, and bake for 20 minutes. Remove the lid and bake for a further 10 minutes.
     timer: ⏱ 30 minutes
   - title: Make the dumplings
-    content: Rub the butter into the self-raising flour with your fingertips until it resembles fine breadcrumbs. Stir in the herbs with ½ tsp salt and some pepper. Drizzle in 150ml water and stir quickly with a cutlery knife to form a light dough. Shape into ping pong-sized balls with floured hands.
+    content: Rub the butter into the self-raising flour with your fingertips until it resembles fine breadcrumbs. Stir in the herbs with {{½ tsp}} salt and some pepper. Drizzle in {{150ml}} water and stir quickly with a cutlery knife to form a light dough. Shape into ping pong-sized balls with floured hands.
   - title: Top and bake
     content: Place the dumplings on top of the stew and bake for a further 20 minutes until the dumplings are cooked through.
     timer: ⏱ 20 minutes

@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 
 const WATCH_TARGETS = [
-  path.join(ROOT, "src", "index.html"),
+  path.join(ROOT, "src"),
   path.join(ROOT, "recipes"),
   path.join(ROOT, "ingredients.yaml"),
 ];
@@ -37,7 +37,7 @@ function scheduleBuild() {
   debounceTimer = setTimeout(runBuild, 150);
 }
 
-console.log("Watching src/index.html, recipes/, ingredients.yaml for changes...\n");
+console.log("Watching src/, recipes/, ingredients.yaml for changes...\n");
 runBuild();
 
 for (const target of WATCH_TARGETS) {

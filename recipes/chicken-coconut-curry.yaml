@@ -67,10 +67,10 @@ steps:
     content: Heat the oil in a large pan and add the curry leaves, onion, garlic and ginger. Cook for 5–10 minutes until the onions are soft and lightly browned.
     timer: ⏱ 5–10 minutes
   - title: Brown the chicken
-    content: Add the chicken pieces and allow to brown, stirring frequently. Stir in 2 tbsp of the roasted curry powder, coating the chicken evenly, and cook for a further 5–10 minutes.
+    content: Add the chicken pieces and allow to brown, stirring frequently. Stir in {{2 tbsp}} of the roasted curry powder, coating the chicken evenly, and cook for a further 5–10 minutes.
     timer: ⏱ 5–10 minutes
   - title: Simmer
-    content: Add the coconut milk and about 250ml water. Add a teaspoon of salt, bring to the boil, then reduce the heat, cover, and simmer gently for around 30 minutes until the chicken is cooked through. Remove the lid and reduce for a further 5–10 minutes to thicken.
+    content: Add the coconut milk and about {{250ml}} water. Add {{1 tsp}} salt, bring to the boil, then reduce the heat, cover, and simmer gently for around 30 minutes until the chicken is cooked through. Remove the lid and reduce for a further 5–10 minutes to thicken.
     timer: ⏱ 35–40 minutes
   - title: Serve
     content: Transfer to a serving dish and scatter with fresh coriander. Serve with steamed rice.

@@ -55,7 +55,9 @@ ingredients:
   # into one line. See "Ingredient names" below.
   - { name: Carrots, amount: 300g, prep: thinly sliced }
 steps:
-  - { title: Step title, content: Step instructions., timer: "⏱ 20 minutes" }
+  # Wrap ingredient quantities in the method in {{ }} so they follow the
+  # servings stepper — see "Servings" below.
+  - { title: Step title, content: "Add {{250ml}} water and simmer.", timer: "⏱ 20 minutes" }
 notes: Extra tips shown at the bottom of the recipe.
 ```
 
@@ -110,6 +112,10 @@ error listing each problem (file and field) if any of these fail:
 - `id` doesn't match the filename, or the recipe isn't in
   `recipes/_order.yaml` (or `_order.yaml` lists an id with no file, or
   lists one twice)
+- `servings` isn't a whole number (`"4"`) or a range (`"3–4"`) — the
+  servings stepper needs a number to scale from
+- A step marks `{{something}}` to scale with no number in it, or has an
+  unclosed `{{` or stray `}}`
 - `cookedIn` isn't one of the allowed values
 - `timeMins` isn't a positive number
 - An ingredient `name` isn't in `ingredients.yaml`
@@ -146,6 +152,39 @@ Each filter segment keeps its width when you choose something in it — a
 long choice is cut short with an ellipsis (the full value is in its tooltip
 and accessible name) rather than pushing the other segments along.
 
+## Servings
+
+The Servings stat on each recipe page has − / + buttons (1 to 24). Changing
+it rescales every ingredient amount on the page straight away, a note above
+the ingredients says what they're scaled from, with a "Reset to N" button,
+and screen readers hear the new servings. The choice lasts for the browser
+session (`sessionStorage`), so a reload mid-cook keeps it. A recipe that
+serves a range (`"3–4"`) scales from the middle of it.
+
+The scaling lives in `src/scale.js` (inlined into the page by the build)
+and works on the free-text `amount`:
+
+- Weights and volumes round to sensible steps (`135g` × 3 → `410g`) and
+  switch to kg / litres from 1000 (`600ml` × 2 → `1.2 litres`)
+- Spoons, cups and counts use kitchen fractions (`1 tbsp` × ½ → `1½ tsp`,
+  `1 large` × ½ → `½ large`), and count words agree (`1 yolk` → `2 yolks`)
+- Ranges scale both ends; `2 x 400g` scales the count, not the pack;
+  `400g tin` becomes `2 x 400g tins`; `(250g each)` stays as written
+- Amounts without a number (`to taste`, `a squeeze`) never change
+
+Quantities in the method scale too, but only where the recipe marks them
+in double braces: `Heat {{2 tbsp}} of the oil`, `Add {{250ml}} water`. The
+braces don't show on the page; the amount is shown slightly bolder and
+follows the stepper. Mark only quantities of food or liquid — not times,
+temperatures, dish or cut sizes, or per-item amounts ("about 3 tbsp of
+batter per crêpe") — and write the marker the way you'd write an
+ingredient `amount`, count word included (`{{6 slices}}`, `{{1 tsp}}`
+rather than "a teaspoon"). The build rejects a marker with no number in it
+or an unclosed `{{`.
+
+`scripts/scale-test.mjs` (run by `npm test`) covers each of these forms;
+add a case there if a new recipe writes an amount in a new way.
+
 ## Shopping list
 
 Any recipe can be added to a shopping basket — via the "+" button on its index card or the "+ Add to shopping list" button on its own page. The basket is saved to `localStorage`, so it survives a reload.
@@ -169,7 +208,7 @@ Ingredients with the same `name` are merged into a single line across recipes, l
 npm install                       # once, installs the js-yaml, esbuild, and
                                    # playwright dependencies
 npm run watch                     # rebuilds build/ automatically whenever
-                                   # src/index.html, recipes/, or ingredients.yaml change
+                                   # src/, recipes/, or ingredients.yaml change
 npx serve build
 ```
 
@@ -257,7 +296,8 @@ git push
 ```
 my-recipes/
 ├── src/
-│   └── index.html         # Hand-written template — markup, styles, rendering logic
+│   ├── index.html         # Hand-written template — markup, styles, rendering logic
+│   └── scale.js           # Servings scaler, inlined into the page by the build
 ├── build/                  # Gitignored — build output, what actually gets deployed
 ├── ingredients.yaml        # Canonical ingredient name -> shopping-list section
 ├── recipes/
@@ -270,7 +310,8 @@ my-recipes/
 │   ├── smoke-test.mjs        # Playwright checks against build/index.html (npm test)
 │   ├── a11y-test.mjs         # axe accessibility checks on every view (npm test)
 │   ├── validate.mjs          # Recipe data checks run by build.mjs
-│   └── validate-test.mjs     # One fixture per validation rule (npm test)
+│   ├── validate-test.mjs     # One fixture per validation rule (npm test)
+│   └── scale-test.mjs        # Unit tests for src/scale.js (npm test)
 ├── .github/workflows/
 │   ├── deploy.yml            # Tests, builds, and deploys to GitHub Pages on push to main
 │   └── test.yml              # Runs the smoke test on every pull request into main

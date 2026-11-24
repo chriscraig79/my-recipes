@@ -50,9 +50,9 @@ steps:
   - title: Chargrill the veg
     content: Preheat a griddle pan to high. Peel the onions, scrub the sweet potatoes and deseed the peppers. Set aside a small chunk of each, plus one tomato, for the salsa. Roughly chop the rest into 4cm chunks, halve the remaining tomatoes, and chargrill in batches.
   - title: Build the stew
-    content: Heat 1 tbsp oil in a large casserole over medium-low heat and stir in the cumin and paprika. Add the chopped garlic and grated lemon zest, then add the grilled veg bit by bit, stirring regularly.
+    content: Heat {{1 tbsp}} oil in a large casserole over medium-low heat and stir in the cumin and paprika. Add the chopped garlic and grated lemon zest, then add the grilled veg bit by bit, stirring regularly.
   - title: Simmer
-    content: Tip in the beans (with their liquid) and 1½ tins' worth of water, then stir in about 1 tbsp chilli sauce, or to taste. Season and simmer for 30 minutes until thickened and reduced.
+    content: Tip in the beans (with their liquid) and {{1½ tins}} of water, then stir in about {{1 tbsp}} chilli sauce, or to taste. Season and simmer for 30 minutes until thickened and reduced.
     timer: ⏱ 30 minutes
   - title: Cook the rice
     content: Meanwhile, cook the black rice in a pan of boiling salted water according to the packet instructions.

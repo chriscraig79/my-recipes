@@ -22,7 +22,7 @@ const WIDTHS = [
 ];
 
 async function openIndex(page) {
-  await page.evaluate(() => { localStorage.clear(); location.hash = ""; });
+  await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); location.hash = ""; });
   await page.reload();
   await page.waitForSelector(".recipe-list-item");
 }
@@ -65,6 +65,12 @@ const STATES = [
   { name: "recipe page", setup: async page => {
     await openIndex(page);
     await openFirstRecipe(page);
+  } },
+  { name: "recipe page with servings changed", setup: async page => {
+    await openIndex(page);
+    await openFirstRecipe(page);
+    await page.click("#servings-inc");
+    await page.waitForSelector("#servings-note:not([hidden])");
   } },
   { name: "recipe opened at a step link", setup: async page => {
     await openIndex(page);

@@ -37,7 +37,7 @@ steps:
     content: Bring a large pan of well-salted water to the boil and cook the pasta until al dente according to packet instructions. Before draining, scoop out a mugful of the starchy pasta water — you'll need it for the sauce.
     timer: ⏱ ~10 minutes
   - title: Mix the sauce
-    content: While the pasta cooks, whisk together the 3 eggs, 1 egg yolk, and most of the parmesan in a bowl. Season with the black pepper. The mixture should be thick and pale — this is your sauce. Don't add salt; the gammon and cheese will take care of that.
+    content: While the pasta cooks, whisk together the {{3 eggs}}, {{1 yolk}}, and most of the parmesan in a bowl. Season with the black pepper. The mixture should be thick and pale — this is your sauce. Don't add salt; the gammon and cheese will take care of that.
   - title: Fry the gammon
     content: Heat the olive oil in a wide frying pan over medium heat. Add the whole garlic clove and let it sizzle for a minute, then remove it. Add the gammon and fry for 2–3 minutes until the edges start to colour slightly.
     timer: ⏱ 3 minutes

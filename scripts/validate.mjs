@@ -75,7 +75,14 @@ export function validateRecipes({ order, files, registry, images }) {
     for (const field of STRING_FIELDS) {
       if (r[field] !== undefined && r[field] !== null && typeof r[field] !== "string") err(`\`${field}\` must be text`);
     }
-    if (r.servings !== undefined && !["string", "number"].includes(typeof r.servings)) err("`servings` must be text or a number");
+    if (r.servings !== undefined) {
+      // Same shape the page's servings stepper reads (parseServings in
+      // src/scale.js): a whole number, or a range like "3–4".
+      const m = /^\s*(\d+)(?:\s*[–-]\s*(\d+))?\s*$/.exec(String(r.servings));
+      if (!["string", "number"].includes(typeof r.servings) || !m || Number(m[1]) < 1 || (m[2] && Number(m[2]) < Number(m[1]))) {
+        err(`\`servings\` is ${JSON.stringify(r.servings)}; must be a whole number like "4" or a range like "3–4"`);
+      }
+    }
 
     if (r.timeMins !== undefined && !(typeof r.timeMins === "number" && Number.isFinite(r.timeMins) && r.timeMins > 0)) {
       err(`\`timeMins\` must be a positive number of minutes, got ${JSON.stringify(r.timeMins)}`);
@@ -120,6 +127,16 @@ export function validateRecipes({ order, files, registry, images }) {
           if (!step || typeof step !== "object") return err(`${where} must be { title, content, timer? }`);
           if (!isText(step.title)) err(`${where} is missing \`title\``);
           if (!isText(step.content)) err(`${where} is missing \`content\``);
+          // {{amount}} marks a quantity the servings stepper rescales (see
+          // splitScaleMarkers in src/scale.js); it has to hold a number.
+          if (isText(step.content)) {
+            for (const [, inner] of step.content.matchAll(/\{\{([^{}]*)\}\}/g)) {
+              if (!/\d|[½⅓⅔¼¾]/.test(inner)) err(`${where} marks {{${inner}}} to scale, but it has no number in it`);
+            }
+            if (/\{\{|\}\}/.test(step.content.replace(/\{\{[^{}]*\}\}/g, ""))) {
+              err(`${where} has an unclosed {{ or a stray }} — mark amounts that scale like {{250ml}}`);
+            }
+          }
           if (step.timer !== undefined && typeof step.timer !== "string") err(`${where}.timer must be text`);
         });
       }

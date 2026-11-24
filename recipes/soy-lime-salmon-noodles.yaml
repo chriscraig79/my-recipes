@@ -52,10 +52,10 @@ ingredients:
     prep: thinly sliced
 steps:
   - title: Quick-pickle the carrots
-    content: Toss the carrots with 2 tbsp of the rice vinegar, the sugar and the salt. Set aside while you cook — they'll soften slightly and turn tangy.
+    content: Toss the carrots with {{2 tbsp}} of the rice vinegar, the sugar and the salt. Set aside while you cook — they'll soften slightly and turn tangy.
     timer: ⏱ 10 minutes
   - title: Make the sauce
-    content: Whisk together the soy sauce, honey, lime juice, the remaining 1 tbsp rice vinegar, garlic, ginger (if using) and sesame oil.
+    content: Whisk together the soy sauce, honey, lime juice, the remaining {{1 tbsp}} rice vinegar, garlic, ginger (if using) and sesame oil.
   - title: Sear the salmon
     content: Heat the vegetable oil in a frying pan over medium-high heat. Pat the salmon dry and cook skin-side down, without moving it, until the skin is crisp and the flesh has turned opaque most of the way up.
     timer: ⏱ 4 minutes

@@ -12,6 +12,8 @@ const BUILD_DIR = path.join(ROOT, "build");
 const BUILD_INDEX = path.join(BUILD_DIR, "index.html");
 const START_MARKER = "// GENERATED:RECIPES:START";
 const END_MARKER = "// GENERATED:RECIPES:END";
+const SCALE_SRC = path.join(ROOT, "src", "scale.js");
+const SCALE_INCLUDE = /^\/\/ INCLUDE:scale\.js.*$/m;
 
 function loadIngredientRegistry() {
   const raw = yaml.load(fs.readFileSync(path.join(ROOT, "ingredients.yaml"), "utf8"));
@@ -109,7 +111,12 @@ function main() {
   const before = html.slice(0, startIdx + START_MARKER.length);
   const after = html.slice(endIdx);
   const generated = `\nconst recipes = ${serializeRecipes(recipes)};\n`;
-  const assembled = before + generated + after;
+  if (!SCALE_INCLUDE.test(after)) {
+    throw new Error("Could not find the // INCLUDE:scale.js line in src/index.html");
+  }
+  // A function replacement, so `$` in the source is never read as a pattern.
+  const withScale = after.replace(SCALE_INCLUDE, () => fs.readFileSync(SCALE_SRC, "utf8"));
+  const assembled = before + generated + withScale;
   const minified = minifyHtml(assembled);
 
   fs.mkdirSync(BUILD_DIR, { recursive: true });

@@ -59,6 +59,16 @@ template and render code never need to change.
      most likely to go wrong.
    - `steps` — list of `{ title, content, timer? }`. `timer` is optional,
      free text like `"⏱ 20 minutes"`, only on steps with a real wait/cook time.
+     In `content`, wrap every ingredient quantity in double braces so the
+     servings stepper rescales it: `Heat {{2 tbsp}} of the oil`, `Add
+     {{250ml}} water`, `the {{3 eggs}}`. Mark only amounts of food or liquid
+     that would change with more servings — never times, temperatures, pan
+     or dish sizes, cut sizes, or per-item amounts like "about 3 tbsp of
+     batter per crêpe". Write each marker the way an ingredient `amount` is
+     written (a number, then a unit or count word: `{{1 tsp}}`, not "a
+     teaspoon"), and keep count words inside it (`{{6 slices}}`) so they
+     stay singular or plural correctly. The build rejects a marker with no
+     number in it, or an unclosed `{{`.
    - `notes` — one paragraph of tips, shown at the bottom of the recipe.
    - `image` — optional. If the user has a photo of the dish, save it to
      `recipes/images/<id>.<ext>` and set `image: <filename>` (filename

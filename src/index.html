@@ -858,6 +858,89 @@
     color: var(--ink);
   }
 
+  /* ── Servings stepper ──
+     − / + either side of the servings value. At the ends of the range the
+     button is aria-disabled rather than disabled, so it keeps focus. */
+  .servings-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .servings-stepper .stat-value {
+    min-width: 2.2ch;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .servings-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: none;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  /* Hover only where there's a real pointer, so a tap doesn't leave the
+     button filled in. */
+  @media (hover: hover) {
+    .servings-btn:hover:not([aria-disabled="true"]) {
+      background: var(--accent);
+      color: var(--warm-white);
+    }
+  }
+
+  .servings-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .servings-btn[aria-disabled="true"] {
+    border-color: var(--border);
+    color: var(--rule);
+    cursor: default;
+  }
+
+  /* Shown above the ingredients while they're scaled away from the
+     recipe's own servings. */
+  .servings-note {
+    margin-bottom: 0.9rem;
+    padding: 0.6rem 1rem;
+    border: var(--card-border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--card-bg);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .servings-note[hidden] { display: none; }
+
+  .servings-reset {
+    margin-left: 0.35rem;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .servings-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
   /* ── Recipe section jump bar ──
      Pinned to the top while scrolling a recipe; tapping a button scrolls to
      that section, and the section currently being read stays highlighted. */
@@ -973,7 +1056,7 @@
 
   .ingredient {
     display: grid;
-    grid-template-columns: 5.5rem 1fr;
+    grid-template-columns: 6.5rem 1fr;
     column-gap: 0.9rem;
     align-items: baseline;
     align-content: center;
@@ -982,11 +1065,14 @@
     line-height: 1.35;
   }
 
+  /* Lining (full-height) numerals: the serif's default old-style digits
+     sit at lowercase height and made the amounts look small. */
   .ingredient-amount {
     font-family: var(--font-serif);
     font-weight: 600;
     color: var(--accent);
-    font-size: 0.85rem;
+    font-size: 1.05rem;
+    font-variant-numeric: lining-nums;
     text-align: right;
     overflow-wrap: anywhere;
   }
@@ -1075,6 +1161,13 @@
     font-size: 0.93rem;
     color: #3d3427;
     line-height: 1.65;
+  }
+
+  /* Amounts in the method that follow the servings stepper. A touch
+     heavier than the step text so they stand out when scanning mid-cook. */
+  .step-amount {
+    font-weight: 500;
+    color: var(--ink);
   }
 
   .step-timer {
@@ -1403,7 +1496,7 @@
   }
 
   @media (max-width: 500px) {
-    .ingredient { grid-template-columns: 4.5rem 1fr; column-gap: 0.75rem; padding: 0.6rem 1rem; }
+    .ingredient { grid-template-columns: 6.5rem 1fr; column-gap: 0.75rem; padding: 0.6rem 1rem; }
     .recipe-list { grid-template-columns: 1fr; }
     .recipe-stats { grid-template-columns: 1fr; }
     .recipe-stat { border-right: none; border-bottom: 1px solid var(--border); }
@@ -1530,6 +1623,8 @@
 
 const recipes = []; // placeholder — real data injected by `npm run build` into build/index.html
 // GENERATED:RECIPES:END
+
+// INCLUDE:scale.js — the servings scaler (src/scale.js), inlined by the build.
 
 // ─────────────────────────────────────────────
 //  SHOPPING BASKET
@@ -2201,7 +2296,7 @@ function renderRecipe(r) {
     const vague = amount && !/\d|[½⅓¼¾⅔]/.test(amount);
     return `
     <li class="ingredient${i < ingredientRows ? ' is-left-col' : ''}">
-      <span class="ingredient-amount${vague ? ' is-vague' : ''}">${esc(amount)}</span>
+      <span class="ingredient-amount${vague ? ' is-vague' : ''}" data-ingredient="${i}">${esc(amount)}</span>
       <span class="ingredient-text">
         <span class="ingredient-name">${esc(ing.name)}</span>
         ${ing.prep ? `<span class="ingredient-prep">${esc(ing.prep)}</span>` : ''}
@@ -2218,7 +2313,7 @@ function renderRecipe(r) {
         <a class="step-number" href="#${r.id}/step-${i + 1}" aria-label="Link to step ${i + 1}">${i + 1}</a>
         <div class="step-title">${esc(step.title)}</div>
       </div>
-      <div class="step-content">${esc(step.content)}</div>
+      <div class="step-content">${stepContentHtml(step.content)}</div>
       ${step.timer ? `<span class="step-timer">${esc(step.timer)}</span>` : ''}
     </li>
   `).join('');
@@ -2234,7 +2329,8 @@ function renderRecipe(r) {
     { label: 'Servings', value: r.servings },
     { label: 'Cook', value: r.cookedIn }
   ];
-  const statsHtml = stats.map(s => `
+  const servingsRange = parseServings(r.servings);
+  const statsHtml = stats.map(s => s.label === 'Servings' && servingsRange ? servingsStatHtml() : `
     <div class="recipe-stat">
       <span class="stat-label">${esc(s.label)}</span>
       <span class="stat-value">${esc(s.value)}</span>
@@ -2243,7 +2339,7 @@ function renderRecipe(r) {
 
   document.getElementById('recipe-content').innerHTML = `
     <header class="recipe-header">
-      <p class="recipe-label">${esc(r.label)} — serves ${esc(r.servings)}</p>
+      <p class="recipe-label">${esc(r.label)} — serves <span id="recipe-serves">${esc(r.servings)}</span></p>
       <h1 class="recipe-title" id="recipe-title" tabindex="-1">${r.titleHtml}</h1>
       <p class="recipe-description">${esc(r.description)}</p>
       ${heroHtml}
@@ -2259,9 +2355,10 @@ function renderRecipe(r) {
 
     <section class="recipe-section" id="recipe-ingredients">
       <div class="section-heading-row">
-        <h2 class="section-heading">Ingredients</h2>
+        <h2 class="section-heading" id="ingredients-heading" tabindex="-1">Ingredients</h2>
         <button class="basket-toggle-large${inBasket ? ' active' : ''}" data-basket-id="${esc(r.id)}" aria-pressed="${inBasket}" onclick="toggleBasket('${r.id}')">${basketLargeLabel(inBasket)}</button>
       </div>
+      <p class="servings-note" id="servings-note" hidden></p>
       <div class="ingredients-card"><ul class="ingredients-grid" style="--rows: ${ingredientRows}">${ingredientsHtml}</ul></div>
     </section>
 
@@ -2279,11 +2376,141 @@ function renderRecipe(r) {
   `;
 
   renderedRecipeId = r.id;
+  currentServings = servingsRange ? savedServings(r.id) : null;
+  applyServings(r);
   showView('recipe');
   document.title = `${r.title} – My Recipes`;
   window.scrollTo(0, takeRestoreScroll());
   document.getElementById('recipe-title').focus({ preventScroll: true });
   updateJumpBar();
+}
+
+// ─────────────────────────────────────────────
+//  SERVINGS — − / + rescales the ingredient amounts
+// ─────────────────────────────────────────────
+
+const MIN_SERVINGS = 1;
+const MAX_SERVINGS = 24;
+// The servings the open recipe is scaled to, or null for the recipe's own.
+let currentServings = null;
+
+// A step's text, with the {{amounts}} that scale with servings wrapped so
+// applyServings can rewrite them (see splitScaleMarkers in src/scale.js).
+function stepContentHtml(content) {
+  return splitScaleMarkers(String(content ?? '')).map(part => part.amount === undefined
+    ? esc(part.text)
+    : `<span class="step-amount" data-step-amount="${esc(part.amount)}">${esc(part.amount)}</span>`
+  ).join('');
+}
+
+function servingsStatHtml() {
+  return `
+    <div class="recipe-stat">
+      <span class="stat-label" id="servings-label">Servings</span>
+      <div class="servings-stepper" role="group" aria-labelledby="servings-label">
+        <button class="servings-btn" id="servings-dec" type="button" aria-label="Fewer servings" onclick="changeServings(-1)"><span aria-hidden="true">−</span></button>
+        <span class="stat-value" id="servings-value"></span>
+        <button class="servings-btn" id="servings-inc" type="button" aria-label="More servings" onclick="changeServings(1)"><span aria-hidden="true">+</span></button>
+      </div>
+    </div>
+  `;
+}
+
+// The chosen servings per recipe last for the browser session, so a
+// reload mid-cook keeps them; a new visit starts from the recipe's own.
+function loadServingsChoices() {
+  try {
+    return JSON.parse(sessionStorage.getItem('recipeServings')) || {};
+  } catch {
+    return {};
+  }
+}
+
+function savedServings(id) {
+  const n = loadServingsChoices()[id];
+  return Number.isInteger(n) && n >= MIN_SERVINGS && n <= MAX_SERVINGS ? n : null;
+}
+
+function saveServings(id, n) {
+  try {
+    const choices = loadServingsChoices();
+    if (n === null) delete choices[id];
+    else choices[id] = n;
+    sessionStorage.setItem('recipeServings', JSON.stringify(choices));
+  } catch {
+    // Storage blocked (private mode etc.) — the choice just won't survive a reload.
+  }
+}
+
+function openRecipe() {
+  return recipes.find(r => r.id === renderedRecipeId) || null;
+}
+
+// From a range like "3–4", − goes to 2 and + to 5; otherwise one either way.
+function changeServings(delta) {
+  const r = openRecipe();
+  const range = r && parseServings(r.servings);
+  if (!range) return;
+  let next;
+  if (currentServings === null) next = delta > 0 ? range.hi + 1 : range.lo - 1;
+  else next = currentServings + delta;
+  if (next < MIN_SERVINGS || next > MAX_SERVINGS) return;
+  setServings(r, next);
+}
+
+function resetServings() {
+  const r = openRecipe();
+  if (!r) return;
+  setServings(r, null);
+  // The reset button has gone with the note, so land just above the amounts.
+  document.getElementById('ingredients-heading').focus({ preventScroll: true });
+}
+
+function setServings(r, n) {
+  const range = parseServings(r.servings);
+  // Stepping back onto the recipe's own servings is the same as a reset.
+  if (n !== null && range.lo === range.hi && n === range.lo) n = null;
+  currentServings = n;
+  saveServings(r.id, n);
+  applyServings(r);
+  announce(n === null
+    ? `Serves ${r.servings}. Ingredient amounts back to the original recipe.`
+    : `Serves ${n}. Ingredient amounts updated.`);
+}
+
+// Writes the open recipe's servings and amounts for currentServings.
+function applyServings(r) {
+  const range = parseServings(r.servings);
+  if (!range) return;
+  const n = currentServings;
+  const factor = n === null ? 1 : n / range.base;
+  const shown = n === null ? r.servings : String(n);
+
+  document.getElementById('servings-value').textContent = shown;
+  document.getElementById('recipe-serves').textContent = shown;
+  const atMin = (n ?? range.lo) <= MIN_SERVINGS;
+  const atMax = (n ?? range.hi) >= MAX_SERVINGS;
+  document.getElementById('servings-dec').setAttribute('aria-disabled', atMin);
+  document.getElementById('servings-inc').setAttribute('aria-disabled', atMax);
+
+  document.querySelectorAll('#recipe-content [data-ingredient]').forEach(el => {
+    el.textContent = scaleAmount(r.ingredients[Number(el.dataset.ingredient)].amount || '', factor);
+  });
+  document.querySelectorAll('#recipe-content [data-step-amount]').forEach(el => {
+    el.textContent = scaleAmount(el.dataset.stepAmount, factor);
+  });
+
+  const note = document.getElementById('servings-note');
+  if (n === null) {
+    note.hidden = true;
+    note.textContent = '';
+    return;
+  }
+  note.innerHTML = `
+    Amounts scaled for ${n}, in the ingredients and the method (the recipe serves ${esc(r.servings)}).
+    <button class="servings-reset" type="button" onclick="resetServings()">Reset to ${esc(r.servings)}</button>
+  `;
+  note.hidden = false;
 }
 
 // ─────────────────────────────────────────────

@@ -37,7 +37,7 @@ steps:
   - title: Preheat the grill
     content: Meanwhile, preheat the grill to hot.
   - title: Add the cheese
-    content: Take the sauce off the heat and stir in 175g of the cheddar until melted and well combined.
+    content: Take the sauce off the heat and stir in {{175g}} of the cheddar until melted and well combined.
   - title: Combine and transfer
     content: Add the macaroni to the sauce and mix well. Transfer to a deep ovenproof dish.
   - title: Grill until golden
