@@ -1,0 +1,95 @@
+id: beef-massaman
+title: Beef Massaman Curry
+titleHtml: Beef <em>Massaman Curry</em>
+label: Main course
+servings: '4'
+time: 3 hrs
+timeMins: 180
+cookedIn: Hob
+image: beef-massaman.webp
+description: The classic massaman, with chunks of beef braised slowly in coconut milk, warm spices and tamarind until they fall apart.
+tags:
+  - beef
+  - potato
+  - curry
+ingredients:
+  - name: Braising steak
+    amount: 900g
+    prep: chuck or blade, cut into 4cm chunks
+  - name: Salt
+    amount: to taste
+  - name: Coconut milk
+    amount: 800ml
+    prep: 2 full fat tins
+  - name: Beef stock
+    amount: 250ml
+  - name: Waxy potatoes
+    amount: 400g
+    prep: cut into large chunks
+  - name: Onions
+    amount: '1'
+    prep: cut into wedges
+  - name: Roasted peanuts
+    amount: 50g
+  - name: Fish sauce
+    amount: 2 tbsp
+  - name: Tamarind paste
+    amount: 1½ tbsp
+  - name: Palm sugar
+    amount: 1 tbsp
+    prep: or brown sugar
+  - name: Vegetable oil
+    amount: 2 tbsp
+  - name: Cinnamon sticks
+    amount: '1'
+  - name: Star anise
+    amount: '2'
+  - name: Bay leaves
+    amount: '3'
+  - name: Dried red chillies
+    amount: '3'
+    prep: soaked in hot water 10 min
+  - name: Lemongrass stalks
+    amount: '1'
+    prep: lower third only, chopped
+  - name: Garlic cloves
+    amount: '4'
+  - name: Shallots
+    amount: '2'
+    prep: roughly chopped
+  - name: Fresh ginger
+    amount: 1 tbsp
+    prep: roughly chopped
+  - name: Ground coriander
+    amount: 1 tsp
+  - name: Ground cumin
+    amount: 1 tsp
+  - name: Ground cinnamon
+    amount: ½ tsp
+  - name: Ground cardamom
+    amount: ½ tsp
+  - name: Ground cloves
+    amount: ½ tsp
+  - name: Shrimp paste
+    amount: 1 tsp
+    prep: optional but worth it
+steps:
+  - title: Make the paste
+    content: Drain the chillies and blitz with the lemongrass, garlic, shallots, ginger, ground coriander, cumin, cinnamon, cardamom, cloves, and shrimp paste in a small food processor with a splash of water until you have a rough paste. It won't be completely smooth — that's fine.
+  - title: Brown the beef
+    content: Pat the beef dry and season with salt. Heat {{1 tbsp}} of the oil in a large heavy, lidded pan over a high heat and brown the beef in batches until well coloured on all sides. Don't crowd the pan or it will steam rather than brown. Lift out onto a plate.
+    timer: ⏱ 10 minutes
+  - title: Fry the paste
+    content: Turn the heat down to medium and add the remaining {{1 tbsp}} of oil. Spoon the thick cream off the top of one tin of coconut milk and add it with the paste. Fry for 4–5 minutes, stirring constantly, until it darkens, smells very fragrant and the oil starts to split out.
+    timer: ⏱ 4–5 minutes
+  - title: Braise
+    content: Return the beef and any juices to the pan. Pour in the rest of the coconut milk and the {{250ml}} stock, add the cinnamon stick, star anise and bay leaves, and bring to a bare simmer. Cover and cook very gently, stirring now and then, until the beef is almost tender. Top up with a splash of water if it gets too thick.
+    timer: ⏱ 2 hours
+  - title: Add the potatoes and onion
+    content: Add the potatoes and onion, then simmer with the lid half on until the potatoes are tender, the beef is falling apart and the sauce has thickened.
+    timer: ⏱ 30–40 minutes
+  - title: Season
+    content: Fish out the cinnamon stick, star anise and bay leaves. Stir in the {{2 tbsp}} fish sauce, {{1½ tbsp}} tamarind paste and {{1 tbsp}} sugar. Taste and adjust. It should be rich, mildly spiced, gently sour and sweet. Add more fish sauce for salt, more tamarind for sourness, more sugar to balance.
+  - title: Finish and serve
+    content: Stir in most of the peanuts, saving a few to scatter on top. Serve over jasmine rice with the remaining peanuts on top.
+notes: Chuck or blade braising steak is the best value here. It's cheaper than brisket and its marbling melts into the sauce, so it stays juicy. Brisket works well too, but cut it into large chunks and expect it to be a little more stringy. Avoid lean cuts like silverside, topside or stewing steak labelled "lean", because they dry out over a long braise. Keep it at a bare simmer, as boiling toughens the meat. You can also braise it in the oven at 160°C (140°C fan) for the same time. Like the chicken version, it's even better the next day and freezes well, though the potatoes go a little soft. To use leftover cooked beef or chicken instead, such as pot-roast beef or roast chicken, skip browning and braising the meat. Make the sauce with the coconut milk and stock (chicken stock is fine), simmer the potatoes and onion in it for 20–25 minutes until tender, and season. Then add the meat in bite-sized pieces and simmer gently for 5–8 minutes until piping hot all the way through. About 500g of cooked meat feeds four. Only reheat leftover meat once, so don't save the curry for another day.
